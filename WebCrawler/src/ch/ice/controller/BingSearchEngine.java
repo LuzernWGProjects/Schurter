@@ -22,8 +22,10 @@ import org.json.JSONObject;
 public class BingSearchEngine {
 
 
-    public static void Search(String companyQuery) throws Exception {
-        final String accountKey = "Ji1A66TE2PeWimPqfLKVsKq4Q91Xb6cNBEEBmPjRWyQ";
+    public static  JSONArray Search(String companyQuery) throws Exception {
+      
+    	// Bing Constants
+    	final String accountKey = "Ji1A66TE2PeWimPqfLKVsKq4Q91Xb6cNBEEBmPjRWyQ";
         final String bingUrlPattern = "https://api.datamarket.azure.com/Bing/SearchWeb/Web?Query=%%27%s%%27&$format=JSON";
 
         final String query = URLEncoder.encode(companyQuery, Charset.defaultCharset().name());
@@ -33,6 +35,9 @@ public class BingSearchEngine {
 
         final URL url = new URL(bingUrl);
         final URLConnection connection = url.openConnection();
+        
+               
+       //Search 
         connection.setRequestProperty("Authorization", "Basic " + accountKeyEnc);
 
         try (final BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
@@ -45,10 +50,16 @@ public class BingSearchEngine {
             final JSONObject d = json.getJSONObject("d");
             final JSONArray results = d.getJSONArray("results");
             final int resultsLength = results.length();
+          
+           /* 
             for (int i = 0; i < resultsLength; i++) {
-                final JSONObject aResult = results.getJSONObject(i);
+            	   JSONObject   aResult = results.getJSONObject(i);
                 System.out.println(aResult.get("Url"));
+            
             }
+            */
+            return results;
+          
         }
     }
 
