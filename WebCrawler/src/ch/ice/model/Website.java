@@ -8,6 +8,13 @@ public class Website {
 	private URL websiteUrl;
 	private Map metaTags;
 	
+	public Website() {}
+	
+	public Website(URL url, Map metaTags) {
+		this.setMetaTags(metaTags);
+		this.setWebsiteUrl(url);
+	}
+	
 	public URL getWebsiteUrl() {
 		return websiteUrl;
 	}
@@ -23,6 +30,4 @@ public class Website {
 	public void setMetaTags(Map metaTags) {
 		this.metaTags = metaTags;
 	}
-	
-	
 }

@@ -73,7 +73,7 @@ public class MainController {
 			LinkedList<Customer> customerList = excelParser.readFile(new File("posTest.xlsx"));
 			
 			for (Customer customer : customerList) {
-				
+				System.out.println(customer.toString());
 			}
 			
 		} catch (IOException e) {

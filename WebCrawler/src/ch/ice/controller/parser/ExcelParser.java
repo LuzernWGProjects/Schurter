@@ -5,8 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.Row;
@@ -29,7 +31,7 @@ public class ExcelParser implements Parser {
 	private File file;
 	private InputStream ExcelFileToRead;
 	
-	LinkedList<Customer> customerList;
+	LinkedList<Customer> customerList = new LinkedList<Customer>();
 	
 	// Customer Fields
 	//headers
@@ -41,9 +43,11 @@ public class ExcelParser implements Parser {
 	
 	// customer data
 	String customerID;
+	String customerCountryCode;
 	String country;
 	String zipCode;
 	String customerFullName;
+	String custonerShortName;
 
 	@Override
 	public LinkedList<Customer> readFile(File file) throws IOException {
@@ -90,7 +94,6 @@ public class ExcelParser implements Parser {
 		while (rows.hasNext()) {
 			
 			row=(XSSFRow) rows.next();
-			
 			//skip first two rows
 			if(row.getRowNum() == 0 || row.getRowNum() == 1) continue;
 			
@@ -105,7 +108,6 @@ public class ExcelParser implements Parser {
 				continue;
 				
 			}
-			
 			Iterator<?> cells = row.cellIterator();
 			
 			
@@ -122,7 +124,8 @@ public class ExcelParser implements Parser {
 						break;
 					
 					//country Code
-					case 1: continue;
+					case 1: 
+						this.customerCountryCode = this.checkForCellType(cell);
 					
 					// country Name
 					case 2:
@@ -135,7 +138,9 @@ public class ExcelParser implements Parser {
 						break;
 					
 					//customer name short
-					case 4: continue;
+					case 4:
+						this.custonerShortName = this.checkForCellType(cell);
+						break;
 					
 					// empty cell
 					case 5: continue;
@@ -153,12 +158,16 @@ public class ExcelParser implements Parser {
 			
 			Customer customer = new Customer();
 			customer.setCustomerID(this.customerID);
+			customer.setCountryCode(this.customerCountryCode);
 			customer.setCountryName(this.country);
 			customer.setCustomerName(this.customerFullName);
+			customer.setCustomerNameShort(this.custonerShortName);
 			customer.setZipCode(this.zipCode);
 			
 			// Website model content is null
 			customer.setCustomersWebsite(new Website());
+			
+			System.out.println(customer.toString());
 			
 			// add customer to array
 			this.customerList.add(customer);

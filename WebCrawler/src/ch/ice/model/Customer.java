@@ -72,6 +72,12 @@ public class Customer {
 	
 	@Override
 	public String toString() {
-		return "Customer ID: "+this.getCustomerID()+"; Customer Name: "+this.getCustomerName()+"; Customer Zipcode: "+this.getZipCode()+";";
+		return "Customer ID: "+this.getCustomerID()+
+				"; Customer Name: "+this.getCustomerName()+
+				"Country Code: "+this.getCountryCode()+";"+
+				"country Name: "+this.getCountryName()+";"+
+				"zip code: "+this.getZipCode()+";"+
+				"customer short name "+this.getCustomerNameShort()+
+				"Customer Website: "+this.getCustomersWebsite().toString();
 	}
 }
