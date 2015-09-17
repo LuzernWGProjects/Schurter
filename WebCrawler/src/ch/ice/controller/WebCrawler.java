@@ -50,14 +50,14 @@ public class WebCrawler {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("something wring with Desc");
+			System.out.println("something wrong with Desc");
 		}
 		try {
 			wc.getKeywords();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("something wring with Keyw");
+			System.out.println("something wrong with Keyw");
 		}
 
 	}
