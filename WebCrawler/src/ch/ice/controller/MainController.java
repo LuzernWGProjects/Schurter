@@ -36,6 +36,8 @@ public class MainController {
 			
 			//test
 			customer.toString();
+		//	System.out.println(customer.getCustomersWebsite().);
+			customer.getCustomersWebsite().printWebsiteUrl();
 			
 			// add metadata
 			

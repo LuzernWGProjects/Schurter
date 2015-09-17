@@ -30,4 +30,8 @@ public class Website {
 	public void setMetaTags(Map metaTags) {
 		this.metaTags = metaTags;
 	}
+	public void printWebsiteUrl()
+	{
+		System.out.println(this.websiteUrl.toString());
+	}
 }
