@@ -5,6 +5,7 @@ package ch.ice.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -25,18 +26,20 @@ public class MainController {
 	public static void startMainController()
 	{
 		
-		//startSearch();
-		startExcelParser();
-	}
-	
-	
-	public static void startParser()
-	{
 		
+		LinkedList<Customer> customerList = startExcelParser(new File("posTest.xlsx"));
+		
+		for (Customer customer : customerList) {
+			// Add url for customer
+			URL retrivedUrl = searchForUrl(customer);
+			customer.getCustomersWebsite().setWebsiteUrl(retrivedUrl);
+			
+			// add metadata
+			
+		}
 	}
 	
-	
-	public static Customer startSearch(Customer  customer){
+	public static URL searchForUrl(Customer  customer){
 		System.out.println("start test bing");
 		
 		try {
@@ -50,21 +53,18 @@ public class MainController {
 	
 	
 	// Test purpose
-	public static void startExcelParser(){
+	public static LinkedList<Customer> startExcelParser(File file){
 		Parser excelParser = new ExcelParser();
 		
 		try {
 			// retrive all Customers from list
-			LinkedList<Customer> customerList = excelParser.readFile(new File("posTest.xlsx"));
-			
-			for (Customer customer : customerList) {
-				System.out.println(customer.toString());
-			}
+			return excelParser.readFile(file);
 			
 		} catch (IOException e) {
 			System.out.println("File not found");
 			e.printStackTrace();
 		}
+		return null;
 	}
 	
 	public static void startWriter()
