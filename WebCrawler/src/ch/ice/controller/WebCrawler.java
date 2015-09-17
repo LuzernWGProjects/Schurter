@@ -20,18 +20,7 @@ public class WebCrawler {
 		document = Jsoup.connect(url).get();
 	}
 
-	// Get description from document object.
-	public String getDescription() {
-		String description = document.select("meta[name=description]").get(0)
-				.attr("content");
-
-		// Print description.
-		// System.out.println("Meta Description: " + description);
-
-		return description;
-	}
-
-	// Get keywords from document object.
+	// Get Metatags from document object and return Map
 	public Map<String, String> getMetaTags(ArrayList<String> metaDef) {
 
 		Map<String, String> map = new HashMap<String, String>();
@@ -49,9 +38,6 @@ public class WebCrawler {
 			}
 
 		}
-
-		// Print keywords.
-		// System.out.println("Meta Keyword : " + keywords);
 
 		return map;
 	}
