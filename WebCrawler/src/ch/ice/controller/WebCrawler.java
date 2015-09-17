@@ -14,7 +14,7 @@ public class WebCrawler {
 
 	// Get Document object after parsing the html from given url.
 	public void connnect(String url) throws IOException {
-		document = Jsoup.connect("http://www.snowflake.ch").get();
+		document = Jsoup.connect(url).get();
 	}
 
 	// Get description from document object.
