@@ -36,8 +36,6 @@ public class MainController {
 			
 			//test
 			customer.toString();
-		//	System.out.println(customer.getCustomersWebsite().);
-			customer.getCustomersWebsite().printWebsiteUrl();
 			
 			// add metadata
 			
@@ -53,7 +51,7 @@ public class MainController {
 		// else{....
 		
 	// Define Query	
-	 String query = c.getCustomerName()+" "+ c.getCountryName()+" "+c.getZipCode();
+	 String query = c.getFullName()+" "+ c.getCountryName()+" "+c.getZipCode();
 		
 	
 		try {
