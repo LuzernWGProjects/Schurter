@@ -14,6 +14,8 @@ import java.util.Base64;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import ch.ice.model.Customer;
+
 
 /**
  * @author Oliver
@@ -22,8 +24,11 @@ import org.json.JSONObject;
 public class BingSearchEngine {
 
 
-    public static  JSONArray Search(String companyQuery) throws Exception {
+    public static  Customer Search(Customer c) throws Exception {
       
+    	
+    	String companyQuery = c.getCountryName()+" "+c.getZipCode();
+    	
     	// Bing Constants
     	final String accountKey = "Ji1A66TE2PeWimPqfLKVsKq4Q91Xb6cNBEEBmPjRWyQ";
         final String bingUrlPattern = "https://api.datamarket.azure.com/Bing/SearchWeb/Web?Query=%%27%s%%27&$format=JSON";
@@ -58,6 +63,8 @@ public class BingSearchEngine {
             
             }
             */
+            
+            
             return results;
           
         }
