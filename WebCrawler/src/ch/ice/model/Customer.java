@@ -69,4 +69,9 @@ public class Customer {
 	public void setCustomersWebsite(Website customersWebsite) {
 		this.customersWebsite = customersWebsite;
 	}
+	
+	@Override
+	public String toString() {
+		return "Customer ID: "+this.getCustomerID()+"; Customer Name: "+this.getCustomerName()+"; Customer Zipcode: "+this.getZipCode()+";";
+	}
 }
