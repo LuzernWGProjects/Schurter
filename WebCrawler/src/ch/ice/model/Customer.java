@@ -61,4 +61,12 @@ public class Customer {
 	public void setCustomerNameShort(String customerNameShort) {
 		this.customerNameShort = customerNameShort;
 	}
+
+	public Website getCustomersWebsite() {
+		return customersWebsite;
+	}
+
+	public void setCustomersWebsite(Website customersWebsite) {
+		this.customersWebsite = customersWebsite;
+	}
 }
