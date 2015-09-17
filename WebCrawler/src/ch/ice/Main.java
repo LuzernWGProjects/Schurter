@@ -4,6 +4,7 @@
 package ch.ice;
 
 import ch.ice.controller.BingSearchEngine;
+import ch.ice.controller.MainController;
 
 /**
  * @author Oliver
@@ -16,17 +17,9 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		System.out.println("start test bing");
+		System.out.println("start programm");
 		
-		String query = "schurter luzern";
-		try {
-			BingSearchEngine.Search(query);
-			
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		MainController.startMainController();
 
 	}
 
