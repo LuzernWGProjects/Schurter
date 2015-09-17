@@ -24,16 +24,16 @@ import ch.ice.model.Customer;
 public class BingSearchEngine {
 
 
-    public static  Customer Search(Customer c) throws Exception {
+    public static  JSONArray Search(String requestedQuery) throws Exception {
       
     	
-    	String companyQuery = c.getCountryName()+" "+c.getZipCode();
+    	
     	
     	// Bing Constants
     	final String accountKey = "Ji1A66TE2PeWimPqfLKVsKq4Q91Xb6cNBEEBmPjRWyQ";
         final String bingUrlPattern = "https://api.datamarket.azure.com/Bing/SearchWeb/Web?Query=%%27%s%%27&$format=JSON";
 
-        final String query = URLEncoder.encode(companyQuery, Charset.defaultCharset().name());
+        final String query = URLEncoder.encode(requestedQuery, Charset.defaultCharset().name());
         final String bingUrl = String.format(bingUrlPattern, query);
 
         final String accountKeyEnc = Base64.getEncoder().encodeToString((accountKey + ":" + accountKey).getBytes());
@@ -64,7 +64,11 @@ public class BingSearchEngine {
             }
             */
             
+        //    JSONObject   aResult = results.getJSONObject(0);
+      
+           // c.getCustomersWebsite().setWebsiteUrl(new URL((String) aResult.get("Url")));
             
+           // return new URL((String) aResult.get("Url"));
             return results;
           
         }

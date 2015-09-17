@@ -5,11 +5,15 @@ package ch.ice.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ch.ice.controller.parser.ExcelParser;
+import ch.ice.model.Customer;
 import ch.ice.controller.interf.Parser;
 
 /**
@@ -22,55 +26,68 @@ public class MainController {
 	public static void startMainController()
 	{
 		
-		//startSearch();
-		startExcelParser();
-	}
-	
-	
-	public static void startParser()
-	{
 		
+		LinkedList<Customer> customerList = startExcelParser(new File("posTest.xlsx"));
+		
+		for (Customer customer : customerList) {
+			// Add url for customer
+			URL retrivedUrl = searchForUrl(customer);
+			customer.getCustomersWebsite().setWebsiteUrl(retrivedUrl);
+			
+			//test
+			customer.toString();
+		//	System.out.println(customer.getCustomersWebsite().);
+			customer.getCustomersWebsite().printWebsiteUrl();
+			
+			// add metadata
+			
+		}
 	}
 	
-	
-	public static String startSearch(String query){
+	public static URL searchForUrl(Customer  c){
 		System.out.println("start test bing");
-		String url = null;
+	
+	//decide whether to use bing or google
+		// if (bing)
+		//{ BingSearchEngine(......
+		// else{....
 		
+	// Define Query	
+	 String query = c.getCustomerName()+" "+ c.getCountryName()+" "+c.getZipCode();
+		
+	
 		try {
 			
-		 JSONArray results = BingSearchEngine.Search(query);
-	/*	 
-	     final int resultsLength = results.length();
-
-		   for (int i = 0; i < resultsLength; i++) {
-	    	   JSONObject   aResult = results.getJSONObject(i);
-	        System.out.println(aResult.get("Url"));
-	    }
-	      */ 
-	        JSONObject   JsonObj = results.getJSONObject(0); 
-	        
-	         url = (String) JsonObj.get("Url");
-	      	
-			
+			 //Start Search
+			 JSONArray results =  BingSearchEngine.Search(query);
+			 
+			 //logic to pick the first record ; here should be the search logic!
+			 JSONObject   aResult = results.getJSONObject(0);
+			 
+			 // return only the URL form first object
+			 return new URL((String) aResult.get("Url"));
+			 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		  return url;
-		}
+		return null;
+	}
 	
 	
 	// Test purpose
-	public static void startExcelParser(){
+	public static LinkedList<Customer> startExcelParser(File file){
 		Parser excelParser = new ExcelParser();
 		
 		try {
-			excelParser.readFile(new File("posTest.xlsx"));
+			// retrive all Customers from list
+			return excelParser.readFile(file);
+			
 		} catch (IOException e) {
 			System.out.println("File not found");
 			e.printStackTrace();
 		}
+		return null;
 	}
 	
 	public static void startWriter()

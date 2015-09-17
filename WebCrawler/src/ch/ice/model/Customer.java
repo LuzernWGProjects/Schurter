@@ -61,4 +61,23 @@ public class Customer {
 	public void setCustomerNameShort(String customerNameShort) {
 		this.customerNameShort = customerNameShort;
 	}
+
+	public Website getCustomersWebsite() {
+		return customersWebsite;
+	}
+
+	public void setCustomersWebsite(Website customersWebsite) {
+		this.customersWebsite = customersWebsite;
+	}
+	
+	@Override
+	public String toString() {
+		return "Customer ID: "+this.getCustomerID()+
+				"; Customer Name: "+this.getCustomerName()+
+				"Country Code: "+this.getCountryCode()+";"+
+				"country Name: "+this.getCountryName()+";"+
+				"zip code: "+this.getZipCode()+";"+
+				"customer short name "+this.getCustomerNameShort()+
+				"Customer Website: "+this.getCustomersWebsite().toString();
+	}
 }
