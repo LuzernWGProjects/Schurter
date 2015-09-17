@@ -34,21 +34,44 @@ public class MainController {
 			URL retrivedUrl = searchForUrl(customer);
 			customer.getWebsite().setUrl(retrivedUrl);
 			
+			//test
+			customer.toString();
+		//	System.out.println(customer.getCustomersWebsite().);
+			customer.getCustomersWebsite().printWebsiteUrl();
+			
 			// add metadata
 			
 		}
 	}
 	
-	public static URL searchForUrl(Customer  customer){
+	public static URL searchForUrl(Customer  c){
 		System.out.println("start test bing");
+	
+	//decide whether to use bing or google
+		// if (bing)
+		//{ BingSearchEngine(......
+		// else{....
 		
+	// Define Query	
+	 String query = c.getCustomerName()+" "+ c.getCountryName()+" "+c.getZipCode();
+		
+	
 		try {
-			return BingSearchEngine.Search(customer);
+			
+			 //Start Search
+			 JSONArray results =  BingSearchEngine.Search(query);
+			 
+			 //logic to pick the first record ; here should be the search logic!
+			 JSONObject   aResult = results.getJSONObject(0);
+			 
+			 // return only the URL form first object
+			 return new URL((String) aResult.get("Url"));
+			 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return customer;
+		return null;
 	}
 	
 	
