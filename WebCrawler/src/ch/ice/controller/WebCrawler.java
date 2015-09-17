@@ -1,4 +1,5 @@
 package ch.ice.controller;
+
 import java.io.IOException;
 
 import org.jsoup.Jsoup;
@@ -13,7 +14,7 @@ public class WebCrawler {
 
 	// Get Document object after parsing the html from given url.
 	public void connnect(String url) throws IOException {
-		document = Jsoup.connect("http://www.snowflake.ch").get();
+		document = Jsoup.connect(url).get();
 	}
 
 	// Get description from document object.
@@ -36,7 +37,7 @@ public class WebCrawler {
 
 		WebCrawler wc = new WebCrawler();
 		try {
-			wc.connnect("htttp://www.snowflake.ch");
+			wc.connnect("http://www.snowflake.ch");
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -49,14 +50,14 @@ public class WebCrawler {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("something wring with Desc");
+			System.out.println("something wrong with Desc");
 		}
 		try {
 			wc.getKeywords();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("something wring with Keyw");
+			System.out.println("something wrong with Keyw");
 		}
 
 	}
