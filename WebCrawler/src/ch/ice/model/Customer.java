@@ -12,6 +12,7 @@ public class Customer {
 	private String countryName;
 	private String zipCode;
 	private String customerNameShort;
+	private Website customersWebsite;
 	
 	public String getCustomerID() {
 		return customerID;
