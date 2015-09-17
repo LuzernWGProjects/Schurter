@@ -1,4 +1,5 @@
 package ch.ice.controller;
+
 import java.io.IOException;
 
 import org.jsoup.Jsoup;
@@ -36,7 +37,7 @@ public class WebCrawler {
 
 		WebCrawler wc = new WebCrawler();
 		try {
-			wc.connnect("htttp://www.snowflake.ch");
+			wc.connnect("http://www.snowflake.ch");
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
