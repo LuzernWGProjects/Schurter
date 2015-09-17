@@ -24,7 +24,7 @@ public class BingSearchEngine {
 
     public static void Search(String companyQuery) throws Exception {
         final String accountKey = "Ji1A66TE2PeWimPqfLKVsKq4Q91Xb6cNBEEBmPjRWyQ";
-        final String bingUrlPattern = "https://api.datamarket.azure.com/Bing/Search/Web?Query=%%27%s%%27&$format=JSON";
+        final String bingUrlPattern = "https://api.datamarket.azure.com/Bing/SearchWeb/Web?Query=%%27%s%%27&$format=JSON";
 
         final String query = URLEncoder.encode(companyQuery, Charset.defaultCharset().name());
         final String bingUrl = String.format(bingUrlPattern, query);
