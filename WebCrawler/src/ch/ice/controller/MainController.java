@@ -32,7 +32,7 @@ public class MainController {
 		for (Customer customer : customerList) {
 			// Add url for customer
 			URL retrivedUrl = searchForUrl(customer);
-			customer.getCustomersWebsite().setWebsiteUrl(retrivedUrl);
+			customer.getWebsite().setUrl(retrivedUrl);
 			
 			// add metadata
 			

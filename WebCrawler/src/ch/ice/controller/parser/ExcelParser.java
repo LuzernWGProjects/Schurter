@@ -2,16 +2,12 @@ package ch.ice.controller.parser;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -157,15 +153,15 @@ public class ExcelParser implements Parser {
 			 */
 			
 			Customer customer = new Customer();
-			customer.setCustomerID(this.customerID);
+			customer.setId(this.customerID);
 			customer.setCountryCode(this.customerCountryCode);
 			customer.setCountryName(this.country);
-			customer.setCustomerName(this.customerFullName);
-			customer.setCustomerNameShort(this.custonerShortName);
+			customer.setFullName(this.customerFullName);
+			customer.setShortName(this.custonerShortName);
 			customer.setZipCode(this.zipCode);
 			
 			// Website model content is null
-			customer.setCustomersWebsite(new Website());
+			customer.setWebsite(new Website());
 			
 			System.out.println(customer.toString());
 			

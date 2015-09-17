@@ -6,28 +6,36 @@ package ch.ice.model;
  */
 public class Customer {
 	
-	private String customerID;
-	private String customerName;
+	private String id;
+	private String fullName;
+	private String shortName;
 	private String countryCode;
 	private String countryName;
 	private String zipCode;
-	private String customerNameShort;
-	private Website customersWebsite;
+	private Website website;
 	
-	public String getCustomerID() {
-		return customerID;
+	public String getId() {
+		return id;
 	}
 	
-	public void setCustomerID(String customerID) {
-		this.customerID = customerID;
+	public void setId(String id) {
+		this.id = id;
 	}
 	
-	public String getCustomerName() {
-		return customerName;
+	public String getFullName() {
+		return fullName;
 	}
 	
-	public void setCustomerName(String customerName) {
-		this.customerName = customerName;
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+	
+	public String getShortName() {
+		return shortName;
+	}
+	
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
 	}
 	
 	public String getCountryCode() {
@@ -54,30 +62,17 @@ public class Customer {
 		this.zipCode = zipCode;
 	}
 	
-	public String getCustomerNameShort() {
-		return customerNameShort;
+	public Website getWebsite() {
+		return website;
 	}
 	
-	public void setCustomerNameShort(String customerNameShort) {
-		this.customerNameShort = customerNameShort;
-	}
-
-	public Website getCustomersWebsite() {
-		return customersWebsite;
-	}
-
-	public void setCustomersWebsite(Website customersWebsite) {
-		this.customersWebsite = customersWebsite;
+	public void setWebsite(Website website) {
+		this.website = website;
 	}
 	
 	@Override
 	public String toString() {
-		return "Customer ID: "+this.getCustomerID()+
-				"; Customer Name: "+this.getCustomerName()+
-				"Country Code: "+this.getCountryCode()+";"+
-				"country Name: "+this.getCountryName()+";"+
-				"zip code: "+this.getZipCode()+";"+
-				"customer short name "+this.getCustomerNameShort()+
-				"Customer Website: "+this.getCustomersWebsite().toString();
+		//Website: [ URL: "+this.getWebsite().getUrl().toString()+"; Meta Tags: "+this.getWebsite().getMetaTags().toString()+" ];
+		return "Customer Object = ID: "+this.getId()+"; Full Name: "+this.getFullName()+"; Short Name: "+this.getShortName()+"; Country Code: "+this.getCountryCode()+"; Country Name: "+this.getCountryName()+"; ZIP Code: "+this.getZipCode()+"; ";
 	}
 }

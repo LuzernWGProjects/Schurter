@@ -5,29 +5,30 @@ import java.util.Map;
 
 public class Website {
 	
-	private URL websiteUrl;
+	private URL url;
 	private Map metaTags;
 	
 	public Website() {}
 	
 	public Website(URL url, Map metaTags) {
 		this.setMetaTags(metaTags);
-		this.setWebsiteUrl(url);
+		this.setUrl(url);
 	}
-	
-	public URL getWebsiteUrl() {
-		return websiteUrl;
+
+	public URL getUrl() {
+		return url;
 	}
-	
-	public void setWebsiteUrl(URL websiteUrl) {
-		this.websiteUrl = websiteUrl;
+
+	public void setUrl(URL url) {
+		this.url = url;
 	}
-	
+
 	public Map getMetaTags() {
 		return metaTags;
 	}
-	
+
 	public void setMetaTags(Map metaTags) {
 		this.metaTags = metaTags;
 	}
+	
 }
