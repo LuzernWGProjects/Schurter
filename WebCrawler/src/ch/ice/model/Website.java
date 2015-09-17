@@ -30,5 +30,4 @@ public class Website {
 	public void setMetaTags(Map metaTags) {
 		this.metaTags = metaTags;
 	}
-	
 }
