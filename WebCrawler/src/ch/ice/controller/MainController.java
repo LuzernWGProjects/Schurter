@@ -36,32 +36,17 @@ public class MainController {
 	}
 	
 	
-	public static String startSearch(String query){
+	public static Customer startSearch(Customer  customer){
 		System.out.println("start test bing");
-		String url = null;
 		
 		try {
-			
-		 JSONArray results = BingSearchEngine.Search(query);
-	/*	 
-	     final int resultsLength = results.length();
-
-		   for (int i = 0; i < resultsLength; i++) {
-	    	   JSONObject   aResult = results.getJSONObject(i);
-	        System.out.println(aResult.get("Url"));
-	    }
-	      */ 
-	        JSONObject   JsonObj = results.getJSONObject(0); 
-	        
-	         url = (String) JsonObj.get("Url");
-	      	
-			
+			return BingSearchEngine.Search(customer);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		  return url;
-		}
+		return customer;
+	}
 	
 	
 	// Test purpose

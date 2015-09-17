@@ -64,8 +64,11 @@ public class BingSearchEngine {
             }
             */
             
+            JSONObject   aResult = results.getJSONObject(0);
+      
+            c.getCustomersWebsite().setWebsiteUrl(new URL((String) aResult.get("Url")));
             
-            return results;
+            return c;
           
         }
     }
