@@ -1,0 +1,5 @@
+Ich weiss etz warum mer kei jars chan ufelade. Git bzw egit verbütet das. falls mer wend das alles automatisch abeglade wird, müsstemer maven verwende oder de rescht vo hand dezuelade.
+
+ich ha etz mal das file erstellt, das mer all de "lib" ordner hend.
+
+cheers marco
