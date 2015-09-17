@@ -1,5 +1,5 @@
 package ch.ice.controller.interf;
 
-public interface IWriter {
+public interface Writer {
 
 }
