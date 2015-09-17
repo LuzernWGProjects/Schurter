@@ -5,11 +5,14 @@ package ch.ice.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ch.ice.controller.parser.ExcelParser;
+import ch.ice.model.Customer;
 import ch.ice.controller.interf.Parser;
 
 /**
@@ -58,7 +61,13 @@ public class MainController {
 		Parser excelParser = new ExcelParser();
 		
 		try {
-			excelParser.readFile(new File("posTest.xlsx"));
+			// retrive all Customers from list
+			LinkedList<Customer> customerList = excelParser.readFile(new File("posTest.xlsx"));
+			
+			for (Customer customer : customerList) {
+				
+			}
+			
 		} catch (IOException e) {
 			System.out.println("File not found");
 			e.printStackTrace();

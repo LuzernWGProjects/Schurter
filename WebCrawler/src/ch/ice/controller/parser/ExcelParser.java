@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.Row;
@@ -15,6 +16,8 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import ch.ice.controller.interf.Parser;
+import ch.ice.model.Customer;
+import ch.ice.model.Website;
 
 /*
  *  NOTE: Write config files with allowed file extensions.
@@ -25,9 +28,25 @@ import ch.ice.controller.interf.Parser;
 public class ExcelParser implements Parser {
 	private File file;
 	private InputStream ExcelFileToRead;
+	
+	LinkedList<Customer> customerList;
+	
+	// Customer Fields
+	//headers
+	String customerIDHeader;
+	String countryNameHeader;
+	String zipCodeHeader;
+	String customerNameShortHeader;
+	String customerNameHeader;
+	
+	// customer data
+	String customerID;
+	String country;
+	String zipCode;
+	String customerFullName;
 
 	@Override
-	public void readFile(File file) throws IOException {
+	public LinkedList<Customer> readFile(File file) throws IOException {
 		
 		// set file to private access
 		this.file = file;
@@ -38,8 +57,7 @@ public class ExcelParser implements Parser {
 		
 		switch(fileExtension) {
 			case "xlsx":
-				readXLSXFile();
-				break;
+				return readXLSXFile();
 				
 			case "xls":
 				readXLSFile();
@@ -49,10 +67,12 @@ public class ExcelParser implements Parser {
 					System.out.println("Diese Dateeinung ist nicht erlaubt");
 					break;
 		}
+		return null;
+		
 	}
 
 	
-	private void readXLSXFile() throws IOException {
+	private LinkedList<Customer> readXLSXFile() throws IOException {
 		ExcelFileToRead = new FileInputStream(this.file);
 		
 		XSSFWorkbook wb = new XSSFWorkbook(ExcelFileToRead);
@@ -76,18 +96,12 @@ public class ExcelParser implements Parser {
 			
 			//get table heads
 			if(row.getRowNum() == 2){
-				String customerIDHeader = 			row.getCell(0).toString();
-				String countryNameHeader =			row.getCell(1).toString();
-				String zipCodeHeader = 				row.getCell(3).toString();
-				String customerNameShortHeader = 	row.getCell(4).toString();
-				String customerNameHeader = 		row.getCell(6).toString();
+				this.customerIDHeader = 			row.getCell(0).toString();
+				this.countryNameHeader =			row.getCell(1).toString();
+				this.zipCodeHeader = 				row.getCell(3).toString();
+				this.customerNameShortHeader = 	row.getCell(4).toString();
+				this.customerNameHeader = 		row.getCell(6).toString();
 				
-				System.out.println(customerIDHeader);
-				System.out.println(countryNameHeader);
-				System.out.println(zipCodeHeader);
-				System.out.println(customerNameShortHeader);
-				System.out.println(customerNameHeader);
-				System.out.println();
 				continue;
 				
 			}
@@ -102,32 +116,60 @@ public class ExcelParser implements Parser {
 				if(cell.getColumnIndex() >= 7) continue;
 				
 				switch(cell.getColumnIndex()){
-					case 0: //customer id
-						String customerID = this.checkForCellType(cell);
-						System.out.println(customerID);
+					//customer id
+					case 0: 
+						this.customerID = this.checkForCellType(cell);
 						break;
-					case 1: continue; //skip this (laendercode)
-					case 2: //land
-						String country = this.checkForCellType(cell);
-						System.out.println(country);
+					
+					//country Code
+					case 1: continue;
+					
+					// country Name
+					case 2:
+						this.country = this.checkForCellType(cell);
 						break;
-					case 3: //zip
-						String zip = this.checkForCellType(cell);
-						System.out.println(zip);
+						
+					// Zip code
+					case 3:
+						this.zipCode = this.checkForCellType(cell);
 						break;
-					case 4: continue; //customer name short
-					case 5: continue; //skip
-					case 6: //customer name
-						String customerFullName = this.checkForCellType(cell);
-						System.out.println(customerFullName);
+					
+					//customer name short
+					case 4: continue;
+					
+					// empty cell
+					case 5: continue;
+					
+					//customer full name
+					case 6:
+						this.customerFullName = this.checkForCellType(cell);
 						break;
 				}
 			}
-			System.out.println();
+			
+			/*
+			 * Generate Customer Object
+			 */
+			
+			Customer customer = new Customer();
+			customer.setCustomerID(this.customerID);
+			customer.setCountryName(this.country);
+			customer.setCustomerName(this.customerFullName);
+			customer.setZipCode(this.zipCode);
+			
+			// Website model content is null
+			customer.setCustomersWebsite(new Website());
+			
+			// add customer to array
+			this.customerList.add(customer);
 		}
 		
+		return this.customerList;
 	}
 	
+	/*
+	 * Check if the cell is numeric or a string type
+	 */
 	private String checkForCellType(XSSFCell cell) {
 		if (cell.getCellType() == XSSFCell.CELL_TYPE_STRING) {
 			return cell.getStringCellValue().toString();
@@ -142,7 +184,6 @@ public class ExcelParser implements Parser {
 
 	private void readXLSFile() {
 		// TODO Auto-generated method stub
-		
 	}
 	
 }

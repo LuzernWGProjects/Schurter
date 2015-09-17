@@ -3,6 +3,9 @@ package ch.ice.controller.interf;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
+
+import ch.ice.model.Customer;
 
 /**
  * 
@@ -12,6 +15,6 @@ import java.io.IOException;
 public interface Parser {
 	
 	// input can either be a Excel File or a CSV file
-	public void readFile(File file) throws IOException;
+	public LinkedList<Customer> readFile(File file) throws IOException;
 		
 }
