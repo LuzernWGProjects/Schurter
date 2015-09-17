@@ -16,6 +16,12 @@ public class MainController {
 		startSearch();
 	}
 	
+	
+	public static void startParser()
+	{
+		
+	}
+	
 	public static void startSearch(){
 	System.out.println("start test bing");
 	
@@ -30,4 +36,14 @@ public class MainController {
 	}
 	}
 	
+	
+	public static void startWriter()
+	{
+		
+	}
+	
+	public static void startCrawler()
+	{
+		
+	}
 }
