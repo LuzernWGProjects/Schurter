@@ -21,10 +21,10 @@ import ch.ice.model.Customer;
  * @author Oliver
  *
  */
-public class BingSearchEngine {
+public class BingSearchEngine  {
 
-
-    public static  JSONArray Search(String requestedQuery) throws Exception {
+	
+		public static  JSONArray Search(String requestedQuery) throws Exception {
       
     	
     	
