@@ -6,7 +6,9 @@ package ch.ice.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,23 +28,36 @@ public class MainController {
 
 		LinkedList<Customer> customerList = startExcelParser(new File(
 				"posTest.xlsx"));
+		
+		
+		WebCrawler wc = new WebCrawler();
+		//Testing purpose
+		ArrayList<String> array = new ArrayList<String>();
+		array.add("description");
+		array.add("keyword");
+		array.add("author");
+		array.add("viewport");
+		
+		for (Customer customer : customerList) {
+			// Add url for customer
+			URL retrivedUrl = searchForUrl(customer);
+			customer.getWebsite().setUrl(retrivedUrl);
 
-//		for (Customer customer : customerList) {
-//			// Add url for customer
-//			URL retrivedUrl = searchForUrl(customer);
-//			customer.getWebsite().setUrl(retrivedUrl);
-//
-//			// add metadata
-//			WebCrawler wc = new WebCrawler();
-//			try {
-//				wc.connnect(retrivedUrl.toString());
-//				wc.getMetaTags(metaDef);
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//
-//		}
+			// add metadata
+			
+			try {
+				wc.connnect(retrivedUrl.toString());
+					
+				customer.getWebsite().setMetaTags(wc.getMetaTags(array));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			System.out.println("Customer: "+ "url: "+customer.getWebsite().getUrl()+" ------ meta: "+ customer.getWebsite().getMetaTags());
+			
+			
+		}
 	}
 
 	public static URL searchForUrl(Customer c) {
