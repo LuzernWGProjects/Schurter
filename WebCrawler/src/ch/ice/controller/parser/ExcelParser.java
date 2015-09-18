@@ -5,10 +5,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -26,7 +30,6 @@ import ch.ice.model.Website;
  *
  */
 
-// TODO Write allowed Extension in Configfile!!
 
 public class ExcelParser implements Parser {
 	private File file;
@@ -51,12 +54,26 @@ public class ExcelParser implements Parser {
 	String customerFullName;
 	String custonerShortName;
 
+	Configuration config;
+	
+	public ExcelParser() {
+		/*
+		 * Load Configuration File
+		 */
+		try {
+			this.config = new PropertiesConfiguration("app.properties");
+			
+			this.allowedFileExtensions = Arrays.asList(this.config.getStringArray("parser.allowedFileExtensions"));
+		} catch (ConfigurationException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getLocalizedMessage());
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public LinkedList<Customer> readFile(File file) throws IOException, IllegalFileExtensionException {
-		this.allowedFileExtensions.add("xls");
-		this.allowedFileExtensions.add("xlsx");
-		this.allowedFileExtensions.add("cvs");
-
+		
 		// set file to private access only
 		this.file = file;
 

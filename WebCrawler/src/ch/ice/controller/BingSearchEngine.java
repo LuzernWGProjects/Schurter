@@ -9,8 +9,12 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Base64;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,20 +27,32 @@ import ch.ice.model.Customer;
  */
 public class BingSearchEngine {
 
-
     public static  JSONArray Search(String requestedQuery) throws Exception {
-      
     	
+    	String accountKey = "";
+    	String bingUrlPattern = "";
+    	Configuration config;
     	
+    	/*
+		 * Load Configuration File
+		 */
+		try {
+			config = new PropertiesConfiguration("app.properties");
+			
+			accountKey = config.getString("searchEngine.bing.accountKey");
+			bingUrlPattern = config.getString("searchEngine.bing.pattern");
+			
+		} catch (ConfigurationException e) {
+			System.out.println(e.getLocalizedMessage());
+			e.printStackTrace();
+		}
     	
     	// Bing Constants
-    	final String accountKey = "Ji1A66TE2PeWimPqfLKVsKq4Q91Xb6cNBEEBmPjRWyQ";
-        final String bingUrlPattern = "https://api.datamarket.azure.com/Bing/SearchWeb/Web?Query=%%27%s%%27&$format=JSON";
 
-        final String query = URLEncoder.encode(requestedQuery, Charset.defaultCharset().name());
-        final String bingUrl = String.format(bingUrlPattern, query);
+        String query = URLEncoder.encode(requestedQuery, Charset.defaultCharset().name());
+        String bingUrl = String.format(bingUrlPattern, query);
 
-        final String accountKeyEnc = Base64.getEncoder().encodeToString((accountKey + ":" + accountKey).getBytes());
+        String accountKeyEnc = Base64.getEncoder().encodeToString((accountKey + ":" + accountKey).getBytes());
 
         final URL url = new URL(bingUrl);
         final URLConnection connection = url.openConnection();
@@ -55,22 +71,8 @@ public class BingSearchEngine {
             final JSONObject d = json.getJSONObject("d");
             final JSONArray results = d.getJSONArray("results");
             final int resultsLength = results.length();
-          
-           /* 
-            for (int i = 0; i < resultsLength; i++) {
-            	   JSONObject   aResult = results.getJSONObject(i);
-                System.out.println(aResult.get("Url"));
-            
-            }
-            */
-            
-        //    JSONObject   aResult = results.getJSONObject(0);
-      
-           // c.getCustomersWebsite().setWebsiteUrl(new URL((String) aResult.get("Url")));
-            
-           // return new URL((String) aResult.get("Url"));
+
             return results;
-          
         }
     }
 

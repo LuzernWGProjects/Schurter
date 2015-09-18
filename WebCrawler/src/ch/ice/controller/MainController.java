@@ -27,22 +27,22 @@ public class MainController {
 		LinkedList<Customer> customerList = startExcelParser(new File(
 				"posTest.xlsx"));
 
-		for (Customer customer : customerList) {
-			// Add url for customer
-			URL retrivedUrl = searchForUrl(customer);
-			customer.getWebsite().setUrl(retrivedUrl);
-
-			// add metadata
-			WebCrawler wc = new WebCrawler();
-			try {
-				wc.connnect(retrivedUrl.toString());
-				wc.getMetaTags(metaDef);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
+//		for (Customer customer : customerList) {
+//			// Add url for customer
+//			URL retrivedUrl = searchForUrl(customer);
+//			customer.getWebsite().setUrl(retrivedUrl);
+//
+//			// add metadata
+//			WebCrawler wc = new WebCrawler();
+//			try {
+//				wc.connnect(retrivedUrl.toString());
+//				wc.getMetaTags(metaDef);
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//
+//		}
 	}
 
 	public static URL searchForUrl(Customer c) {
