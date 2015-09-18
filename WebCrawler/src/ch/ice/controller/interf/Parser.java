@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 
+import ch.ice.exceptions.IllegalFileExtensionException;
 import ch.ice.model.Customer;
 
 /**
@@ -15,6 +16,6 @@ import ch.ice.model.Customer;
 public interface Parser {
 	
 	// input can either be a Excel File or a CSV file
-	public LinkedList<Customer> readFile(File file) throws IOException;
+	public LinkedList<Customer> readFile(File file) throws IOException, IllegalFileExtensionException;
 		
 }

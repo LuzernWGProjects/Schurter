@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ch.ice.controller.parser.ExcelParser;
+import ch.ice.exceptions.IllegalFileExtensionException;
 import ch.ice.model.Customer;
 import ch.ice.controller.interf.Parser;
 
@@ -78,8 +79,8 @@ public class MainController {
 			// retrive all Customers from list
 			return excelParser.readFile(file);
 			
-		} catch (IOException e) {
-			System.out.println("File not found");
+		} catch (IOException | IllegalFileExtensionException e) {
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
 		return null;

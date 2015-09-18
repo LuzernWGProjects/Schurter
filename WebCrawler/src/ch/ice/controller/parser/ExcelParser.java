@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -14,23 +16,27 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import ch.ice.controller.interf.Parser;
+import ch.ice.exceptions.IllegalFileExtensionException;
 import ch.ice.model.Customer;
 import ch.ice.model.Website;
 
-/*
- *  NOTE: Write config files with allowed file extensions.
- *  	-> XLS OR XLSX
+/**
  * 
+ * @author mneuhaus
+ *
  */
+
+//TODO Write allowed Extension in Configfile!!
 
 public class ExcelParser implements Parser {
 	private File file;
 	private InputStream ExcelFileToRead;
+	private List<String> allowedFileExtensions = new ArrayList<String>();
 	
 	LinkedList<Customer> customerList = new LinkedList<Customer>();
 	
 	// Customer Fields
-	//headers
+	//headers from File
 	String customerIDHeader;
 	String countryNameHeader;
 	String zipCodeHeader;
@@ -46,22 +52,27 @@ public class ExcelParser implements Parser {
 	String custonerShortName;
 
 	@Override
-	public LinkedList<Customer> readFile(File file) throws IOException {
+	public LinkedList<Customer> readFile(File file) throws IOException, IllegalFileExtensionException {
+		this.allowedFileExtensions.add("xls");
+		this.allowedFileExtensions.add("xlsx");
 		
-		// set file to private access
+		// set file to private access only
 		this.file = file;
 		
 		
 		// check if it is an XLS file or a XLSX file
 		String fileExtension = FilenameUtils.getExtension(file.getName()).toLowerCase();
 		
+		if(!this.allowedFileExtensions.contains(fileExtension)){
+			throw new IllegalFileExtensionException("Wrong file Extension. Please only use "+this.allowedFileExtensions.toString());
+		}
+		
 		switch(fileExtension) {
 			case "xlsx":
 				return readXLSXFile();
 				
 			case "xls":
-				readXLSFile();
-				break;
+				return readXLSFile();
 			
 			default:
 					System.out.println("Diese Dateeinung ist nicht erlaubt");
@@ -151,23 +162,42 @@ public class ExcelParser implements Parser {
 			/*
 			 * Generate Customer Object
 			 */
+			Customer customer = this.createCustomer();
 			
-			Customer customer = new Customer();
-			customer.setId(this.customerID);
-			customer.setCountryCode(this.customerCountryCode);
-			customer.setCountryName(this.country);
-			customer.setFullName(this.customerFullName);
-			customer.setShortName(this.custonerShortName);
-			customer.setZipCode(this.zipCode);
 			
-			// Website model content is null
-			customer.setWebsite(new Website());
 			
 			// add customer to array
 			this.customerList.add(customer);
 		}
 		
 		return this.customerList;
+	}
+	
+	private LinkedList<Customer> readXLSFile() {
+
+
+		return null;
+	}
+	
+	/**
+	 * 
+	 * @return customer model with empty Website.
+	 */
+	private Customer createCustomer(){
+		
+		Customer customer = new Customer();
+		
+		customer.setId(this.customerID);
+		customer.setCountryCode(this.customerCountryCode);
+		customer.setCountryName(this.country);
+		customer.setFullName(this.customerFullName);
+		customer.setShortName(this.custonerShortName);
+		customer.setZipCode(this.zipCode);
+		
+		// Website model content is null
+		customer.setWebsite(new Website());
+		
+		return customer;
 	}
 	
 	/*
@@ -183,10 +213,4 @@ public class ExcelParser implements Parser {
 		}
 		return null;
 	}
-
-
-	private void readXLSFile() {
-		// TODO Auto-generated method stub
-	}
-	
 }
