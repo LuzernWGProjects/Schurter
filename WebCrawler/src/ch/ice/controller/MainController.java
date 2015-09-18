@@ -5,6 +5,7 @@ package ch.ice.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +39,9 @@ public class MainController {
 		LinkedList<Customer> customerList = startExcelParser(new File(
 				"posTest.xlsx"));
 		
+		// Core settings
+		boolean isSearchAvail = false;
+		URL defaultUrl = null;
 		
 		WebCrawler wc = new WebCrawler();
 		
@@ -48,8 +52,11 @@ public class MainController {
 		try {
 			config = new PropertiesConfiguration("app.properties");
 			
+			isSearchAvail = config.getBoolean("core.search.isEnabled");
+			defaultUrl = new URL(config.getString("core.search.defaultUrl"));
+			
 			metaTagElements = Arrays.asList(config.getStringArray("crawler.searchForMetaTags"));
-		} catch (ConfigurationException e) {
+		} catch (ConfigurationException | MalformedURLException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getLocalizedMessage());
 			e.printStackTrace();
@@ -57,13 +64,21 @@ public class MainController {
 		
 		for (Customer customer : customerList) {
 			
-			// Add url for customer
-			URL retrivedUrl = searchForUrl(customer);
-			customer.getWebsite().setUrl(retrivedUrl);
-
+			// only search if search is enabled. Disable search for testing purpose
+			if(isSearchAvail){
+				// Add url for customer
+				URL retrivedUrl = searchForUrl(customer);
+				customer.getWebsite().setUrl(retrivedUrl);
+				
+			} else {
+				customer.getWebsite().setUrl(defaultUrl);
+			}
+			
+			
+			
 			// add metadata
 			try {
-				wc.connnect(retrivedUrl.toString());
+				wc.connnect(customer.getWebsite().getUrl().toString());
 				customer.getWebsite().setMetaTags(wc.getMetaTags(metaTagElements));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

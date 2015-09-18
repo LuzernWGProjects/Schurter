@@ -40,6 +40,7 @@ public class ExcelParser implements Parser {
 
 	// Customer Fields
 	// headers from File
+	List<String> headerInfos = new ArrayList<String>();
 	String customerIDHeader;
 	String countryNameHeader;
 	String zipCodeHeader;
@@ -128,7 +129,13 @@ public class ExcelParser implements Parser {
 				this.zipCodeHeader = row.getCell(3).toString();
 				this.customerNameShortHeader = row.getCell(4).toString();
 				this.customerNameHeader = row.getCell(6).toString();
-
+				
+				this.headerInfos.add(this.customerIDHeader);
+				this.headerInfos.add(this.countryNameHeader);
+				this.headerInfos.add(this.zipCodeHeader);
+				this.headerInfos.add(this.customerNameShortHeader);
+				this.headerInfos.add(this.customerNameHeader);
+				
 				continue;
 
 			}
@@ -195,6 +202,7 @@ public class ExcelParser implements Parser {
 	}
 
 	/**
+	 * Create a new customer for every row in the file
 	 * 
 	 * @return customer model with empty Website.
 	 */
@@ -213,6 +221,16 @@ public class ExcelParser implements Parser {
 		customer.setWebsite(new Website());
 
 		return customer;
+	}
+	
+	/**
+	 * Return all collected Headercells from File.
+	 * Will be used for creating new file with the correct Headers
+	 * 
+	 * @return Value in header cells
+	 */
+	public List<String> getCellHeaders(){
+		return this.headerInfos;
 	}
 
 	/**
