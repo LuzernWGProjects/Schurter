@@ -70,9 +70,8 @@ public class Customer {
 		this.website = website;
 	}
 	
-	@Override
-	public String toString() {
-		//Website: [ URL: "+this.getWebsite().getUrl().toString()+"; Meta Tags: "+this.getWebsite().getMetaTags().toString()+" ];
-		return "Customer Object = ID: "+this.getId()+"; Full Name: "+this.getFullName()+"; Short Name: "+this.getShortName()+"; Country Code: "+this.getCountryCode()+"; Country Name: "+this.getCountryName()+"; ZIP Code: "+this.getZipCode()+"; ";
-	}
+//	@Override
+//	public String toString() {
+//		return "Customer Object = ID: "+this.getId()+"; Full Name: "+this.getFullName()+"; Short Name: "+this.getShortName()+"; Country Code: "+this.getCountryCode()+"; Country Name: "+this.getCountryName()+"; ZIP Code: "+this.getZipCode()+"; Website: [ URL: "+this.getWebsite().getUrl().toString()+"; Meta Tags: "+this.getWebsite().getMetaTags().toString()+" ];";
+//	}
 }

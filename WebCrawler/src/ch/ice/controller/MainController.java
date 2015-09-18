@@ -34,9 +34,6 @@ public class MainController {
 			URL retrivedUrl = searchForUrl(customer);
 			customer.getWebsite().setUrl(retrivedUrl);
 			
-			//test
-			customer.toString();
-			
 			// add metadata
 			
 		}

@@ -163,8 +163,6 @@ public class ExcelParser implements Parser {
 			// Website model content is null
 			customer.setWebsite(new Website());
 			
-			System.out.println(customer.toString());
-			
 			// add customer to array
 			this.customerList.add(customer);
 		}
