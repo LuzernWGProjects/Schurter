@@ -6,11 +6,11 @@ import java.util.Map;
 public class Website {
 	
 	private URL url;
-	private Map metaTags;
+	private Map<String,String> metaTags;
 	
 	public Website() {}
 	
-	public Website(URL url, Map metaTags) {
+	public Website(URL url, Map<String,String> metaTags) {
 		this.setMetaTags(metaTags);
 		this.setUrl(url);
 	}
@@ -23,16 +23,16 @@ public class Website {
 		this.url = url;
 	}
 
-	public Map getMetaTags() {
+	public Map<String,String> getMetaTags() {
 		return metaTags;
 	}
 
-	public void setMetaTags(Map metaTags) {
+	public void setMetaTags(Map<String,String> metaTags) {
 		this.metaTags = metaTags;
 	}
 	
-//	@Override
-//	public String toString() {
-//		return "Website Url: "+this.getUrl().toString();
-//	}
+	@Override
+	public String toString() {
+		return "Website URL: "+this.getUrl().toString()+"; MetaTags: "+this.getMetaTags().toString()+"";
+	}
 }

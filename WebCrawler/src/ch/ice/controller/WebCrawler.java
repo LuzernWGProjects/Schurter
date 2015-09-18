@@ -1,8 +1,8 @@
 package ch.ice.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jsoup.Jsoup;
@@ -12,16 +12,13 @@ public class WebCrawler {
 
 	Document document;
 
-	public WebCrawler() {
-	}
-
 	// Get Document object after parsing the html from given url.
 	public void connnect(String url) throws IOException {
 		document = Jsoup.connect(url).get();
 	}
 
 	// Get Metatags from document object and return Map
-	public Map<String, String> getMetaTags(ArrayList<String> metaDef) {
+	public Map<String, String> getMetaTags(List<String> metaDef) {
 
 		Map<String, String> map = new HashMap<String, String>();
 
@@ -32,42 +29,11 @@ public class WebCrawler {
 						.attr("content");
 				map.put(metaWord, metaTags);
 			} catch (Exception e) {
-				System.out.println("fuck this");
-				map.put(metaWord, " n/a");
-
+				// MetaTags not available
+				map.put(metaWord, "n/a");
 			}
-
 		}
 
 		return map;
-	}
-
-	public static void main(String[] args) {
-
-		WebCrawler wc = new WebCrawler();
-		ArrayList<String> array = new ArrayList<String>();
-		array.add("description");
-		array.add("keyword");
-		array.add("author");
-		array.add("viewport");
-
-		try {
-			wc.connnect("http://www.snowflake.ch");
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("Connection failed");
-
-		}
-		try {
-			Map<String, String> test = wc.getMetaTags(array);
-			System.out.println(test.toString());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("something wrong with Desc");
-		}
-
 	}
 }

@@ -7,9 +7,14 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,38 +28,49 @@ import ch.ice.model.Customer;
  *
  */
 public class MainController {
-
+	
+	
 	public static void startMainController() {
 
+		Configuration config;
+		List<String> metaTagElements = new ArrayList<String>();
+		
 		LinkedList<Customer> customerList = startExcelParser(new File(
 				"posTest.xlsx"));
 		
 		
 		WebCrawler wc = new WebCrawler();
-		//Testing purpose
-		ArrayList<String> array = new ArrayList<String>();
-		array.add("description");
-		array.add("keyword");
-		array.add("author");
-		array.add("viewport");
+		
+		
+		/*
+		 * Load Configuration File
+		 */
+		try {
+			config = new PropertiesConfiguration("app.properties");
+			
+			metaTagElements = Arrays.asList(config.getStringArray("crawler.searchForMetaTags"));
+		} catch (ConfigurationException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getLocalizedMessage());
+			e.printStackTrace();
+		}
 		
 		for (Customer customer : customerList) {
+			
 			// Add url for customer
 			URL retrivedUrl = searchForUrl(customer);
 			customer.getWebsite().setUrl(retrivedUrl);
 
 			// add metadata
-			
 			try {
 				wc.connnect(retrivedUrl.toString());
-					
-				customer.getWebsite().setMetaTags(wc.getMetaTags(array));
+				customer.getWebsite().setMetaTags(wc.getMetaTags(metaTagElements));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-			System.out.println("Customer: "+ "url: "+customer.getWebsite().getUrl()+" ------ meta: "+ customer.getWebsite().getMetaTags());
+			System.out.println(customer.getWebsite().toString());
 			
 			
 		}
