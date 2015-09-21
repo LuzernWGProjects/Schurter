@@ -41,8 +41,8 @@ public class ExcelWriter implements Writer {
 	
 	
 	public ExcelWriter(){
-	this.workbook = new HSSFWorkbook();
-	this.sheet = workbook.createSheet("Enriched POS Data");
+	//this.workbook = new HSSFWorkbook();
+	//this.sheet = workbook.createSheet("Enriched POS Data");
 	}
 	
 	
