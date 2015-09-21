@@ -1,9 +1,5 @@
-/**
- * 
- */
 package ch.ice;
 
-import ch.ice.controller.BingSearchEngine;
 import ch.ice.controller.MainController;
 
 /**
@@ -19,8 +15,8 @@ public class Main {
 		// TODO Auto-generated method stub
 		System.out.println("start programm");
 		
-		MainController.startMainController();
-
+		MainController main = new MainController();
+		main.startMainController();
 	}
 
 }

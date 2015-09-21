@@ -5,6 +5,7 @@ package ch.ice.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +16,8 @@ import java.util.Map;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -29,15 +32,18 @@ import ch.ice.model.Customer;
  */
 public class MainController {
 	
+	ExcelParser excelParserInstance;
 	
-	public static void startMainController() {
+	public void startMainController() {
 
 		Configuration config;
 		List<String> metaTagElements = new ArrayList<String>();
 		
-		LinkedList<Customer> customerList = startExcelParser(new File(
-				"posTest.xlsx"));
+		LinkedList<Customer> customerList = startExcelParser(new File("posTest.xlsx"));
 		
+		// Core settings
+		boolean isSearchAvail = false;
+		URL defaultUrl = null;
 		
 		WebCrawler wc = new WebCrawler();
 		
@@ -48,22 +54,32 @@ public class MainController {
 		try {
 			config = new PropertiesConfiguration("app.properties");
 			
+			isSearchAvail = config.getBoolean("core.search.isEnabled");
+			defaultUrl = new URL(config.getString("core.search.defaultUrl"));
+			
 			metaTagElements = Arrays.asList(config.getStringArray("crawler.searchForMetaTags"));
-		} catch (ConfigurationException e) {
-			// TODO Auto-generated catch block
+		} catch (ConfigurationException | MalformedURLException e) {
 			System.out.println(e.getLocalizedMessage());
 			e.printStackTrace();
 		}
 		
 		for (Customer customer : customerList) {
 			
-			// Add url for customer
-			URL retrivedUrl = searchForUrl(customer);
-			customer.getWebsite().setUrl(retrivedUrl);
-
+			// only search via SearchEngine if search is enabled. Disable search for testing purpose
+			if(isSearchAvail){
+				// Add url for customer
+				URL retrivedUrl = searchForUrl(customer);
+				customer.getWebsite().setUrl(retrivedUrl);
+				
+			} else {
+				customer.getWebsite().setUrl(defaultUrl);
+			}
+			
+			
+			
 			// add metadata
 			try {
-				wc.connnect(retrivedUrl.toString());
+				wc.connnect(customer.getWebsite().getUrl().toString());
 				customer.getWebsite().setMetaTags(wc.getMetaTags(metaTagElements));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -72,18 +88,15 @@ public class MainController {
 
 			System.out.println(customer.getWebsite().toString());
 			
-			
 		}
+		
+		
+		startWriter(customerList);
 	}
 
-	public static URL searchForUrl(Customer c) {
+	public URL searchForUrl(Customer c) {
 		System.out.println("start test bing");
-
-		// decide whether to use bing or google
-		// if (bing)
-		// { BingSearchEngine(......
-		// else{....
-
+		
 		// Define Query
 		String query = c.getFullName() + " " + c.getCountryName() + " "
 				+ c.getZipCode();
@@ -106,22 +119,34 @@ public class MainController {
 		return null;
 	}
 
-	// Test purpose
-	public static LinkedList<Customer> startExcelParser(File file) {
-		Parser excelParser = new ExcelParser();
+	
+	public LinkedList<Customer> startExcelParser(File file) {
+		this.excelParserInstance = new ExcelParser();
 
 		try {
 			// retrive all Customers from list
-			return excelParser.readFile(file);
+			return this.excelParserInstance.readFile(file);
 
-		} catch (IOException | IllegalFileExtensionException e) {
+		} catch (IOException | IllegalFileExtensionException | EncryptedDocumentException | InvalidFormatException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
-		return null;
+		
+		return new LinkedList<Customer>();
 	}
 
-	public static void startWriter() {
+	public void startWriter(List<Customer> customerList) {
+		
+		//TODO Check if user demands CSV or EXCEL -> if(excel)->getWorkbook, Else ->write normal
+		//ExcelWriter ew = new ExcelWriter(this.excelParserInstance.getWorkbook());
+		
+		System.out.println("Sheet name at 0 = "+this.excelParserInstance.getWorkbook().getSheetAt(0).getSheetName());
+		
+		System.out.println("Start writing...");
+		
+		ExcelWriter ew = new ExcelWriter();
+		
+		ew.writeFile(customerList, this.excelParserInstance.getWorkbook());
 
 	}
 
