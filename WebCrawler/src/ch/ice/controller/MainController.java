@@ -32,14 +32,14 @@ import ch.ice.model.Customer;
  */
 public class MainController {
 	
+	ExcelParser excelParserInstance;
 	
-	public static void startMainController() {
+	public void startMainController() {
 
 		Configuration config;
 		List<String> metaTagElements = new ArrayList<String>();
 		
-		LinkedList<Customer> customerList = startExcelParser(new File(
-				"posTest.xlsx"));
+		LinkedList<Customer> customerList = startExcelParser(new File("posTest.xlsx"));
 		
 		// Core settings
 		boolean isSearchAvail = false;
@@ -59,7 +59,6 @@ public class MainController {
 			
 			metaTagElements = Arrays.asList(config.getStringArray("crawler.searchForMetaTags"));
 		} catch (ConfigurationException | MalformedURLException e) {
-			// TODO Auto-generated catch block
 			System.out.println(e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -89,21 +88,15 @@ public class MainController {
 
 			System.out.println(customer.getWebsite().toString());
 			
-			
-			
-			
 		}
+		
+		
 		startWriter(customerList);
 	}
 
-	public static URL searchForUrl(Customer c) {
+	public URL searchForUrl(Customer c) {
 		System.out.println("start test bing");
-
-		// decide whether to use bing or google
-		// if (bing)
-		// { BingSearchEngine(......
-		// else{....
-
+		
 		// Define Query
 		String query = c.getFullName() + " " + c.getCountryName() + " "
 				+ c.getZipCode();
@@ -126,28 +119,34 @@ public class MainController {
 		return null;
 	}
 
-	// Test purpose
-	public static LinkedList<Customer> startExcelParser(File file) {
-		Parser excelParser = new ExcelParser();
+	
+	public LinkedList<Customer> startExcelParser(File file) {
+		this.excelParserInstance = new ExcelParser();
 
 		try {
 			// retrive all Customers from list
-			return excelParser.readFile(file);
+			return this.excelParserInstance.readFile(file);
 
 		} catch (IOException | IllegalFileExtensionException | EncryptedDocumentException | InvalidFormatException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
-		return null;
+		
+		return new LinkedList<Customer>();
 	}
 
-	public static void startWriter(List<Customer> customerList) {
+	public void startWriter(List<Customer> customerList) {
+		
+		//TODO Check if user demands CSV or EXCEL -> if(excel)->getWorkbook, Else ->write normal
+		//ExcelWriter ew = new ExcelWriter(this.excelParserInstance.getWorkbook());
+		
+		System.out.println("Sheet name at 0 = "+this.excelParserInstance.getWorkbook().getSheetAt(0).getSheetName());
 		
 		System.out.println("Start writing...");
-		ExcelWriter ew = new ExcelWriter();
+		//ExcelWriter ew = new ExcelWriter();
 		
-		LinkedList l = new LinkedList();
-		ew.writeFile(customerList, l );
+//		LinkedList l = new LinkedList();
+//		ew.writeFile(customerList, l );
 
 	}
 

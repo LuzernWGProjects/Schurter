@@ -42,6 +42,8 @@ public class ExcelParser implements Parser {
 
 	Configuration config;
 
+	Workbook wb;
+	
 	// Customer Fields
 	// headers from File
 	List<String> headerInfos = new ArrayList<String>();
@@ -112,10 +114,10 @@ public class ExcelParser implements Parser {
 	private LinkedList<Customer> readFile() throws EncryptedDocumentException, InvalidFormatException, IOException {
 		ExcelFileToRead = new FileInputStream(this.file);
 
-		Workbook wb = WorkbookFactory.create(ExcelFileToRead);
+		this.wb = WorkbookFactory.create(ExcelFileToRead);
 
 		// load first sheet in File
-		Sheet sheet = wb.getSheetAt(0);
+		Sheet sheet = this.wb.getSheetAt(0);
 
 		Row row;
 		Cell cell;
@@ -247,5 +249,9 @@ public class ExcelParser implements Parser {
 			return Double.toString(cell.getNumericCellValue());
 		}
 		return null;
+	}
+	
+	public Workbook getWorkbook(){
+		return this.wb;
 	}
 }
