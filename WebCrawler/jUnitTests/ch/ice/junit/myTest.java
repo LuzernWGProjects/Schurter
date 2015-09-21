@@ -1,11 +1,11 @@
-package ch.ice.junitTests;
+package ch.ice.junit;
 
 import static org.junit.Assert.*;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class MyFirstTest {
+public class myTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
