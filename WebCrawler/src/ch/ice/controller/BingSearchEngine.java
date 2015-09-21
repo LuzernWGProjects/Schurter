@@ -37,7 +37,7 @@ public class BingSearchEngine  {
 		 * Load Configuration File
 		 */
 		try {
-			config = new PropertiesConfiguration("app.properties");
+			config = new PropertiesConfiguration("conf/app.properties");
 			
 			accountKey = config.getString("searchEngine.bing.accountKey");
 			bingUrlPattern = config.getString("searchEngine.bing.pattern");

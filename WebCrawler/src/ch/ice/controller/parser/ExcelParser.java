@@ -65,7 +65,7 @@ public class ExcelParser implements Parser {
 	public ExcelParser() {
 		// load config file
 		try {
-			this.config = new PropertiesConfiguration("app.properties");
+			this.config = new PropertiesConfiguration("conf/app.properties");
 			
 			// get all allowed file extensions (xls,xlsx,csv)
 			this.allowedFileExtensions = Arrays.asList(this.config.getStringArray("parser.allowedFileExtensions"));

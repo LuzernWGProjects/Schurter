@@ -50,7 +50,7 @@ public class MainController {
 		 * Load Configuration File
 		 */
 		try {
-			config = new PropertiesConfiguration("app.properties");
+			config = new PropertiesConfiguration("conf/app.properties");
 			
 			isSearchAvail = config.getBoolean("core.search.isEnabled");
 			defaultUrl = new URL(config.getString("core.search.defaultUrl"));
