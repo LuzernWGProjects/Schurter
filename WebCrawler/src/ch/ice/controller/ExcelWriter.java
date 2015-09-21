@@ -57,7 +57,6 @@ public class ExcelWriter implements Writer {
 
 				cell = row.createCell(cellnum++);
 
-
 				if(obj instanceof String){
 					cell.setCellValue((String)obj);
 				}
@@ -73,7 +72,7 @@ public class ExcelWriter implements Writer {
 			}
 			mapCellNum = 0;
 		}
-		
+
 		try {
 			FileOutputStream out = new FileOutputStream(new File("enrichedPOSFile.xlsx"));
 			workbook.write(out);
@@ -101,10 +100,5 @@ public class ExcelWriter implements Writer {
 
 	public Workbook getWorkbook() {
 		return workbook;
-	}
-
-
-	public Sheet getSheet() {
-		return sheet;
 	}
 }

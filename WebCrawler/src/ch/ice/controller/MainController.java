@@ -39,14 +39,12 @@ public class MainController {
 		Configuration config;
 		List<String> metaTagElements = new ArrayList<String>();
 		
-		LinkedList<Customer> customerList = startExcelParser(new File("posTest.xlsx"));
+		// retrieve all customers from file
+		LinkedList<Customer> customerList = retrieveCustomerFromFile(new File("posTest.xlsx"));
 		
 		// Core settings
 		boolean isSearchAvail = false;
 		URL defaultUrl = null;
-		
-		WebCrawler wc = new WebCrawler();
-		
 		
 		/*
 		 * Load Configuration File
@@ -63,6 +61,9 @@ public class MainController {
 			e.printStackTrace();
 		}
 		
+		
+		WebCrawler wc = new WebCrawler();
+		
 		for (Customer customer : customerList) {
 			
 			// only search via SearchEngine if search is enabled. Disable search for testing purpose
@@ -73,39 +74,37 @@ public class MainController {
 				
 			} else {
 				customer.getWebsite().setUrl(defaultUrl);
-			}
-			
-			
+			}			
 			
 			// add metadata
 			try {
 				wc.connnect(customer.getWebsite().getUrl().toString());
 				customer.getWebsite().setMetaTags(wc.getMetaTags(metaTagElements));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 			System.out.println(customer.getWebsite().toString());
-			
 		}
 		
-		
-		startWriter(customerList);
+		/*
+		 * Write every enhanced customer object into a new file
+		 */
+		this.startWriter(customerList);
 	}
 
 	public URL searchForUrl(Customer c) {
 		System.out.println("start test bing");
 		
 		// Define Query
-		String query = c.getFullName() + " " + c.getCountryName() + " "
-				+ c.getZipCode();
+		String query = c.getFullName() + " " + c.getCountryName() + " "	+ c.getZipCode();
 
 		try {
 
 			// Start Search
 			JSONArray results = BingSearchEngine.Search(query);
 
+			//TODO write logichandler class
 			// logic to pick the first record ; here should be the search logic!
 			JSONObject aResult = results.getJSONObject(0);
 
@@ -113,18 +112,22 @@ public class MainController {
 			return new URL((String) aResult.get("Url"));
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	
-	public LinkedList<Customer> startExcelParser(File file) {
+	/**
+	 * Each Row returns a customer object. These customers are saved in an List-Object.
+	 * 
+	 * @param file
+	 * @return LinkedList<Customer>
+	 */
+	public LinkedList<Customer> retrieveCustomerFromFile(File file) {
 		this.excelParserInstance = new ExcelParser();
 
 		try {
-			// retrive all Customers from list
+			// retrieve all Customers from list
 			return this.excelParserInstance.readFile(file);
 
 		} catch (IOException | IllegalFileExtensionException | EncryptedDocumentException | InvalidFormatException e) {
@@ -140,17 +143,10 @@ public class MainController {
 		//TODO Check if user demands CSV or EXCEL -> if(excel)->getWorkbook, Else ->write normal
 		//ExcelWriter ew = new ExcelWriter(this.excelParserInstance.getWorkbook());
 		
-		System.out.println("Sheet name at 0 = "+this.excelParserInstance.getWorkbook().getSheetAt(0).getSheetName());
-		
 		System.out.println("Start writing...");
 		
 		ExcelWriter ew = new ExcelWriter();
 		
 		ew.writeFile(customerList, this.excelParserInstance.getWorkbook());
-
-	}
-
-	public static void startCrawler() {
-
 	}
 }

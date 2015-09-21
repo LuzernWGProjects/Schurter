@@ -58,15 +58,18 @@ public class BingSearchEngine  {
         final URLConnection connection = url.openConnection();
         
                
-       //Search 
+        //Search 
         connection.setRequestProperty("Authorization", "Basic " + accountKeyEnc);
 
         try (final BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-            String inputLine;
+            
+        	String inputLine;
             final StringBuilder response = new StringBuilder();
+            
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
+       
             final JSONObject json = new JSONObject(response.toString());
             final JSONObject d = json.getJSONObject("d");
             final JSONArray results = d.getJSONArray("results");
@@ -75,5 +78,4 @@ public class BingSearchEngine  {
             return results;
         }
     }
-
 }

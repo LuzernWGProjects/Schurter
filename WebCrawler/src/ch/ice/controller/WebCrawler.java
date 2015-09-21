@@ -24,12 +24,11 @@ public class WebCrawler {
 
 		for (String metaWord : metaDef) {
 			try {
-				String metaTags = document
-						.select("meta[name=" + metaWord + "]").first()
-						.attr("content");
+				String metaTags = document.select("meta[name=" + metaWord + "]").first().attr("content");
 				map.put(metaWord, metaTags);
 			} catch (Exception e) {
 				// MetaTags not available
+				//TODO Throw custom Exception -> gui handle
 				map.put(metaWord, "n/a");
 			}
 		}
