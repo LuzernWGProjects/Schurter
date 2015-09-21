@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="600.0" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ice.view.MetaController">
+   <children>
+      <VBox spacing="10.0">
+         <children>
+            <CheckBox mnemonicParsing="false" text="description" />
+            <CheckBox mnemonicParsing="false" text="keyword" />
+         </children>
+      </VBox>
+      <HBox alignment="BOTTOM_RIGHT" prefHeight="40.0" prefWidth="200.0" spacing="15.0">
+         <children>
+            <Button id="cancelMetaButton" fx:id="cancelMetaButton" mnemonicParsing="false" text="Cancel" />
+            <Button id="okMetaButton" fx:id="okMetaButton" mnemonicParsing="false" text="OK" />
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+   </padding>
+</VBox>
