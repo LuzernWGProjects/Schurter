@@ -143,10 +143,10 @@ public class MainController {
 		System.out.println("Sheet name at 0 = "+this.excelParserInstance.getWorkbook().getSheetAt(0).getSheetName());
 		
 		System.out.println("Start writing...");
-		//ExcelWriter ew = new ExcelWriter();
 		
-//		LinkedList l = new LinkedList();
-//		ew.writeFile(customerList, l );
+		ExcelWriter ew = new ExcelWriter();
+		
+		ew.writeFile(customerList, this.excelParserInstance.getWorkbook());
 
 	}
 
