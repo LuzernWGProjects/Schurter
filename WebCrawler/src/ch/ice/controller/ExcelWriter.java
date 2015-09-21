@@ -48,9 +48,11 @@ public class ExcelWriter implements Writer {
 	
 	
 	@Override
-	public void writeFile(List<Customer> customerList, List<String> cellHeaders) {
+	public void writeFile(List<Customer> customerList, HSSFWorkbook wb) {
 		// TODO Auto-generated method stub
 		
+		this.workbook = wb;
+		this.sheet = wb.getSheetAt(0);
 		firstRow = sheet.createRow(0);
 		
 		int rownum = 1;
