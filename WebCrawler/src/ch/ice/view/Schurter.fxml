@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<VBox prefHeight="400.0" prefWidth="640.0" stylesheets="@WebCrawler.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ice.view.GUIController">
+  <children>
+    <MenuBar VBox.vgrow="NEVER">
+      <menus>
+        <Menu mnemonicParsing="false" text="File">
+          <items>
+            <MenuItem fx:id="MetaTags" mnemonicParsing="false" text="Meta Tags" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Edit">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Undo" />
+            <MenuItem mnemonicParsing="false" text="Redo" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+    <AnchorPane id="mainMenuBar" maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+      <children>
+            <TextField id="fileTextField" fx:id="fileTextField" layoutX="52.0" layoutY="27.0" prefHeight="26.0" prefWidth="436.0" />
+            <Button id="selectFileButton" fx:id="selectFileButton" layoutX="508.0" layoutY="27.0" mnemonicParsing="false" text="Select File" textFill="WHITE" />
+            <Button id="startSearchButton" fx:id="startSearchButton" layoutX="253.0" layoutY="197.0" mnemonicParsing="false" text="Start Search" textFill="WHITE">
+               <effect>
+                  <Reflection fraction="0.53" topOpacity="0.75" />
+               </effect>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <ProgressBar id="searchProgressBar" fx:id="searchProgressBar" layoutX="52.0" layoutY="284.0" prefHeight="20.0" prefWidth="537.0" progress="0.34" />
+            <Label layoutX="52.0" layoutY="98.0" text="Selected Metatags:" />
+      </children>
+    </AnchorPane>
+  </children>
+</VBox>
