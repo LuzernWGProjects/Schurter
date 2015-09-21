@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -34,13 +36,15 @@ import ch.ice.model.Website;
  */
 
 public class ExcelParser implements Parser {
+	private static final Logger logger = LogManager.getLogger("excelParser");
+	
 	private File file;
 	private InputStream ExcelFileToRead;
 	private List<String> allowedFileExtensions = new ArrayList<String>();
 
 	LinkedList<Customer> customerList = new LinkedList<Customer>();
 
-	Configuration config;
+	PropertiesConfiguration config;
 
 	Workbook wb;
 	
