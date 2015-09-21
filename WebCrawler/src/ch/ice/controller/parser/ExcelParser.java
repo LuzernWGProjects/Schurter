@@ -14,10 +14,13 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import ch.ice.controller.interf.Parser;
 import ch.ice.exceptions.IllegalFileExtensionException;
@@ -30,13 +33,14 @@ import ch.ice.model.Website;
  *
  */
 
-
 public class ExcelParser implements Parser {
 	private File file;
 	private InputStream ExcelFileToRead;
 	private List<String> allowedFileExtensions = new ArrayList<String>();
 
 	LinkedList<Customer> customerList = new LinkedList<Customer>();
+
+	Configuration config;
 
 	// Customer Fields
 	// headers from File
@@ -55,26 +59,23 @@ public class ExcelParser implements Parser {
 	String customerFullName;
 	String custonerShortName;
 
-	Configuration config;
-	
+
 	public ExcelParser() {
-		/*
-		 * Load Configuration File
-		 */
+		// load config file
 		try {
 			this.config = new PropertiesConfiguration("app.properties");
 			
+			// get all allowed file extensions (xls,xlsx,csv)
 			this.allowedFileExtensions = Arrays.asList(this.config.getStringArray("parser.allowedFileExtensions"));
 		} catch (ConfigurationException e) {
-			// TODO Auto-generated catch block
 			System.out.println(e.getLocalizedMessage());
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
-	public LinkedList<Customer> readFile(File file) throws IOException, IllegalFileExtensionException {
-		
+	public LinkedList<Customer> readFile(File file) throws IOException, IllegalFileExtensionException, EncryptedDocumentException, InvalidFormatException {
+
 		// set file to private access only
 		this.file = file;
 
@@ -88,10 +89,8 @@ public class ExcelParser implements Parser {
 
 		switch (fileExtension) {
 		case "xlsx":
-			return readXLSXFile();
-
 		case "xls":
-			return readXLSFile();
+			return this.readFile();
 
 		case "cvs":
 			// return readCVSFile();
@@ -99,25 +98,34 @@ public class ExcelParser implements Parser {
 		}
 
 		return null;
-
 	}
 
-	private LinkedList<Customer> readXLSXFile() throws IOException {
+
+	/**
+	 * Read a File and ingnore file format (xls, xlsx). Due to the ss usermodel and generic handling.
+	 * 
+	 * @return LinkedList<Customer>
+	 * @throws EncryptedDocumentException
+	 * @throws InvalidFormatException
+	 * @throws IOException
+	 */
+	private LinkedList<Customer> readFile() throws EncryptedDocumentException, InvalidFormatException, IOException {
 		ExcelFileToRead = new FileInputStream(this.file);
 
-		XSSFWorkbook wb = new XSSFWorkbook(ExcelFileToRead);
+		Workbook wb = WorkbookFactory.create(ExcelFileToRead);
 
-		// load first sheet in the File
-		XSSFSheet sheet = wb.getSheetAt(0);
+		// load first sheet in File
+		Sheet sheet = wb.getSheetAt(0);
 
-		XSSFRow row;
-		XSSFCell cell;
+		Row row;
+		Cell cell;
 
 		Iterator<?> rows = sheet.rowIterator();
 
 		while (rows.hasNext()) {
 
-			row = (XSSFRow) rows.next();
+			row = (Row) rows.next();
+
 			// skip first two rows
 			if (row.getRowNum() == 0 || row.getRowNum() == 1)
 				continue;
@@ -129,20 +137,21 @@ public class ExcelParser implements Parser {
 				this.zipCodeHeader = row.getCell(3).toString();
 				this.customerNameShortHeader = row.getCell(4).toString();
 				this.customerNameHeader = row.getCell(6).toString();
-				
+
 				this.headerInfos.add(this.customerIDHeader);
 				this.headerInfos.add(this.countryNameHeader);
 				this.headerInfos.add(this.zipCodeHeader);
 				this.headerInfos.add(this.customerNameShortHeader);
 				this.headerInfos.add(this.customerNameHeader);
-				
+
 				continue;
 
 			}
+			
 			Iterator<?> cells = row.cellIterator();
 
 			while (cells.hasNext()) {
-				cell = (XSSFCell) cells.next();
+				cell = (Cell) cells.next();
 
 				// skip unused cells
 				if (cell.getColumnIndex() >= 7)
@@ -154,7 +163,7 @@ public class ExcelParser implements Parser {
 					this.customerID = this.checkForCellType(cell);
 					break;
 
-				// country Code
+					// country Code
 				case 1:
 					this.customerCountryCode = this.checkForCellType(cell);
 
@@ -163,17 +172,17 @@ public class ExcelParser implements Parser {
 					this.country = this.checkForCellType(cell);
 					break;
 
-				// Zip code
+					// Zip code
 				case 3:
 					this.zipCode = this.checkForCellType(cell);
 					break;
 
-				// customer name short
+					// customer name short
 				case 4:
 					this.custonerShortName = this.checkForCellType(cell);
 					break;
 
-				// empty cell
+					// empty cell
 				case 5:
 					continue;
 
@@ -185,20 +194,13 @@ public class ExcelParser implements Parser {
 			}
 
 			/*
-			 * Generate Customer Object
+			 * Generate Customer Object and add it to the array
 			 */
-			Customer customer = this.createCustomer();
-
-			// add customer to array
-			this.customerList.add(customer);
+			this.customerList.add(this.createCustomer());
 		}
 
 		return this.customerList;
-	}
 
-	private LinkedList<Customer> readXLSFile() {
-
-		return null;
 	}
 
 	/**
@@ -222,7 +224,7 @@ public class ExcelParser implements Parser {
 
 		return customer;
 	}
-	
+
 	/**
 	 * Return all collected Headercells from File.
 	 * Will be used for creating new file with the correct Headers
@@ -236,12 +238,12 @@ public class ExcelParser implements Parser {
 	/**
 	 * Check if the cell is numeric or a string type
 	 */
-	private String checkForCellType(XSSFCell cell) {
-		if (cell.getCellType() == XSSFCell.CELL_TYPE_STRING) {
+	private String checkForCellType(Cell cell) {
+		if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
 			return cell.getStringCellValue().toString();
 		}
 
-		else if (cell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC) {
+		else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
 			return Double.toString(cell.getNumericCellValue());
 		}
 		return null;

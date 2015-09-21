@@ -16,6 +16,8 @@ import java.util.Map;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -64,7 +66,7 @@ public class MainController {
 		
 		for (Customer customer : customerList) {
 			
-			// only search if search is enabled. Disable search for testing purpose
+			// only search via SearchEngine if search is enabled. Disable search for testing purpose
 			if(isSearchAvail){
 				// Add url for customer
 				URL retrivedUrl = searchForUrl(customer);
@@ -132,7 +134,7 @@ public class MainController {
 			// retrive all Customers from list
 			return excelParser.readFile(file);
 
-		} catch (IOException | IllegalFileExtensionException e) {
+		} catch (IOException | IllegalFileExtensionException | EncryptedDocumentException | InvalidFormatException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
