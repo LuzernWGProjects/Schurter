@@ -88,7 +88,10 @@ public class MainController {
 			System.out.println(customer.getWebsite().toString());
 			
 			
+			
+			
 		}
+		startWriter(customerList);
 	}
 
 	public static URL searchForUrl(Customer c) {
@@ -136,7 +139,13 @@ public class MainController {
 		return null;
 	}
 
-	public static void startWriter() {
+	public static void startWriter(List<Customer> customerList) {
+		
+		System.out.println("Start writing...");
+		ExcelWriter ew = new ExcelWriter();
+		
+		LinkedList l = new LinkedList();
+		ew.writeFile(customerList, l );
 
 	}
 
