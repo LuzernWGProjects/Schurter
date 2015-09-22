@@ -36,7 +36,7 @@ import ch.ice.model.Website;
  */
 
 public class ExcelParser implements Parser {
-	private static final Logger logger = LogManager.getLogger("excelParser");
+	//private static final Logger logger = LogManager.getLogger("excelParser");
 	
 	private File file;
 	private InputStream ExcelFileToRead;
