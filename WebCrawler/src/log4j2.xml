@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="WARN">
+	<Properties>
+		<Property name="LOG_DIR">logs</Property>
+		<Property name="ARCHIVE">log_archive</Property>
+		<Property name="PATTERN">[%-5level] - %d [%t] %c:%M(%L): %m%n</Property>
+	</Properties>
+	
+	<Appenders>
+		<Console name="STDOUT" target="SYSTEM_OUT">
+			<PatternLayout pattern="${PATTERN}"/>
+		</Console>
+		
+		<RollingFile name="allLog" filename="${LOG_DIR}/webcrawler.log" filePattern="${ARCHIVE}/webcrawler.log.%d{yyyy-MM-dd-hh-mm}.gz">>
+			<PatternLayout pattern="${PATTERN}" />
+			<SizeBasedTriggeringPolicy size="10 MB" />
+		</RollingFile>
+	</Appenders>
+	
+	<Loggers>
+		<Root level="TRACE">
+			<AppenderRef ref="allLog" />
+			<AppenderRef ref="STDOUT" />
+		</Root>
+	</Loggers>
+	
+</configuration>
