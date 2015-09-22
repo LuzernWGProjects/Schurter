@@ -51,7 +51,6 @@ public class ExcelWriter implements Writer {
 
 	public ExcelWriter()
 	{
-		
 		try {
 			config = new PropertiesConfiguration("conf/app.properties");
 		} catch (ConfigurationException e) {
@@ -78,6 +77,16 @@ public class ExcelWriter implements Writer {
 			
 			//Start at cell number 8 -> H
 			cellnum =8;
+			
+			//TODO get style of existing cells
+			//Cell existingCell = 
+		//	if(sheet.getRow(3).getCell(cellnum) == null){
+		//		System.out.println("null s");
+		//	}else{
+		//	System.out.println("zelleninhalt:" +sheet.getRow(4).getCell(0).getStringCellValue());
+		//	System.out.println("inhalt der zelle welche style hat: "+cell.getStringCellValue());
+		//	}
+			
 			//iterate thru the customerObjectArray and write them into a new cell
 			for(Object obj : customerObjectArray){
 				
@@ -85,9 +94,13 @@ public class ExcelWriter implements Writer {
 								
 				 if (obj instanceof URL)
 					{
+					 	//Write header cell
+					 	Cell firstCell = sheet.getRow(2).createCell(cellnum);
+						firstCell.setCellValue("URL");
 					 	//create a new Cell at the particular point and write down the value
 						cell = sheet.getRow(row.getRowNum()).createCell(cellnum);
-					//	cell.setCellStyle( TODO
+					//	TODO add cellstyle setting logic here
+				
 						cell.setCellValue((String) obj.toString());
 					} 
 				 else if (obj instanceof Map)
@@ -101,6 +114,10 @@ public class ExcelWriter implements Writer {
 			//reset the counting variable to 0 in order to not shift the alignment
 			mapCellNum = 0;			
 		}
+		
+		//Autosize Columns
+		for(int i = 0; i < 20; i++)
+		sheet.autoSizeColumn(i);
 		
 		try {
 			
@@ -132,8 +149,8 @@ public class ExcelWriter implements Writer {
 	{
 		
 		//write header informations (key)
-	//	Cell firstCell = headerRow.createCell(cellnum+mapCellNum);
-		//firstCell.setCellValue((String)k);
+		Cell firstCell = sheet.getRow(2).createCell(cellnum+mapCellNum);
+		firstCell.setCellValue((String)k);
 		//write cell values (Value)
 		cell = row.createCell(cellnum+mapCellNum);
 		cell.setCellValue((String)v);
