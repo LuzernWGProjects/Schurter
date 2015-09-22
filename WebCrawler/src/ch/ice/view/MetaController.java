@@ -10,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -22,6 +23,8 @@ public class MetaController implements Initializable {
 	Button okMetaButton;
 	@FXML
 	Label metaTagsLabel;
+	@FXML
+	VBox vBoxMeta;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -63,6 +66,8 @@ public class MetaController implements Initializable {
 		});
 
 		metaTagsLabel.setText(GUIController.metaTagElements.toString());
+
+		MetaTag.getMetaList();
 
 	}
 
