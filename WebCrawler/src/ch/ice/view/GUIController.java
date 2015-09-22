@@ -55,11 +55,11 @@ public class GUIController implements Initializable {
 			config = new PropertiesConfiguration("conf/app.properties");
 			metaTagElements = new ArrayList<String>(Arrays.asList(config
 					.getStringArray("crawler.searchForMetaTags")));
-			metaTagsList.setText(metaTagElements.toString());
 		} catch (ConfigurationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		metaTagsList.setText(metaTagElements.toString());
 
 		// TODO Auto-generated method stub
 
