@@ -9,13 +9,13 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -36,7 +36,7 @@ import ch.ice.model.Website;
  */
 
 public class ExcelParser implements Parser {
-	private static final Logger logger = LogManager.getLogger("excelParser");
+	private static final Logger logger = LogManager.getLogger(ExcelParser.class.getName());
 	
 	private File file;
 	private InputStream ExcelFileToRead;
@@ -67,6 +67,7 @@ public class ExcelParser implements Parser {
 
 
 	public ExcelParser() {
+		
 		// load config file
 		try {
 			this.config = new PropertiesConfiguration("conf/app.properties");
