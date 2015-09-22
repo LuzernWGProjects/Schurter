@@ -9,7 +9,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import org.apache.commons.configuration.ConfigurationException;
 
 public class MetaController implements Initializable {
 
@@ -17,6 +21,10 @@ public class MetaController implements Initializable {
 	Button cancelMetaButton;
 	@FXML
 	Button okMetaButton;
+	@FXML
+	Label metaTagsLabel;
+	@FXML
+	VBox vBoxMeta;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -36,12 +44,30 @@ public class MetaController implements Initializable {
 
 			@Override
 			public void handle(ActionEvent event) {
-				System.out.println("Saved");
+				System.out.println(GUIController.metaTagElements.toString());
+
+				GUIController.metaTagElements.add("Test");
+				System.out.println(GUIController.metaTagElements.toString());
+
+				GUIController.config.setProperty(
+						"crawler.searchForMetaTags",
+						GUIController.metaTagElements.toString()
+								.replace("[", "").replace("]", ""));
+				try {
+					GUIController.config.save();
+				} catch (ConfigurationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				Node source = (Node) event.getSource();
 				Stage stage = (Stage) source.getScene().getWindow();
 				stage.close();
 			}
 		});
+
+		metaTagsLabel.setText("testtest");
+
+		MetaTag.getMetaList();
 
 	}
 

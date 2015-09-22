@@ -40,6 +40,7 @@
             </Button>
             <ProgressBar id="searchProgressBar" fx:id="searchProgressBar" layoutX="52.0" layoutY="284.0" prefHeight="20.0" prefWidth="537.0" progress="0.34" />
             <Label layoutX="52.0" layoutY="98.0" text="Selected Metatags:" />
+            <Label fx:id="metaTagsList" layoutX="52.0" layoutY="126.0" text="Label" />
       </children>
     </AnchorPane>
   </children>
