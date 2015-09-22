@@ -44,7 +44,8 @@ public class ExcelWriter implements Writer {
 	private Cell cell;
 	private Row row;
 	private int cellnum;
-	private int mapCellNum =0;
+	private int rownum;
+	private int mapCellNum;
 	private Row headerRow;
 	private Configuration config;
 
@@ -60,40 +61,47 @@ public class ExcelWriter implements Writer {
 	}
 	@Override
 	public void writeFile(List<Customer> customerList, Workbook wb) {
+		//get existing workbook and sheet
 		this.workbook = wb;
 		this.sheet = wb.getSheetAt(0);
-		//firstRow = sheet.createRow(0);
-		headerRow = sheet.getRow(2);
-
-		int rownum = 3;
-
-		for (Customer c : customerList) {
+	
+		//Start with row Number 3
+		rownum = 3;
+		//Foreach Customer in CustomerList generate a new row
+		for(Customer c: customerList){
+			
+			//get the 3rd row 
 			row = sheet.getRow(rownum++);
-
-			Object[] cObject = new Object[] {c.getFullName(),c.getCountryName(), c.getZipCode(), c.getWebsite().getUrl(), c.getWebsite().getMetaTags()};
-
-			cellnum = 0;
-			for (Object obj :cObject) {
-
-				cell = row.createCell(cellnum++);
-				//cell.setCellStyle((CellStyle) row.getCell(0));
-/*
-				if(obj instanceof String){
-					cell.setCellValue((String)obj);
-				} */
+			
+			//create an array of objects including all the properties that are need to be written of a customer object.
+			Object[] customerObjectArray = new Object[] {c.getWebsite().getUrl(), c.getWebsite().getMetaTags()};
+			
+			//Start at cell number 8 -> H
+			cellnum =8;
+			//iterate thru the customerObjectArray and write them into a new cell
+			for(Object obj : customerObjectArray){
+				
+				//Start at cell (3/8 -> 3/H)
+								
 				 if (obj instanceof URL)
-				{
-					cell.setCellValue((String) obj.toString());
-				} 
-				else if (obj instanceof Map)
-				{
-					((Map) obj).forEach((k,v) -> writeMap(k, v));
-				} 
-
+					{
+					 	//create a new Cell at the particular point and write down the value
+						cell = sheet.getRow(row.getRowNum()).createCell(cellnum);
+					//	cell.setCellStyle( TODO
+						cell.setCellValue((String) obj.toString());
+					} 
+				 else if (obj instanceof Map)
+					{	
+					 	//Start the writeMap  lamda Method to write down the whole Metatags-Map
+						((Map) obj).forEach((k,v) -> writeMap(k, v));
+					} 
+			//Iterate the cellnum counting variable to get to the next cell	
+			cellnum++;
 			}
-			mapCellNum = 0;
+			//reset the counting variable to 0 in order to not shift the alignment
+			mapCellNum = 0;			
 		}
-
+		
 		try {
 			
 			//Timestamp Format
@@ -115,15 +123,22 @@ public class ExcelWriter implements Writer {
 		}
 
 	}
-
+	/**
+	 * This Method is executed for each element in the Metatags Map
+	 * @param k	Metatag name
+	 * @param v	Metatag value
+	 */
 	private void writeMap(Object k, Object v)
 	{
-
-		Cell firstCell = headerRow.getCell(cellnum+mapCellNum);
-		firstCell.setCellValue((String)k);
-		cell = row.getCell(cellnum+mapCellNum);
+		
+		//write header informations (key)
+	//	Cell firstCell = headerRow.createCell(cellnum+mapCellNum);
+		//firstCell.setCellValue((String)k);
+		//write cell values (Value)
+		cell = row.createCell(cellnum+mapCellNum);
 		cell.setCellValue((String)v);
 		mapCellNum++;
+	
 
 	}
 
