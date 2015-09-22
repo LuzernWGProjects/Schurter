@@ -36,7 +36,7 @@ public class MainController {
 	
 	public void startMainController() {
 
-		Configuration config;
+		PropertiesConfiguration config;
 		List<String> metaTagElements = new ArrayList<String>();
 		
 		// retrieve all customers from file

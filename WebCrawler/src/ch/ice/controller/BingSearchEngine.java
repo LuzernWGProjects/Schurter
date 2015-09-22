@@ -31,7 +31,7 @@ public class BingSearchEngine  {
 	
     	String accountKey = "";
     	String bingUrlPattern = "";
-    	Configuration config;
+    	PropertiesConfiguration config;
     	
     	/*
 		 * Load Configuration File
