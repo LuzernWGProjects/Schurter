@@ -19,6 +19,8 @@ import java.util.Set;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -29,6 +31,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import ch.ice.controller.interf.Writer;
+import ch.ice.controller.parser.ExcelParser;
 import ch.ice.model.Customer;
 import ch.ice.model.Website;
 
@@ -39,6 +42,7 @@ import ch.ice.model.Website;
 
 public class ExcelWriter implements Writer {
 
+	private static final Logger logger = LogManager.getLogger(ExcelParser.class.getName());
 	private Workbook workbook;
 	private Sheet sheet;
 	private Cell cell;
@@ -131,12 +135,14 @@ public class ExcelWriter implements Writer {
 			FileOutputStream out = new FileOutputStream(new File(config.getString("writer.fileNamePattern")+"_"+timestampFormat+".xlsx" ));
 			workbook.write(out);
 			out.close();
-			System.out.println("Excel written successfully..");
+			logger.info("Excel file sucessfully written.");
 
-		} catch (FileNotFoundException ea) {
-			ea.printStackTrace();
-		} catch (IOException er) {
-			er.printStackTrace();
+		} catch (FileNotFoundException e) {
+			logger.error(e.getMessage());
+			
+		} catch (IOException e) {
+			
+			logger.error(e.getMessage());
 		}
 
 	}
