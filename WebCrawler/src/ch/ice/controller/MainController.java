@@ -16,6 +16,8 @@ import java.util.Map;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.json.JSONArray;
@@ -31,7 +33,7 @@ import ch.ice.model.Customer;
  *
  */
 public class MainController {
-	
+	private static final Logger logger = LogManager.getLogger(MainController.class.getName());
 	ExcelParser excelParserInstance;
 	
 	public void startMainController() {
@@ -40,6 +42,7 @@ public class MainController {
 		List<String> metaTagElements = new ArrayList<String>();
 		
 		// retrieve all customers from file
+		logger.info("Retrieve Customers from File posTest.xlsx");
 		LinkedList<Customer> customerList = retrieveCustomerFromFile(new File("posTest.xlsx"));
 		
 		// Core settings
@@ -57,6 +60,7 @@ public class MainController {
 			
 			metaTagElements = Arrays.asList(config.getStringArray("crawler.searchForMetaTags"));
 		} catch (ConfigurationException | MalformedURLException e) {
+			logger.error("Faild to load config file");
 			System.out.println(e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -83,8 +87,8 @@ public class MainController {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
-			System.out.println(customer.getWebsite().toString());
+			
+			logger.info(customer.getWebsite().toString());
 		}
 		
 		/*
@@ -93,12 +97,11 @@ public class MainController {
 		this.startWriter(customerList);
 	}
 
-	public URL searchForUrl(Customer c) {
-		System.out.println("start test bing");
-		
+	public URL searchForUrl(Customer c) {		
 		// Define Query
 		String query = c.getFullName() + " " + c.getCountryName() + " "	+ c.getZipCode();
-
+		logger.info("start searchEngine for URL with query: "+query);
+		
 		try {
 
 			// Start Search
@@ -143,7 +146,7 @@ public class MainController {
 		//TODO Check if user demands CSV or EXCEL -> if(excel)->getWorkbook, Else ->write normal
 		//ExcelWriter ew = new ExcelWriter(this.excelParserInstance.getWorkbook());
 		
-		System.out.println("Start writing...");
+		logger.info("Start writing customers to File");
 		
 		ExcelWriter ew = new ExcelWriter();
 		
