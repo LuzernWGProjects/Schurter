@@ -62,7 +62,7 @@ public class MetaController implements Initializable {
 			}
 		});
 
-		metaTagsLabel.setText("testtest");
+		metaTagsLabel.setText(GUIController.metaTagElements.toString());
 
 	}
 
