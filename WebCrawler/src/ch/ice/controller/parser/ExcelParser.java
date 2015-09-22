@@ -89,6 +89,7 @@ public class ExcelParser implements Parser {
 		String fileExtension = FilenameUtils.getExtension(file.getName()).toLowerCase();
 
 		if (!this.allowedFileExtensions.contains(fileExtension)) {
+			logger.error("Wrong Fileextension: "+fileExtension+"; Only "+this.allowedFileExtensions.toString()+" allowed.");
 			throw new IllegalFileExtensionException(
 					"Wrong file Extension. Please only use " + this.allowedFileExtensions.toString());
 		}
@@ -204,7 +205,8 @@ public class ExcelParser implements Parser {
 			 */
 			this.customerList.add(this.createCustomer());
 		}
-
+		
+		logger.info("Rendered Customers from List: "+this.customerList.size());
 		return this.customerList;
 
 	}
