@@ -2,7 +2,6 @@ package ch.ice.view;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.ResourceBundle;
 
 import javafx.beans.value.ChangeListener;
@@ -33,7 +32,8 @@ public class MetaController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
+
+		GUIController.getProperties(metaTagsLabel);
 
 		cancelMetaButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -42,6 +42,7 @@ public class MetaController implements Initializable {
 				Node source = (Node) event.getSource();
 				Stage stage = (Stage) source.getScene().getWindow();
 				stage.close();
+
 			}
 		});
 
@@ -66,10 +67,10 @@ public class MetaController implements Initializable {
 		});
 
 		ArrayList<MetaTag> endList = MetaTag.getMetaList();
-		Iterator<MetaTag> iterator = endList.iterator();
 
-		while (iterator.hasNext()) {
-			MetaTag mt = iterator.next();
+		for (int i = 0; i < endList.size(); i++) {
+
+			MetaTag mt = endList.get(i);
 			String name = mt.getMapXML().get("name");
 			CheckBox cb = new CheckBox(name);
 			cb.setMinWidth(150);
@@ -96,7 +97,9 @@ public class MetaController implements Initializable {
 					if (cb.isSelected()) {
 						System.out.println(cb.getText() + " is checked");
 						GUIController.metaTagElements.add(cb.getText());
-						metaTagsLabel.setText(cb.getText());
+						String innerLabel = GUIController.metaTagElements
+								.toString();
+						metaTagsLabel.setText(innerLabel);
 
 					}
 					if (cb.isSelected() == false) {
@@ -105,8 +108,12 @@ public class MetaController implements Initializable {
 							if (checker.equals(cb.getText())) {
 
 								GUIController.metaTagElements.remove(checker);
+								String innerLabel = GUIController.metaTagElements
+										.toString();
+								metaTagsLabel.setText(innerLabel);
 							}
 						}
+
 					}
 
 				}

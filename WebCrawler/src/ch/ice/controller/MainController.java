@@ -31,95 +31,99 @@ import ch.ice.utils.JSONUtil;
  *
  */
 public class MainController {
-	private static final Logger logger = LogManager.getLogger(MainController.class.getName());
+	private static final Logger logger = LogManager
+			.getLogger(MainController.class.getName());
 	ExcelParser excelParserInstance;
-	
+
+	public static File file;
+
 	public void startMainController() {
 
 		PropertiesConfiguration config;
 		List<String> metaTagElements = new ArrayList<String>();
-		
+
 		// retrieve all customers from file
 		logger.info("Retrieve Customers from File posTest.xlsx");
-		LinkedList<Customer> customerList = retrieveCustomerFromFile(new File("posTest.xlsx"));
-		
+		LinkedList<Customer> customerList = retrieveCustomerFromFile(file);
+
 		// Core settings
 		boolean isSearchAvail = false;
 		URL defaultUrl = null;
-		
+
 		/*
 		 * Load Configuration File
 		 */
 		try {
 			config = new PropertiesConfiguration("conf/app.properties");
-			
+
 			isSearchAvail = config.getBoolean("core.search.isEnabled");
 			defaultUrl = new URL(config.getString("core.search.defaultUrl"));
-			
-			metaTagElements = Arrays.asList(config.getStringArray("crawler.searchForMetaTags"));
+
+			metaTagElements = Arrays.asList(config
+					.getStringArray("crawler.searchForMetaTags"));
 		} catch (ConfigurationException | MalformedURLException e) {
 			logger.error("Faild to load config file");
 			System.out.println(e.getLocalizedMessage());
 			e.printStackTrace();
 		}
-		
-		
+
 		WebCrawler wc = new WebCrawler();
-		
+
 		for (Customer customer : customerList) {
-			
-			// only search via SearchEngine if search is enabled. Disable search for testing purpose
-			if(isSearchAvail){
+
+			// only search via SearchEngine if search is enabled. Disable search
+			// for testing purpose
+			if (isSearchAvail) {
 				// Add url for customer
 				URL retrivedUrl = searchForUrl(customer);
 				customer.getWebsite().setUrl(retrivedUrl);
-				
+
 			} else {
 				customer.getWebsite().setUrl(defaultUrl);
-			}			
-			
+			}
+
 			// add metadata
 			try {
 				wc.connnect(customer.getWebsite().getUrl().toString());
-				customer.getWebsite().setMetaTags(wc.getMetaTags(metaTagElements));
+				customer.getWebsite().setMetaTags(
+						wc.getMetaTags(metaTagElements));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
+
 			logger.info(customer.getWebsite().toString());
 		}
-		
+
 		/*
 		 * Write every enhanced customer object into a new file
 		 */
 		this.startWriter(customerList);
-		
+
 		logger.info("end");
 	}
 
 	public URL searchForUrl(Customer c) {
-		
+
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(c.getFullName().toLowerCase());
 		params.add(c.getCountryName().toLowerCase());
-		
+
 		String query = BingSearchEngine.buildQuery(params);
-		
-		logger.info("start searchEngine for URL with query: "+query);
-		
+
+		logger.info("start searchEngine for URL with query: " + query);
+
 		try {
 
 			// Start Search
 			JSONArray results = BingSearchEngine.Search(query);
-			
-			//logger.debug(results.toString());
+
+			// logger.debug(results.toString());
 
 			// logic to pick the first record ; here should be the search logic!
 			results = JSONUtil.cleanUp(results);
-			
-			
+
 			JSONObject aResult = results.getJSONObject(0);
-			
+
 			// return only the URL form first object
 			return new URL((String) aResult.get("Url"));
 
@@ -130,7 +134,8 @@ public class MainController {
 	}
 
 	/**
-	 * Each Row returns a customer object. These customers are saved in an List-Object.
+	 * Each Row returns a customer object. These customers are saved in an
+	 * List-Object.
 	 * 
 	 * @param file
 	 * @return LinkedList<Customer>
@@ -142,23 +147,26 @@ public class MainController {
 			// retrieve all Customers from list
 			return this.excelParserInstance.readFile(file);
 
-		} catch (IOException | IllegalFileExtensionException | EncryptedDocumentException | InvalidFormatException e) {
+		} catch (IOException | IllegalFileExtensionException
+				| EncryptedDocumentException | InvalidFormatException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
-		
+
 		return new LinkedList<Customer>();
 	}
 
 	public void startWriter(List<Customer> customerList) {
-		
-		//TODO Check if user demands CSV or EXCEL -> if(excel)->getWorkbook, Else ->write normal
-		//ExcelWriter ew = new ExcelWriter(this.excelParserInstance.getWorkbook());
-		
+
+		// TODO Check if user demands CSV or EXCEL -> if(excel)->getWorkbook,
+		// Else ->write normal
+		// ExcelWriter ew = new
+		// ExcelWriter(this.excelParserInstance.getWorkbook());
+
 		logger.info("Start writing customers to File");
-		
+
 		ExcelWriter ew = new ExcelWriter();
-		
+
 		ew.writeFile(customerList, this.excelParserInstance.getWorkbook());
 	}
 }
