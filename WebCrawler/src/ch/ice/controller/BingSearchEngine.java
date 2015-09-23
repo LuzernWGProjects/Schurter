@@ -9,16 +9,13 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Base64;
 
-import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import ch.ice.model.Customer;
 
 
 /**
@@ -78,4 +75,20 @@ public class BingSearchEngine  {
             return results;
         }
     }
+	
+	/**
+	 * Build a query for the search engine use.
+	 * 
+	 * @param params
+	 * @return String query
+	 */
+	public static String buildQuery(ArrayList<String> params){
+		String query = "";
+		
+		for (String string : params) {
+			query += string+" ";
+		}
+		
+		return query;
+	}
 }
