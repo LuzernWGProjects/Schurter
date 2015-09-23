@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.logging.log4j.LogManager;
@@ -23,10 +21,10 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import ch.ice.controller.interf.Parser;
 import ch.ice.controller.parser.ExcelParser;
 import ch.ice.exceptions.IllegalFileExtensionException;
 import ch.ice.model.Customer;
+import ch.ice.utils.JSONUtil;
 
 /**
  * @author Oliver
@@ -97,20 +95,28 @@ public class MainController {
 		this.startWriter(customerList);
 	}
 
-	public URL searchForUrl(Customer c) {		
-		// Define Query
-		String query = c.getFullName() + " " + c.getCountryName() + " "	+ c.getZipCode();
+	public URL searchForUrl(Customer c) {
+		
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(c.getFullName().toLowerCase());
+		params.add(c.getCountryName().toLowerCase());
+		
+		String query = BingSearchEngine.buildQuery(params);
+		
 		logger.info("start searchEngine for URL with query: "+query);
 		
 		try {
 
 			// Start Search
 			JSONArray results = BingSearchEngine.Search(query);
+			
+			//logger.debug(results.toString());
 
-			//TODO write logichandler class
 			// logic to pick the first record ; here should be the search logic!
+			results = JSONUtil.analyseObjects(results, params);
+			
 			JSONObject aResult = results.getJSONObject(0);
-
+			
 			// return only the URL form first object
 			return new URL((String) aResult.get("Url"));
 
