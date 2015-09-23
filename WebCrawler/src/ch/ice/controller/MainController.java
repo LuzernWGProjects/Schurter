@@ -46,7 +46,7 @@ public class MainController {
 		List<String> metaTagElements = new ArrayList<String>();
 
 		// retrieve all customers from file
-		logger.info("Retrieve Customers from File posTest.xlsx");
+		logger.info("Retrieve Customers from File "+file.getAbsolutePath());
 		LinkedList<Customer> customerList = retrieveCustomerFromFile(file);
 
 		// Core settings
@@ -147,7 +147,7 @@ public class MainController {
 		this.excelParserInstance = new ExcelParser();
 
 		try {
-			// retrieve all Customers from list
+			
 			return this.excelParserInstance.readFile(file);
 
 		} catch (IOException | IllegalFileExtensionException
