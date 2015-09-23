@@ -16,7 +16,7 @@ public final class JSONUtil {
 	private static final Logger logger = LogManager.getLogger(JSONUtil.class.getName());
 
 	// init key search field
-	private static List<String> keyNodes = new ArrayList<String>(
+	public static List<String> keyNodes = new ArrayList<String>(
 			// default ones for bing
 			Arrays.asList("Url", "Description", "Title")
 	);
@@ -28,7 +28,7 @@ public final class JSONUtil {
 	 * @param searchParams
 	 * @return 
 	 */
-	public static JSONArray analyseObjects(JSONArray results, List<String> searchParams) {
+	public static JSONArray cleanUp(JSONArray results, List<String> searchParams) {
 		JSONArray stripedResults = removeUnusedElements(results, keyNodes);
 
 		stripedResults = trimUrls(stripedResults);
