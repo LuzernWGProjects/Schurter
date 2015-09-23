@@ -20,5 +20,13 @@ public interface Parser {
 	
 	// input can either be a Excel File or a CSV file
 	public LinkedList<Customer> readFile(File file) throws IOException, IllegalFileExtensionException, EncryptedDocumentException, InvalidFormatException;
+	
+	//progress bar and statistic stuff
+	public void setTotalDataSets(int totalRows); // Updated once
+	public int getTotalDataSets();
+	
+	public void setCurrentRow(int currentRowNumber); // Updated within for-loop
+	public int getCurrentRow();
+	
 		
 }
