@@ -3,7 +3,6 @@ package ch.ice.view;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -34,9 +33,9 @@ public class MetaTag {
 		getMetaList();
 	}
 
-	public static List<MetaTag> getMetaList() {
+	public static ArrayList<MetaTag> getMetaList() {
 
-		List<MetaTag> finalListMeta = new ArrayList<MetaTag>();
+		ArrayList<MetaTag> finalListMeta = new ArrayList<MetaTag>();
 
 		try {
 
@@ -48,7 +47,6 @@ public class MetaTag {
 			doc.getDocumentElement().normalize();
 
 			NodeList nList = doc.getElementsByTagName("metaTag");
-			System.out.println(nList.getLength());
 
 			for (int temp = 0; temp < nList.getLength(); temp++) {
 
@@ -71,7 +69,6 @@ public class MetaTag {
 				}
 				mt.setMapXML(mapXML);
 				finalListMeta.add(mt);
-				System.out.println(finalListMeta.size());
 
 			}
 
