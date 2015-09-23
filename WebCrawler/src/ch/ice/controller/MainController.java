@@ -93,6 +93,8 @@ public class MainController {
 		 * Write every enhanced customer object into a new file
 		 */
 		this.startWriter(customerList);
+		
+		logger.info("end");
 	}
 
 	public URL searchForUrl(Customer c) {

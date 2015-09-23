@@ -5,14 +5,12 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="600.0" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" spacing="15.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ice.view.MetaController">
+<VBox minHeight="-Infinity" minWidth="-Infinity" spacing="15.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ice.view.MetaController">
    <children>
-      <VBox fx:id="vBoxMeta" spacing="10.0">
-         <children>
-            <CheckBox mnemonicParsing="false" text="description" />
-            <CheckBox mnemonicParsing="false" text="keyword" />
-         </children>
-      </VBox>
+      <FlowPane fx:id="flowPane" hgap="2.0" vgap="2.0" VBox.vgrow="ALWAYS">
+         <padding>
+            <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+         </padding></FlowPane>
       <Label text="Chosen Meta Tags: " />
       <Label fx:id="metaTagsLabel" />
       <HBox alignment="BOTTOM_RIGHT" prefHeight="40.0" prefWidth="200.0" spacing="15.0">
