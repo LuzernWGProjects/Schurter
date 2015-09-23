@@ -115,7 +115,7 @@ public class MainController {
 			//logger.debug(results.toString());
 
 			// logic to pick the first record ; here should be the search logic!
-			results = JSONUtil.cleanUp(results, params);
+			results = JSONUtil.cleanUp(results);
 			
 			
 			JSONObject aResult = results.getJSONObject(0);

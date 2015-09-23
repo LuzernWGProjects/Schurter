@@ -25,14 +25,12 @@ public final class JSONUtil {
 	 * Starter Function for our analysis methods.
 	 * 
 	 * @param results
-	 * @param searchParams
 	 * @return 
 	 */
-	public static JSONArray cleanUp(JSONArray results, List<String> searchParams) {
+	public static JSONArray cleanUp(JSONArray results) {
 		JSONArray stripedResults = removeUnusedElements(results, keyNodes);
 
 		stripedResults = trimUrls(stripedResults);
-		
 		
 		return stripedResults;
 	}
