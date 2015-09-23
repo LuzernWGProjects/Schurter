@@ -45,9 +45,24 @@ public class MainController {
 		PropertiesConfiguration config;
 		List<String> metaTagElements = new ArrayList<String>();
 
-		// retrieve all customers from file
-		logger.info("Retrieve Customers from File "+file.getAbsolutePath());
-		LinkedList<Customer> customerList = retrieveCustomerFromFile(file);
+		
+		
+		
+				
+		LinkedList<Customer> customerList;
+		
+		//For testing if used without GUI
+		if(file==null)
+		{			
+			customerList = retrieveCustomerFromFile(new File("posTest.xlsx"));
+		}else{
+			customerList = retrieveCustomerFromFile(file);
+
+			// retrieve all customers from file
+			logger.info("Retrieve Customers from File "+file.getAbsolutePath());
+			
+		}
+		
 
 		// Core settings
 		boolean isSearchAvail = false;
