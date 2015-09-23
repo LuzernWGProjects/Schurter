@@ -1,4 +1,4 @@
-package ch.ice.controller;
+package ch.ice.controller.web;
 
 import java.io.IOException;
 import java.util.HashMap;

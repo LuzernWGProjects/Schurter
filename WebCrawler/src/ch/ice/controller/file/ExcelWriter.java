@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ice.controller;
+package ch.ice.controller.file;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,7 +31,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import ch.ice.controller.interf.Writer;
-import ch.ice.controller.parser.ExcelParser;
 import ch.ice.model.Customer;
 import ch.ice.model.Website;
 

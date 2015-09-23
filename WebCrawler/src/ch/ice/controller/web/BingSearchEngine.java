@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ice.controller;
+package ch.ice.controller.web;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

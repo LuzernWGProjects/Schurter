@@ -21,7 +21,10 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import ch.ice.controller.parser.ExcelParser;
+import ch.ice.controller.file.ExcelParser;
+import ch.ice.controller.file.ExcelWriter;
+import ch.ice.controller.web.BingSearchEngine;
+import ch.ice.controller.web.WebCrawler;
 import ch.ice.exceptions.IllegalFileExtensionException;
 import ch.ice.model.Customer;
 import ch.ice.utils.JSONUtil;

@@ -1,4 +1,4 @@
-package ch.ice.controller.parser;
+package ch.ice.controller.file;
 
 import java.io.File;
 import java.io.FileInputStream;
