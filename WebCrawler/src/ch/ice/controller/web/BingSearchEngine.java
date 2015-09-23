@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ice.controller;
+package ch.ice.controller.web;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -9,16 +9,16 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 
-import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import ch.ice.model.Customer;
+import ch.ice.utils.JSONUtil;
 
 
 /**
@@ -71,11 +71,29 @@ public class BingSearchEngine  {
             }
        
             final JSONObject json = new JSONObject(response.toString());
-            final JSONObject d = json.getJSONObject("d");
-            final JSONArray results = d.getJSONArray("results");
+            JSONObject d = json.getJSONObject("d");
+            
+            JSONArray results = d.getJSONArray("results");
+            
             final int resultsLength = results.length();
-
-            return results;
+            
+            return JSONUtil.cleanUp(results);
         }
     }
+	
+	/**
+	 * Build a query for the search engine use.
+	 * 
+	 * @param params
+	 * @return String query
+	 */
+	public static String buildQuery(ArrayList<String> params){
+		String query = "";
+		
+		for (String string : params) {
+			query += string+" ";
+		}
+		
+		return query;
+	}
 }

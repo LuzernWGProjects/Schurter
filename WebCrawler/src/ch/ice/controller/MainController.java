@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.logging.log4j.LogManager;
@@ -23,92 +21,110 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import ch.ice.controller.interf.Parser;
-import ch.ice.controller.parser.ExcelParser;
+import ch.ice.controller.file.ExcelParser;
+import ch.ice.controller.file.ExcelWriter;
+import ch.ice.controller.web.BingSearchEngine;
+import ch.ice.controller.web.WebCrawler;
 import ch.ice.exceptions.IllegalFileExtensionException;
 import ch.ice.model.Customer;
+import ch.ice.utils.JSONUtil;
 
 /**
  * @author Oliver
  *
  */
 public class MainController {
-	private static final Logger logger = LogManager.getLogger(MainController.class.getName());
+	private static final Logger logger = LogManager
+			.getLogger(MainController.class.getName());
 	ExcelParser excelParserInstance;
-	
+
+	public static File file;
+
 	public void startMainController() {
 
 		PropertiesConfiguration config;
 		List<String> metaTagElements = new ArrayList<String>();
-		
+
 		// retrieve all customers from file
-		logger.info("Retrieve Customers from File posTest.xlsx");
-		LinkedList<Customer> customerList = retrieveCustomerFromFile(new File("posTest.xlsx"));
-		
+		logger.info("Retrieve Customers from File "+file.getAbsolutePath());
+		LinkedList<Customer> customerList = retrieveCustomerFromFile(file);
+
 		// Core settings
 		boolean isSearchAvail = false;
 		URL defaultUrl = null;
-		
+
 		/*
 		 * Load Configuration File
 		 */
 		try {
 			config = new PropertiesConfiguration("conf/app.properties");
-			
+
 			isSearchAvail = config.getBoolean("core.search.isEnabled");
 			defaultUrl = new URL(config.getString("core.search.defaultUrl"));
-			
-			metaTagElements = Arrays.asList(config.getStringArray("crawler.searchForMetaTags"));
+
+			metaTagElements = Arrays.asList(config
+					.getStringArray("crawler.searchForMetaTags"));
 		} catch (ConfigurationException | MalformedURLException e) {
 			logger.error("Faild to load config file");
 			System.out.println(e.getLocalizedMessage());
 			e.printStackTrace();
 		}
-		
-		
+
 		WebCrawler wc = new WebCrawler();
-		
+
 		for (Customer customer : customerList) {
-			
-			// only search via SearchEngine if search is enabled. Disable search for testing purpose
-			if(isSearchAvail){
+
+			// only search via SearchEngine if search is enabled. Disable search
+			// for testing purpose
+			if (isSearchAvail) {
 				// Add url for customer
 				URL retrivedUrl = searchForUrl(customer);
 				customer.getWebsite().setUrl(retrivedUrl);
-				
+
 			} else {
 				customer.getWebsite().setUrl(defaultUrl);
-			}			
-			
+			}
+
 			// add metadata
 			try {
 				wc.connnect(customer.getWebsite().getUrl().toString());
-				customer.getWebsite().setMetaTags(wc.getMetaTags(metaTagElements));
+				customer.getWebsite().setMetaTags(
+						wc.getMetaTags(metaTagElements));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
+
 			logger.info(customer.getWebsite().toString());
 		}
-		
+
 		/*
 		 * Write every enhanced customer object into a new file
 		 */
 		this.startWriter(customerList);
+
+		logger.info("end");
 	}
 
-	public URL searchForUrl(Customer c) {		
-		// Define Query
-		String query = c.getFullName() + " " + c.getCountryName() + " "	+ c.getZipCode();
-		logger.info("start searchEngine for URL with query: "+query);
-		
+	public URL searchForUrl(Customer c) {
+
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(c.getFullName().toLowerCase());
+		params.add(c.getCountryName().toLowerCase());
+
+		String query = BingSearchEngine.buildQuery(params);
+
+		logger.info("start searchEngine for URL with query: " + query);
+
 		try {
 
 			// Start Search
 			JSONArray results = BingSearchEngine.Search(query);
 
-			//TODO write logichandler class
+			// logger.debug(results.toString());
+
 			// logic to pick the first record ; here should be the search logic!
+			results = JSONUtil.cleanUp(results);
+
 			JSONObject aResult = results.getJSONObject(0);
 
 			// return only the URL form first object
@@ -121,7 +137,8 @@ public class MainController {
 	}
 
 	/**
-	 * Each Row returns a customer object. These customers are saved in an List-Object.
+	 * Each Row returns a customer object. These customers are saved in an
+	 * List-Object.
 	 * 
 	 * @param file
 	 * @return LinkedList<Customer>
@@ -130,26 +147,29 @@ public class MainController {
 		this.excelParserInstance = new ExcelParser();
 
 		try {
-			// retrieve all Customers from list
+			
 			return this.excelParserInstance.readFile(file);
 
-		} catch (IOException | IllegalFileExtensionException | EncryptedDocumentException | InvalidFormatException e) {
+		} catch (IOException | IllegalFileExtensionException
+				| EncryptedDocumentException | InvalidFormatException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
-		
+
 		return new LinkedList<Customer>();
 	}
 
 	public void startWriter(List<Customer> customerList) {
-		
-		//TODO Check if user demands CSV or EXCEL -> if(excel)->getWorkbook, Else ->write normal
-		//ExcelWriter ew = new ExcelWriter(this.excelParserInstance.getWorkbook());
-		
+
+		// TODO Check if user demands CSV or EXCEL -> if(excel)->getWorkbook,
+		// Else ->write normal
+		// ExcelWriter ew = new
+		// ExcelWriter(this.excelParserInstance.getWorkbook());
+
 		logger.info("Start writing customers to File");
-		
+
 		ExcelWriter ew = new ExcelWriter();
-		
+
 		ew.writeFile(customerList, this.excelParserInstance.getWorkbook());
 	}
 }

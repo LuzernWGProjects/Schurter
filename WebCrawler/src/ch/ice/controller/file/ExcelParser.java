@@ -1,4 +1,4 @@
-package ch.ice.controller.parser;
+package ch.ice.controller.file;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,6 +40,8 @@ public class ExcelParser implements Parser {
 	private File file;
 	private InputStream ExcelFileToRead;
 	private List<String> allowedFileExtensions = new ArrayList<String>();
+	private int physicalRowCount;
+	private int currentRowCount;
 
 	LinkedList<Customer> customerList = new LinkedList<Customer>();
 
@@ -123,12 +125,22 @@ public class ExcelParser implements Parser {
 
 		// load first sheet in File
 		Sheet sheet = this.wb.getSheetAt(0);
-
+		
+		//set total amount of rows (Customers)
+		if(sheet.getPhysicalNumberOfRows() == 0){
+			this.setTotalDataSets(0);
+		}
+		else {
+			this.setTotalDataSets(sheet.getPhysicalNumberOfRows()-3);
+		}
+		
 		Row row;
 		Cell cell;
 
 		Iterator<?> rows = sheet.rowIterator();
-
+		
+		
+		
 		while (rows.hasNext()) {
 
 			row = (Row) rows.next();
@@ -154,6 +166,9 @@ public class ExcelParser implements Parser {
 				continue;
 
 			}
+			
+			// current row number
+			this.setCurrentRow(row.getRowNum()+1);
 			
 			Iterator<?> cells = row.cellIterator();
 
@@ -216,7 +231,7 @@ public class ExcelParser implements Parser {
 	 * 
 	 * @return customer model with empty Website.
 	 */
-	private Customer createCustomer() {
+	public Customer createCustomer() {
 
 		Customer customer = new Customer();
 
@@ -256,6 +271,26 @@ public class ExcelParser implements Parser {
 		}
 		return null;
 	}
+	
+	
+	//progress bar and statistic stuff
+	public void setTotalDataSets(int totalRows) {
+		this.physicalRowCount = totalRows;
+	}
+	
+	public int getTotalDataSets() {
+		return this.physicalRowCount;
+	}
+	
+	public void setCurrentRow(int currentRowNumber) {
+		this.currentRowCount = currentRowNumber;
+	}
+	
+	public int getCurrentRow() {
+		return this.currentRowCount;
+	}
+	
+	
 	
 	public Workbook getWorkbook(){
 		return this.wb;
