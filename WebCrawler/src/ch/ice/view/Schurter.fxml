@@ -30,7 +30,7 @@
       <children>
             <TextField id="fileTextField" fx:id="fileTextField" layoutX="52.0" layoutY="27.0" prefHeight="26.0" prefWidth="436.0" />
             <Button id="selectFileButton" fx:id="selectFileButton" layoutX="508.0" layoutY="27.0" mnemonicParsing="false" text="Select File" textFill="WHITE" />
-            <Button id="startSearchButton" fx:id="startSearchButton" layoutX="253.0" layoutY="197.0" mnemonicParsing="false" text="Start Search" textFill="WHITE">
+            <Button id="startSearchButton" fx:id="startSearchButton" layoutX="256.0" layoutY="282.0" mnemonicParsing="false" text="Start Search" textFill="WHITE">
                <effect>
                   <Reflection fraction="0.53" topOpacity="0.75" />
                </effect>
@@ -38,9 +38,11 @@
                   <Font size="18.0" />
                </font>
             </Button>
-            <ProgressBar id="searchProgressBar" fx:id="searchProgressBar" layoutX="52.0" layoutY="284.0" prefHeight="20.0" prefWidth="537.0" progress="0.34" />
-            <Label layoutX="52.0" layoutY="98.0" text="Selected Metatags:" />
-            <Label fx:id="metaTagsList" layoutX="52.0" layoutY="126.0" text="Label" />
+            <Label layoutX="52.0" layoutY="70.0" text="Selected Metatags:" />
+            <Label fx:id="metaTagsList" layoutX="52.0" layoutY="98.0" text="Label" />
+            <TextField id="fileTextField" fx:id="pathTextField" layoutX="52.0" layoutY="220.0" prefHeight="26.0" prefWidth="436.0" />
+            <Button id="selectFileButton" fx:id="changeDirectory" layoutX="508.0" layoutY="220.0" mnemonicParsing="false" text="Change" textFill="WHITE" />
+            <Label layoutX="52.0" layoutY="193.0" text="Your File will be saved to:" />
       </children>
     </AnchorPane>
   </children>
