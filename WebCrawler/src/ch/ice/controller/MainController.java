@@ -46,10 +46,6 @@ public class MainController {
 
 		PropertiesConfiguration config;
 		List<String> metaTagElements = new ArrayList<String>();
-
-		
-		
-		
 				
 		LinkedList<Customer> customerList;
 		
@@ -62,9 +58,7 @@ public class MainController {
 
 			// retrieve all customers from file
 			logger.info("Retrieve Customers from File "+file.getAbsolutePath());
-			
 		}
-		
 
 		// Core settings
 		boolean isSearchAvail = false;
