@@ -39,6 +39,8 @@ public class MainController {
 	ExcelParser excelParserInstance;
 
 	public static File file;
+	
+	private Integer limitSearchResults = 4;
 
 	public void startMainController() {
 
@@ -61,6 +63,7 @@ public class MainController {
 
 			isSearchAvail = config.getBoolean("core.search.isEnabled");
 			defaultUrl = new URL(config.getString("core.search.defaultUrl"));
+			//this.limitSearchResults = config.getInteger("searchEngine.bing.limitSearchResults", 15);
 
 			metaTagElements = Arrays.asList(config
 					.getStringArray("crawler.searchForMetaTags"));
@@ -110,6 +113,7 @@ public class MainController {
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(c.getFullName().toLowerCase());
 		params.add(c.getCountryName().toLowerCase());
+		//params.add("loc:"+c.getCountryCode().toLowerCase()); -> delivers 0 results sometimes. we have to TEST this!!!!
 
 		String query = BingSearchEngine.buildQuery(params);
 
@@ -118,13 +122,13 @@ public class MainController {
 		try {
 
 			// Start Search
-			JSONArray results = BingSearchEngine.Search(query);
+			JSONArray results = BingSearchEngine.Search(query, this.limitSearchResults);
 
 			// logger.debug(results.toString());
 
 			// logic to pick the first record ; here should be the search logic!
 			results = JSONUtil.cleanUp(results);
-
+			System.out.println(results);
 			JSONObject aResult = results.getJSONObject(0);
 
 			// return only the URL form first object

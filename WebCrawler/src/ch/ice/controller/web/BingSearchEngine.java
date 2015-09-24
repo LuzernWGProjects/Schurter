@@ -27,7 +27,7 @@ import ch.ice.utils.JSONUtil;
  */
 public class BingSearchEngine  {
 
-	public static  JSONArray Search(String requestedQuery) throws Exception {
+	public static  JSONArray Search(String requestedQuery, int limitSearchResults) throws Exception {
 	
     	String accountKey = "";
     	String bingUrlPattern = "";
@@ -50,7 +50,11 @@ public class BingSearchEngine  {
     	// Bing Constants
 
         String query = URLEncoder.encode(requestedQuery, Charset.defaultCharset().name());
-        String bingUrl = String.format(bingUrlPattern, query);
+        
+        // if search results limit is smaller then 1, set to 1
+        if(limitSearchResults < 1) limitSearchResults = 1;
+        
+        String bingUrl = String.format(bingUrlPattern+"&$top="+limitSearchResults, query);
 
         String accountKeyEnc = Base64.getEncoder().encodeToString((accountKey + ":" + accountKey).getBytes());
 
