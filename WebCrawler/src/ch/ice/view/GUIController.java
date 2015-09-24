@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -53,6 +55,8 @@ public class GUIController implements Initializable {
 	@FXML
 	private Button changeDirectory;
 
+	public static ObservableValue<? extends String> test;
+
 	public static PropertiesConfiguration config;
 
 	public static List<String> metaTagElements;
@@ -73,7 +77,7 @@ public class GUIController implements Initializable {
 
 	}
 
-	public static void getSaveProperties() {
+	public static String getSaveProperties() {
 		try {
 			config = new PropertiesConfiguration("conf/app.properties");
 			path = config.getString(("writer.file.path"));
@@ -82,6 +86,7 @@ public class GUIController implements Initializable {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		return path;
 
 	}
 
@@ -99,6 +104,17 @@ public class GUIController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+
+		metaTagsList.setWrapText(true);
+		metaTagsList.setMaxWidth(550);
+		metaTagsList.setMaxHeight(80);
+
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				selectFileButton.requestFocus();
+			}
+		});
 
 		getProperties(metaTagsList);
 		FileChooser filechooser = new FileChooser();
@@ -162,18 +178,35 @@ public class GUIController implements Initializable {
 			@Override
 			public void handle(ActionEvent event) {
 
-				MainController main = new MainController();
+				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
+						"SaveFile.fxml"));
+				Parent root1;
+				try {
+					root1 = (Parent) fxmlLoader.load();
 
-				main.startMainController();
-				// int i = 0;
-				// int rows = main.getsize();
-				// while (i < rows) {
-				// Thread.sleep(250);
-				// i = main.getcurrent();
-				// searchProgressBar.setProgress(i);
-				// }
+					Stage stage = new Stage();
+					stage.setTitle("File processed");
+					stage.setScene(new Scene(root1));
+					stage.initStyle(StageStyle.UNDECORATED);
+					stage.show();
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				Thread t1 = new Thread() {
+					public void run() {
+						MainController main = new MainController();
+
+						main.startMainController();
+					}
+				};
+
+				t1.start();
 
 			}
+
 		});
 
 		MetaTags.setOnAction(new EventHandler<ActionEvent>() {
@@ -191,7 +224,15 @@ public class GUIController implements Initializable {
 					stage.setTitle("Choose your Meta Tags");
 					stage.setScene(new Scene(root1));
 					stage.initStyle(StageStyle.UNDECORATED);
-					stage.show();
+					stage.showAndWait();
+
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							getProperties(metaTagsList);
+						}
+					});
+
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
