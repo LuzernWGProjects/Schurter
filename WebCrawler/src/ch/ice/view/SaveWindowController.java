@@ -17,6 +17,8 @@ public class SaveWindowController implements Initializable {
 	private Label endMessageLabel;
 	@FXML
 	private ProgressBar progressBar;
+	@FXML
+	private Label progressLabel;
 
 	boolean myBoo = true;
 	Thread one;
@@ -46,6 +48,8 @@ public class SaveWindowController implements Initializable {
 					if (i == 3) {
 						points = "...";
 					}
+
+					// make static amendments in MainController and we're good
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
@@ -58,6 +62,8 @@ public class SaveWindowController implements Initializable {
 										/ (double) MainController.customerList
 												.size();
 								progressBar.setProgress(d);
+								progressLabel
+										.setText(MainController.progressText);
 								System.out.println(d);
 							} else
 								System.out.println("Not yet...");
