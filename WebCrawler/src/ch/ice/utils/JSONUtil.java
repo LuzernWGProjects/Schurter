@@ -51,7 +51,7 @@ public final class JSONUtil {
 				JSONObject customerDetailObject = results.getJSONObject(i);
 				
 				// iterate over every customer detail (url, desc, title, usw)
-				for (int j = 0; j < customerDetailObject.length()-1; j++) {
+				for (int j = 0; j < customerDetailObject.length(); j++) {
 					
 					try {
 						
