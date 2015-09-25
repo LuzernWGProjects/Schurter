@@ -39,25 +39,26 @@ public class MainController {
 	ExcelParser excelParserInstance;
 
 	public static File file;
-	
+	public static LinkedList<Customer> customerList;
+	public static int i;
+	public static String progressText;
+
 	private Integer limitSearchResults = 4;
 
 	public void startMainController() {
 
 		PropertiesConfiguration config;
 		List<String> metaTagElements = new ArrayList<String>();
-				
-		LinkedList<Customer> customerList;
-		
-		//For testing if used without GUI
-		if(file==null)
-		{			
+
+		// For testing if used without GUI
+		if (file == null) {
 			customerList = retrieveCustomerFromFile(new File("posTest.xlsx"));
-		}else{
+		} else {
 			customerList = retrieveCustomerFromFile(file);
 
 			// retrieve all customers from file
-			logger.info("Retrieve Customers from File "+file.getAbsolutePath());
+			logger.info("Retrieve Customers from File "
+					+ file.getAbsolutePath());
 		}
 
 		// Core settings
@@ -72,7 +73,8 @@ public class MainController {
 
 			isSearchAvail = config.getBoolean("core.search.isEnabled");
 			defaultUrl = new URL(config.getString("core.search.defaultUrl"));
-			//this.limitSearchResults = config.getInteger("searchEngine.bing.limitSearchResults", 15);
+			// this.limitSearchResults =
+			// config.getInteger("searchEngine.bing.limitSearchResults", 15);
 
 			metaTagElements = Arrays.asList(config
 					.getStringArray("crawler.searchForMetaTags"));
@@ -85,6 +87,7 @@ public class MainController {
 		WebCrawler wc = new WebCrawler();
 
 		for (Customer customer : customerList) {
+			i++;
 
 			// only search via SearchEngine if search is enabled. Disable search
 			// for testing purpose
@@ -92,6 +95,7 @@ public class MainController {
 				// Add url for customer
 				URL retrivedUrl = searchForUrl(customer);
 				customer.getWebsite().setUrl(retrivedUrl);
+				progressText = "Gathering data at: " + retrivedUrl.toString();
 
 			} else {
 				customer.getWebsite().setUrl(defaultUrl);
@@ -122,16 +126,19 @@ public class MainController {
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(c.getFullName().toLowerCase());
 		params.add(c.getCountryName().toLowerCase());
-		//params.add("loc:"+c.getCountryCode().toLowerCase()); -> delivers 0 results sometimes. we have to TEST this!!!!
+		// params.add("loc:"+c.getCountryCode().toLowerCase()); -> delivers 0
+		// results sometimes. we have to TEST this!!!!
 
 		String query = BingSearchEngine.buildQuery(params);
+		progressText = "Loockup on: " + query;
 
 		logger.info("start searchEngine for URL with query: " + query);
 
 		try {
 
 			// Start Search
-			JSONArray results = BingSearchEngine.Search(query, this.limitSearchResults);
+			JSONArray results = BingSearchEngine.Search(query,
+					this.limitSearchResults);
 
 			// logger.debug(results.toString());
 
@@ -160,7 +167,7 @@ public class MainController {
 		this.excelParserInstance = new ExcelParser();
 
 		try {
-			
+
 			return this.excelParserInstance.readFile(file);
 
 		} catch (IOException | IllegalFileExtensionException
