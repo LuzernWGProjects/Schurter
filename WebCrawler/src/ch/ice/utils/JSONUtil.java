@@ -30,7 +30,7 @@ public final class JSONUtil {
 	public static JSONArray cleanUp(JSONArray results) {
 		JSONArray stripedResults = removeUnusedElements(results, keyNodes);
 
-		stripedResults = trimUrls(stripedResults);
+		stripedResults = trimUrls(stripedResults, "Url");
 		
 		return stripedResults;
 	}
@@ -41,7 +41,7 @@ public final class JSONUtil {
 	 * @param results
 	 * @return
 	 */
-	private static JSONArray trimUrls(JSONArray results) {
+	public static JSONArray trimUrls(JSONArray results, String urlLabel) {
 		JSONArray trimedUrls = new JSONArray();
 		String cleanUrl ="";
 		
@@ -56,7 +56,7 @@ public final class JSONUtil {
 					try {
 						
 						//Get every customer URL
-						String customerUrl = results.getJSONObject(j).getString("Url");
+						String customerUrl = customerDetailObject.getString(urlLabel);
 						
 						if(customerUrl != null) {
 							// get specific fields from URL
@@ -67,7 +67,8 @@ public final class JSONUtil {
 							cleanUrl = protocol+"://"+host+"/"; 
 							
 							// set clean url to specific customer
-							customerDetailObject.put("Url",cleanUrl);
+							customerDetailObject.remove(urlLabel);
+							customerDetailObject.put(urlLabel,cleanUrl);
 						}
 						
 					} catch (JSONException | MalformedURLException e) {
