@@ -58,6 +58,7 @@ public class GUIMain extends Application {
 			Stage stage = new Stage();
 			stage.setTitle("Schurter POS-Data-Enhancement System (SPOSDES) ");
 			stage.setScene(new Scene(root1));
+			stage.initStyle(StageStyle.UNDECORATED);
 			stage.show();
 
 		} catch (IOException e) {

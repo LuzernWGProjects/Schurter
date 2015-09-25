@@ -8,6 +8,40 @@
             -fx-border-radius: 4px;
           
 }
+
+#okMetaButton:pressed {
+	-fx-background-color: #555555;
+            -fx-border-radius: 4px;
+}
+
+#cancelMetaButton:pressed {
+	-fx-background-color: #555555;
+            -fx-border-radius: 4px;
+          
+}
+
+
+
+#closeButton:pressed {
+	-fx-background-color: #555555;
+            -fx-border-radius: 4px;
+          
+}
+
+#openFileButton:pressed {
+	-fx-background-color: #555555;
+            -fx-border-radius: 4px;
+          
+}
+
+#cancelButton:pressed {
+	-fx-background-color: #555555;
+            -fx-border-radius: 4px;
+          
+}
+
+
+
 .button {
 	-fx-background-color: #336699;
             -fx-border-radius: 4px;

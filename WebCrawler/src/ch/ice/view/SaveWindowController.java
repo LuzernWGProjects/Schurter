@@ -1,5 +1,8 @@
 package ch.ice.view;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -9,10 +12,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.stage.Stage;
 import ch.ice.controller.MainController;
+import ch.ice.controller.file.ExcelWriter;
 
 public class SaveWindowController implements Initializable {
 
@@ -24,6 +30,10 @@ public class SaveWindowController implements Initializable {
 	private Label progressLabel;
 	@FXML
 	private Button closeButton;
+	@FXML
+	private Button openFileButton;
+	@FXML
+	private Button cancelButton;
 
 	boolean myBoo = true;
 	Thread one;
@@ -31,7 +41,9 @@ public class SaveWindowController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		closeButton.setVisible(false);
+		closeButton.setDisable(true);
+		openFileButton.setDisable(true);
+		cancelButton.setDisable(false);
 
 		Task task = new Task<Void>() {
 			@Override
@@ -59,7 +71,27 @@ public class SaveWindowController implements Initializable {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
+							endMessageLabel.setWrapText(true);
+							endMessageLabel.setMaxWidth(400);
+							endMessageLabel.setMaxHeight(80);
 							endMessageLabel.setText("Please wait " + points);
+
+							cancelButton
+									.setOnAction(new EventHandler<ActionEvent>() {
+
+										@Override
+										public void handle(ActionEvent event) {
+
+											cancel(true);
+											Node source = (Node) event
+													.getSource();
+											Stage stage = (Stage) source
+													.getScene().getWindow();
+											stage.close();
+
+										}
+									});
+
 							if (MainController.customerList != null) {
 								System.out.println(MainController.customerList
 										.size() + " : " + MainController.i);
@@ -73,16 +105,16 @@ public class SaveWindowController implements Initializable {
 								System.out.println(d);
 
 								if (progressBar.getProgress() == 1) {
-									endMessageLabel.setWrapText(true);
-									endMessageLabel.setMaxWidth(400);
-									endMessageLabel.setMaxHeight(80);
+
 									endMessageLabel
 											.setText("Your file has been processed and saved to: "
 													+ GUIController.path);
 									progressLabel
 											.setText("Gathering Process ended. We call that AWESOME!");
 
-									closeButton.setVisible(true);
+									closeButton.setDisable(false);
+									openFileButton.setDisable(false);
+									cancelButton.setDisable(true);
 
 									closeButton
 											.setOnAction(new EventHandler<ActionEvent>() {
@@ -92,6 +124,27 @@ public class SaveWindowController implements Initializable {
 														ActionEvent event) {
 
 													System.exit(0);
+
+												}
+											});
+									openFileButton
+											.setOnAction(new EventHandler<ActionEvent>() {
+
+												@Override
+												public void handle(
+														ActionEvent event) {
+													Desktop dt = Desktop
+															.getDesktop();
+													try {
+														dt.open(new File(
+																GUIController.path
+																		+ "/"
+																		+ ExcelWriter.fileName));
+													} catch (IOException e) {
+														// TODO Auto-generated
+														// catch block
+														e.printStackTrace();
+													}
 
 												}
 											});

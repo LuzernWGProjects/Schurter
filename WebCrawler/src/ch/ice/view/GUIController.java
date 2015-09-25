@@ -45,6 +45,9 @@ public class GUIController implements Initializable {
 	@FXML
 	private MenuItem MetaTags;
 	@FXML
+	private MenuItem quitMenuItem;
+
+	@FXML
 	private Button cancelMetaButton;
 	@FXML
 	private Button okMetaButton;
@@ -131,9 +134,9 @@ public class GUIController implements Initializable {
 				try {
 					filechooser.getExtensionFilters().addAll(
 							new FileChooser.ExtensionFilter(
-									"Excel-File (*.xls)", "*.xls"),
+									"Excel-File (*.xlsx)", "*.xlsx"),
 							new FileChooser.ExtensionFilter(
-									"Excel-File (*.xlsx)", "*.xlsx"));
+									"Excel-File (*.xls)", "*.xls"));
 					MainController.file = filechooser.showOpenDialog(stage);
 					if (MainController.file != null) {
 						fileTextField.setText(MainController.file
@@ -237,6 +240,16 @@ public class GUIController implements Initializable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+
+			}
+		});
+
+		quitMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+
+				System.exit(0);
 
 			}
 		});
