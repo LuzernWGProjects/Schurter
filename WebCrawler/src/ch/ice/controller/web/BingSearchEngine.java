@@ -81,7 +81,7 @@ public class BingSearchEngine  {
             
             final int resultsLength = results.length();
             
-            return results; //JSONUtil.cleanUp(results);
+            return JSONUtil.cleanUp(results);
         }
     }
 	

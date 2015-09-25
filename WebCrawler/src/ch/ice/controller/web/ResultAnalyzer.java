@@ -32,7 +32,7 @@ public class ResultAnalyzer {
 		
 		
 	
-		//Go thur each recieved result of the search request
+		//Go thru each received result of the search request
 		for (int i = 0; i < results.length(); i++) {
 			
 			//create a new temporary JSONObject for each result
@@ -43,12 +43,12 @@ public class ResultAnalyzer {
 			String title = (String) singleResult.get("Title");
 			String desc = (String) singleResult.get("Description");
 			
-			//store name of comapny in a variable to work with later on
+			//store name of company in a variable to work with later on
 			String companyName = (String) parameters.get(0);
-			//create acronym of comapny name
+			//create acronym of company name
 			String acroOfCompanyName = createAcronym(companyName);
 		
-			// if the url contains the companys name return this as the best result
+			// if the url contains the company name return this as the best result
 			if(url.contains((CharSequence) parameters.get(0)))
 					{
 				System.out.println("----------- NAMEN in URL!" +url +"diese url enthält den namen: "+ parameters.get(0));
