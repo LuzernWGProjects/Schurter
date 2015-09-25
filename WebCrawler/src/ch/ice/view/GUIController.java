@@ -201,10 +201,11 @@ public class GUIController implements Initializable {
 					stage.setScene(new Scene(root1));
 					stage.initStyle(StageStyle.UNDECORATED);
 					stage.showAndWait();
+
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
-
+							t1.interrupt();
 						}
 					});
 
