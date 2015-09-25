@@ -125,7 +125,7 @@ public class MainController {
 
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(c.getFullName().toLowerCase());
-		params.add(c.getCountryName().toLowerCase());
+		// params.add(c.getCountryName().toLowerCase());
 		// params.add("loc:"+c.getCountryCode().toLowerCase()); -> delivers 0
 		// results sometimes. we have to TEST this!!!!
 
