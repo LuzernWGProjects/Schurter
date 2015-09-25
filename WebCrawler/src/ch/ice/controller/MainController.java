@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import ch.ice.controller.file.ExcelParser;
 import ch.ice.controller.file.ExcelWriter;
 import ch.ice.controller.web.BingSearchEngine;
+import ch.ice.controller.web.ResultAnalyzer;
 import ch.ice.controller.web.WebCrawler;
 import ch.ice.exceptions.IllegalFileExtensionException;
 import ch.ice.model.Customer;
@@ -143,9 +144,11 @@ public class MainController {
 			// logger.debug(results.toString());
 
 			// logic to pick the first record ; here should be the search logic!
-			results = JSONUtil.cleanUp(results);
-			System.out.println(results);
-			JSONObject aResult = results.getJSONObject(0);
+			JSONObject aResult =	ResultAnalyzer.analyze(results, params);
+			
+			
+		
+			
 
 			// return only the URL form first object
 			return new URL((String) aResult.get("Url"));
