@@ -15,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -29,9 +30,14 @@ public class MetaController implements Initializable {
 	Label metaTagsLabel;
 	@FXML
 	FlowPane flowPane;
+	@FXML
+	VBox vBox;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		metaTagsLabel.setWrapText(true);
+		metaTagsLabel.setMaxWidth(600);
+		metaTagsLabel.setMaxHeight(80);
 
 		GUIController.getProperties(metaTagsLabel);
 
@@ -63,6 +69,7 @@ public class MetaController implements Initializable {
 				Node source = (Node) event.getSource();
 				Stage stage = (Stage) source.getScene().getWindow();
 				stage.close();
+
 			}
 		});
 

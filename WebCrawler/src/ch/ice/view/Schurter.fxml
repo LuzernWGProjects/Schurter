@@ -28,7 +28,7 @@
     </MenuBar>
     <AnchorPane id="mainMenuBar" maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <children>
-            <TextField id="fileTextField" fx:id="fileTextField" layoutX="52.0" layoutY="27.0" prefHeight="26.0" prefWidth="436.0" />
+            <TextField id="fileTextField" fx:id="fileTextField" editable="false" layoutX="52.0" layoutY="27.0" prefHeight="26.0" prefWidth="436.0" promptText="Please Select File" />
             <Button id="selectFileButton" fx:id="selectFileButton" layoutX="508.0" layoutY="27.0" mnemonicParsing="false" text="Select File" textFill="WHITE" />
             <Button id="startSearchButton" fx:id="startSearchButton" layoutX="256.0" layoutY="282.0" mnemonicParsing="false" text="Start Search" textFill="WHITE">
                <effect>
@@ -40,7 +40,7 @@
             </Button>
             <Label layoutX="52.0" layoutY="70.0" text="Selected Metatags:" />
             <Label fx:id="metaTagsList" layoutX="52.0" layoutY="98.0" text="Label" />
-            <TextField id="fileTextField" fx:id="pathTextField" layoutX="52.0" layoutY="220.0" prefHeight="26.0" prefWidth="436.0" />
+            <TextField id="fileTextField" fx:id="pathTextField" editable="false" layoutX="52.0" layoutY="220.0" prefHeight="26.0" prefWidth="436.0" promptText="Please define your processed File will be saved" />
             <Button id="selectFileButton" fx:id="changeDirectory" layoutX="508.0" layoutY="220.0" mnemonicParsing="false" text="Change" textFill="WHITE" />
             <Label layoutX="52.0" layoutY="193.0" text="Your File will be saved to:" />
       </children>

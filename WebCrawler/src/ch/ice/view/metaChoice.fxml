@@ -5,14 +5,14 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox minHeight="-Infinity" minWidth="-Infinity" spacing="15.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ice.view.MetaController">
+<VBox fx:id="vBox" minHeight="-Infinity" minWidth="-Infinity" spacing="15.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ice.view.MetaController">
    <children>
       <FlowPane fx:id="flowPane" hgap="2.0" vgap="2.0" VBox.vgrow="ALWAYS">
          <padding>
             <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
          </padding></FlowPane>
       <Label text="Chosen Meta Tags: " />
-      <Label fx:id="metaTagsLabel" />
+      <Label fx:id="metaTagsLabel" VBox.vgrow="ALWAYS" />
       <HBox alignment="BOTTOM_RIGHT" prefHeight="40.0" prefWidth="200.0" spacing="15.0">
          <children>
             <Button id="cancelMetaButton" fx:id="cancelMetaButton" mnemonicParsing="false" text="Cancel" />
