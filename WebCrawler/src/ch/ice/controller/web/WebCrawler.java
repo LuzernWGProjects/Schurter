@@ -19,16 +19,9 @@ public class WebCrawler {
 	// Get Document object after parsing the html from given url.
 	public void connnect(String url) throws IOException, Exception {
 	
-		
-			try {
 				connection = Jsoup.connect(url).userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21");
 				document = connection.get();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.out.println("lkasldkaldka");
-			}
-	
+		
 	}
 
 	// Get Metatags from document object and return Map
@@ -54,8 +47,8 @@ public class WebCrawler {
 	    }
 		
 			else {
-				  System.out.println("received error code : " + statusCode +" "+ connection.response().statusMessage());
-				throw new HttpStatusException("received error code : " +statusCode +" "+ connection.response().statusMessage());
+				  System.out.println("Received HTTP error code : " + statusCode +" "+ connection.response().statusMessage());
+				throw new HttpStatusException("Received HTTP error code : " +statusCode +" "+ connection.response().statusMessage());
 			  
 			}
 
