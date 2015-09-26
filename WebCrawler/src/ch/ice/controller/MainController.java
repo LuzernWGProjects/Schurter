@@ -26,6 +26,7 @@ import ch.ice.controller.file.ExcelWriter;
 import ch.ice.controller.web.BingSearchEngine;
 import ch.ice.controller.web.ResultAnalyzer;
 import ch.ice.controller.web.WebCrawler;
+import ch.ice.exceptions.HttpStatusException;
 import ch.ice.exceptions.IllegalFileExtensionException;
 import ch.ice.model.Customer;
 import ch.ice.utils.JSONUtil;
@@ -109,6 +110,12 @@ public class MainController {
 						wc.getMetaTags(metaTagElements));
 			} catch (IOException e) {
 				e.printStackTrace();
+				logger.error(e.getMessage());
+			}
+			catch(HttpStatusException e)
+			{
+				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 
 			logger.info(customer.getWebsite().toString());
