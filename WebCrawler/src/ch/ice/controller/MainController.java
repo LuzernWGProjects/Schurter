@@ -95,9 +95,14 @@ public class MainController {
 			// for testing purpose
 			if (isSearchAvail) {
 				// Add url for customer
-				URL retrivedUrl = searchForUrl(customer);
-				customer.getWebsite().setUrl(retrivedUrl);
-				progressText = "Gathering data at: " + retrivedUrl.toString();
+				try {
+					URL retrivedUrl = searchForUrl(customer);
+					customer.getWebsite().setUrl(retrivedUrl);
+					progressText = "Gathering data at: " + retrivedUrl.toString();
+				} catch (Exception e) {
+					e.printStackTrace();
+					logger.error(e.getMessage());
+				}
 
 			} else {
 				customer.getWebsite().setUrl(defaultUrl);
@@ -108,17 +113,25 @@ public class MainController {
 				wc.connnect(customer.getWebsite().getUrl().toString());
 				customer.getWebsite().setMetaTags(
 						wc.getMetaTags(metaTagElements));
+				logger.info(customer.getWebsite().toString());
 			} catch (IOException e) {
 				e.printStackTrace();
 				logger.error(e.getMessage());
+				
 			}
 			catch(HttpStatusException e)
 			{
 				e.printStackTrace();
 				logger.error(e.getMessage());
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				
 			}
 
-			logger.info(customer.getWebsite().toString());
+			
 		}
 
 		/*
