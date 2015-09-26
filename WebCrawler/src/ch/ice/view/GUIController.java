@@ -185,28 +185,34 @@ public class GUIController implements Initializable {
 						"SaveFile.fxml"));
 				Parent root1;
 				try {
+					Thread t1 = new Thread() {
+						public void run() {
+							MainController main = new MainController();
+
+							main.startMainController();
+						}
+					};
+
+					t1.start();
 					root1 = (Parent) fxmlLoader.load();
 
 					Stage stage = new Stage();
 					stage.setTitle("File processed");
 					stage.setScene(new Scene(root1));
 					stage.initStyle(StageStyle.UNDECORATED);
-					stage.show();
+					stage.showAndWait();
+
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							t1.interrupt();
+						}
+					});
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
-				Thread t1 = new Thread() {
-					public void run() {
-						MainController main = new MainController();
-
-						main.startMainController();
-					}
-				};
-
-				t1.start();
 
 			}
 
