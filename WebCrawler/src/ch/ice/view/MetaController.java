@@ -11,6 +11,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -56,20 +58,32 @@ public class MetaController implements Initializable {
 
 			@Override
 			public void handle(ActionEvent event) {
-				GUIController.config.setProperty(
-						"crawler.searchForMetaTags",
-						GUIController.metaTagElements.toString()
-								.replace("[", "").replace("]", ""));
-				try {
-					GUIController.config.save();
-				} catch (ConfigurationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				Node source = (Node) event.getSource();
-				Stage stage = (Stage) source.getScene().getWindow();
-				stage.close();
 
+				System.out.println(GUIController.metaTagElements.size());
+				// System.out.println(GUIController.metaTagElements.get(0));
+
+				if (GUIController.metaTagElements.size() < 1) {
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Information Dialog");
+					alert.setHeaderText("No Meta Tags selected");
+					alert.setContentText("Please select at least one Meta Tag");
+
+					alert.showAndWait();
+				} else {
+					GUIController.config.setProperty(
+							"crawler.searchForMetaTags",
+							GUIController.metaTagElements.toString()
+									.replace("[", "").replace("]", ""));
+					try {
+						GUIController.config.save();
+					} catch (ConfigurationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					Node source = (Node) event.getSource();
+					Stage stage = (Stage) source.getScene().getWindow();
+					stage.close();
+				}
 			}
 		});
 
