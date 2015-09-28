@@ -31,6 +31,9 @@ import ch.ice.exceptions.IllegalFileExtensionException;
 import ch.ice.model.Customer;
 import ch.ice.utils.JSONUtil;
 
+import org.apache.commons.lang.time.StopWatch;
+
+
 /**
  * @author Oliver
  *
@@ -44,11 +47,16 @@ public class MainController {
 	public static LinkedList<Customer> customerList;
 	public static int i;
 	public static String progressText;
+	 private static org.apache.commons.lang.time.StopWatch stopwatch;
+	
 
 	private Integer limitSearchResults = 4;
 
 	public void startMainController() {
 
+		stopwatch = new StopWatch();
+		stopwatch.start();
+		
 		PropertiesConfiguration config;
 		List<String> metaTagElements = new ArrayList<String>();
 
@@ -63,6 +71,10 @@ public class MainController {
 					+ file.getAbsolutePath());
 		}
 
+		stopwatch.split();
+		logger.info(stopwatch.toSplitString());
+		System.out.println("Spilt: "+ stopwatch.toSplitString() +" total: "+ stopwatch.toString());
+		
 		// Core settings
 		boolean isSearchAvail = false;
 		URL defaultUrl = null;
@@ -133,12 +145,18 @@ public class MainController {
 
 			
 		}
-
+	
+		stopwatch.split();
+		logger.info(stopwatch.toSplitString());
+		System.out.println("Spilt: "+ stopwatch.toSplitString() +" total: "+ stopwatch.toString());
 		/*
 		 * Write every enhanced customer object into a new file
 		 */
 		this.startWriter(customerList);
 
+		stopwatch.stop();
+		logger.info(stopwatch.toString());
+		System.out.println("Spilt: "+ stopwatch.toSplitString() +" total: "+ stopwatch.toString());
 		logger.info("end");
 	}
 
