@@ -30,7 +30,6 @@ import ch.ice.exceptions.HttpStatusException;
 import ch.ice.exceptions.IllegalFileExtensionException;
 import ch.ice.model.Customer;
 import ch.ice.utils.JSONUtil;
-import ch.ice.utils.WebCrawlerStopwatch;
 
 import org.apache.commons.lang.time.StopWatch;
 
