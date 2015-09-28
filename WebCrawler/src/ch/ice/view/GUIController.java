@@ -15,6 +15,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -209,9 +210,14 @@ public class GUIController implements Initializable {
 						}
 					});
 
-				} catch (IOException e) {
+				} catch (IOException | NullPointerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					System.out.println("HAAAALLLOOOO");
+					Node source = (Node) event.getSource();
+					Stage stage = (Stage) source.getScene().getWindow();
+					stage.close();
+
 				}
 
 			}
