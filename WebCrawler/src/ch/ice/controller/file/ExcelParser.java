@@ -150,7 +150,7 @@ public class ExcelParser implements Parser {
 				continue;
 
 			// get table heads
-			if (row.getRowNum() == 2) {
+			if (row.getRowNum() == 2 && row.getCell(0) != null) {
 				this.customerIDHeader = row.getCell(0).toString();
 				this.countryNameHeader = row.getCell(1).toString();
 				this.zipCodeHeader = row.getCell(3).toString();
@@ -165,6 +165,9 @@ public class ExcelParser implements Parser {
 
 				continue;
 
+			} else {
+				// throw custom exception -> IlligalInternalFileFormat (Falsches pos file, random file)
+				
 			}
 			
 			// current row number
