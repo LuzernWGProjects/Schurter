@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import ch.ice.controller.MainController;
 import ch.ice.exceptions.InternalFormatException;
+import ch.ice.exceptions.MissingCustomerRowsException;
 
 /**
  * @author Oliver
@@ -21,7 +22,7 @@ public class Main {
 		MainController main = new MainController();
 		try {
 			main.startMainController();
-		} catch (InternalFormatException e) {
+		} catch (InternalFormatException | MissingCustomerRowsException e) {
 			logger.error(e.getMessage());
 		}
 	}
