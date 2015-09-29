@@ -20,7 +20,7 @@ import javafx.stage.Stage;
 import ch.ice.controller.MainController;
 import ch.ice.controller.file.ExcelWriter;
 
-public class SaveWindowController implements Initializable {
+public class SaveWindowController extends Thread implements Initializable {
 
 	@FXML
 	private Label endMessageLabel;
@@ -38,6 +38,8 @@ public class SaveWindowController implements Initializable {
 	boolean myBoo = true;
 	Thread one;
 	String points;
+	Thread t1;
+	Thread th;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -45,11 +47,29 @@ public class SaveWindowController implements Initializable {
 		openFileButton.setDisable(true);
 		cancelButton.setDisable(false);
 
+		cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@SuppressWarnings("deprecation")
+			@Override
+			public void handle(ActionEvent event) {
+
+				t1.stop();
+
+				th.stop();
+
+				Node source = (Node) event.getSource();
+				Stage stage = (Stage) source.getScene().getWindow();
+				stage.close();
+			}
+
+		});
+
 		Task task = new Task<Void>() {
 			@Override
 			public Void call() throws Exception {
 				int i = 0;
 				while (true) {
+
 					final int finalI = i;
 					if (i == 4) {
 						i = 0;
@@ -75,22 +95,6 @@ public class SaveWindowController implements Initializable {
 							endMessageLabel.setMaxWidth(400);
 							endMessageLabel.setMaxHeight(80);
 							endMessageLabel.setText("Please wait " + points);
-
-							cancelButton
-									.setOnAction(new EventHandler<ActionEvent>() {
-
-										@Override
-										public void handle(ActionEvent event) {
-
-											cancel(true);
-											Node source = (Node) event
-													.getSource();
-											Stage stage = (Stage) source
-													.getScene().getWindow();
-											stage.close();
-
-										}
-									});
 
 							if (MainController.customerList != null) {
 								System.out.println(MainController.customerList
@@ -153,8 +157,10 @@ public class SaveWindowController implements Initializable {
 
 								}
 
-							} else
-								System.out.println("Not yet...");
+							} else {
+
+							}
+
 						}
 					});
 					i++;
@@ -163,9 +169,25 @@ public class SaveWindowController implements Initializable {
 				}
 			}
 		};
-		Thread th = new Thread(task);
+
+		th = new Thread(task);
 		th.setDaemon(true);
 		th.start();
 
+		Task task1 = new Task<Void>() {
+			@Override
+			public Void call() throws Exception {
+				while (true) {
+
+					MainController main = new MainController();
+					main.startMainController();
+
+				}
+			}
+
+		};
+		t1 = new Thread(task1);
+		t1.setDaemon(true);
+		t1.start();
 	}
 }
