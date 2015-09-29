@@ -9,7 +9,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" stylesheets="@WebCrawler.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ice.view.GUIController">
+<VBox id="mainWindow" prefHeight="400.0" prefWidth="640.0" stylesheets="@WebCrawler.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ice.view.GUIController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -38,6 +38,8 @@
             <TextField id="fileTextField" fx:id="pathTextField" editable="false" layoutX="52.0" layoutY="220.0" prefHeight="26.0" prefWidth="436.0" promptText="Please define your processed File will be saved" />
             <Button id="selectFileButton" fx:id="changeDirectory" layoutX="508.0" layoutY="220.0" mnemonicParsing="false" text="Change" textFill="WHITE" />
             <Label layoutX="52.0" layoutY="193.0" text="Your File will be saved to:" />
+            <Label fx:id="internetLabel" layoutX="52.0" layoutY="326.0" text="Internet:" />
+            <Label fx:id="bingLabel" layoutX="52.0" layoutY="349.0" text="Bing:" />
       </children>
     </AnchorPane>
   </children>

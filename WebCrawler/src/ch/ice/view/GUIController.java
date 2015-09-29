@@ -23,6 +23,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -58,6 +59,10 @@ public class GUIController implements Initializable {
 	private TextField pathTextField;
 	@FXML
 	private Button changeDirectory;
+	@FXML
+	private Label internetLabel;
+	@FXML
+	private Label bingLabel;
 
 	public static ObservableValue<? extends String> test;
 
@@ -113,6 +118,27 @@ public class GUIController implements Initializable {
 		metaTagsList.setMaxWidth(550);
 		metaTagsList.setMaxHeight(80);
 
+		// Task task = new Task<Void>() {
+		// @Override
+		// public Void call() throws Exception {
+		// int i = 0;
+		// while (true) {
+		// Platform.runLater(new Runnable() {
+		// @Override
+		// public void run() {
+
+		// }
+		// });
+		// i++;
+		// Thread.sleep(1000);
+		//
+		// }
+		// }
+		// };
+		// Thread th = new Thread(task);
+		// th.setDaemon(true);
+		// th.start();
+
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
@@ -125,6 +151,29 @@ public class GUIController implements Initializable {
 		DirectoryChooser directoryChooser = new DirectoryChooser();
 		getSaveProperties();
 		pathTextField.setText(path);
+
+		GUIMain.externalNetCheck();
+
+		if (GUIMain.internetCheck == true) {
+			internetLabel.setText("Internet Connection Established");
+			internetLabel.setTextFill(Color.GREEN);
+
+		} else {
+			internetLabel.setText("No Internet Connection");
+			internetLabel.setTextFill(Color.RED);
+			startSearchButton.setDisable(true);
+
+		}
+
+		if (GUIMain.bingCheck == true) {
+			bingLabel.setText("Bing is reachable");
+			bingLabel.setTextFill(Color.GREEN);
+
+		} else {
+			bingLabel.setText("Bing is unreachable");
+			bingLabel.setTextFill(Color.RED);
+			startSearchButton.setDisable(true);
+		}
 
 		selectFileButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -245,6 +294,7 @@ public class GUIController implements Initializable {
 						@Override
 						public void run() {
 							getProperties(metaTagsList);
+
 						}
 					});
 
