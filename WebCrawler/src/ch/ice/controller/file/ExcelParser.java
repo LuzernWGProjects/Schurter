@@ -152,7 +152,7 @@ public class ExcelParser implements Parser {
 
 			// get table heads
 			if (row.getRowNum() == 2) {
-				if(row.getCell(0) == null) throw new InternalFormatException("It seems that the selected File has the wrong internal Format. Customers should start on row 3");
+				if(row.getCell(0) == null && row.getCell(1) == null && row.getCell(3) == null && row.getCell(4) == null && row.getCell(6) == null) throw new InternalFormatException("It seems that the selected File has the wrong internal Format. Customers should start on row 3");
 					
 				this.customerIDHeader = row.getCell(0).toString();
 				this.countryNameHeader = row.getCell(1).toString();
