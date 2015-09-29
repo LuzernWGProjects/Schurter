@@ -25,6 +25,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import ch.ice.controller.interf.Parser;
 import ch.ice.exceptions.IllegalFileExtensionException;
+import ch.ice.exceptions.InternalFormatException;
 import ch.ice.model.Customer;
 import ch.ice.model.Website;
 
@@ -82,18 +83,19 @@ public class ExcelParser implements Parser {
 	}
 
 	@Override
-	public LinkedList<Customer> readFile(File file) throws IOException, IllegalFileExtensionException, EncryptedDocumentException, InvalidFormatException {
+	public LinkedList<Customer> readFile(File file) throws IllegalFileExtensionException, EncryptedDocumentException, InvalidFormatException, IOException, InternalFormatException {
 
 		// set file to private access only
 		this.file = file;
 
 		// check if it is an XLS file or a XLSX file
 		String fileExtension = FilenameUtils.getExtension(file.getName()).toLowerCase();
-
+		
+		// check for all allowed file extensions
 		if (!this.allowedFileExtensions.contains(fileExtension)) {
 			logger.error("Wrong Fileextension: "+fileExtension+"; Only "+this.allowedFileExtensions.toString()+" allowed.");
-			throw new IllegalFileExtensionException(
-					"Wrong file Extension. Please only use " + this.allowedFileExtensions.toString());
+			
+			throw new IllegalFileExtensionException("Wrong file Extension. Please only use " + this.allowedFileExtensions.toString());
 		}
 
 		switch (fileExtension) {
@@ -117,8 +119,9 @@ public class ExcelParser implements Parser {
 	 * @throws EncryptedDocumentException
 	 * @throws InvalidFormatException
 	 * @throws IOException
+	 * @throws InternalFormatException 
 	 */
-	private LinkedList<Customer> readFile() throws EncryptedDocumentException, InvalidFormatException, IOException {
+	private LinkedList<Customer> readFile() throws EncryptedDocumentException, InvalidFormatException, IOException, InternalFormatException {
 		ExcelFileToRead = new FileInputStream(this.file);
 
 		this.wb = WorkbookFactory.create(ExcelFileToRead);
@@ -137,9 +140,7 @@ public class ExcelParser implements Parser {
 		Row row;
 		Cell cell;
 
-		Iterator<?> rows = sheet.rowIterator();
-		
-		
+		Iterator<?> rows = sheet.rowIterator();		
 		
 		while (rows.hasNext()) {
 
@@ -150,7 +151,9 @@ public class ExcelParser implements Parser {
 				continue;
 
 			// get table heads
-			if (row.getRowNum() == 2 && row.getCell(0) != null) {
+			if (row.getRowNum() == 2) {
+				if(row.getCell(0) == null) throw new InternalFormatException("It seems that the selected File has the wrong internal Format. Customers should start on row 3");
+					
 				this.customerIDHeader = row.getCell(0).toString();
 				this.countryNameHeader = row.getCell(1).toString();
 				this.zipCodeHeader = row.getCell(3).toString();
@@ -165,9 +168,6 @@ public class ExcelParser implements Parser {
 
 				continue;
 
-			} else {
-				// throw custom exception -> IlligalInternalFileFormat (Falsches pos file, random file)
-				
 			}
 			
 			// current row number

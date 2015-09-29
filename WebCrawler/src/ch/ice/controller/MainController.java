@@ -28,6 +28,7 @@ import ch.ice.controller.web.ResultAnalyzer;
 import ch.ice.controller.web.WebCrawler;
 import ch.ice.exceptions.HttpStatusException;
 import ch.ice.exceptions.IllegalFileExtensionException;
+import ch.ice.exceptions.InternalFormatException;
 import ch.ice.model.Customer;
 import ch.ice.utils.JSONUtil;
 
@@ -52,33 +53,30 @@ public class MainController {
 
 	private Integer limitSearchResults = 4;
 
-	public void startMainController() {
-
-		stopwatch = new StopWatch();
-		stopwatch.start();
+	public void startMainController() throws InternalFormatException {
+		// Core settings
+		boolean isSearchAvail = false;
+		URL defaultUrl = null;
 		
 		PropertiesConfiguration config;
 		List<String> metaTagElements = new ArrayList<String>();
-
+		
+		stopwatch = new StopWatch();
+		stopwatch.start();
+		
 		// For testing if used without GUI
 		if (file == null) {
-			customerList = retrieveCustomerFromFile(new File("posTest.xlsx"));
+			customerList = retrieveCustomerFromFile(new File("posTest_noCustomers.xlsx"));
 		} else {
 			customerList = retrieveCustomerFromFile(file);
 
 			// retrieve all customers from file
-			logger.info("Retrieve Customers from File "
-					+ file.getAbsolutePath());
+			logger.info("Retrieve Customers from File "	+ file.getAbsolutePath());
 		}
 
 		stopwatch.split();
-		logger.info(stopwatch.toSplitString());
-		System.out.println("Spilt: "+ stopwatch.toSplitString() +" total: "+ stopwatch.toString());
+		logger.info("Spilt: "+ stopwatch.toSplitString() +" total: "+ stopwatch.toString());
 		
-		// Core settings
-		boolean isSearchAvail = false;
-		URL defaultUrl = null;
-
 		/*
 		 * Load Configuration File
 		 */
@@ -202,9 +200,10 @@ public class MainController {
 	 * List-Object.
 	 * 
 	 * @param file
-	 * @return LinkedList<Customer>
+	 * @return List of Customers from file. Each row in a file represents a customer
+	 * @throws InternalFormatException 
 	 */
-	public LinkedList<Customer> retrieveCustomerFromFile(File file) {
+	public LinkedList<Customer> retrieveCustomerFromFile(File file) throws InternalFormatException {
 		this.excelParserInstance = new ExcelParser();
 
 		try {

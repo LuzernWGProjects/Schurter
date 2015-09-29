@@ -9,6 +9,7 @@ import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import ch.ice.exceptions.IllegalFileExtensionException;
+import ch.ice.exceptions.InternalFormatException;
 import ch.ice.model.Customer;
 
 /**
@@ -19,7 +20,7 @@ import ch.ice.model.Customer;
 public interface Parser {
 	
 	// input can either be a Excel File or a CSV file
-	public LinkedList<Customer> readFile(File file) throws IOException, IllegalFileExtensionException, EncryptedDocumentException, InvalidFormatException;
+	public LinkedList<Customer> readFile(File file) throws IOException, IllegalFileExtensionException, EncryptedDocumentException, InvalidFormatException, InternalFormatException;
 	
 	//progress bar and statistic stuff
 	public void setTotalDataSets(int totalRows); // Updated once
