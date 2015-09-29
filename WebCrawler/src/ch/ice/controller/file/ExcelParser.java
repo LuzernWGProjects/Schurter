@@ -26,6 +26,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import ch.ice.controller.interf.Parser;
 import ch.ice.exceptions.IllegalFileExtensionException;
 import ch.ice.exceptions.InternalFormatException;
+import ch.ice.exceptions.MissingCustomerRowsException;
 import ch.ice.model.Customer;
 import ch.ice.model.Website;
 
@@ -83,7 +84,7 @@ public class ExcelParser implements Parser {
 	}
 
 	@Override
-	public LinkedList<Customer> readFile(File file) throws IllegalFileExtensionException, EncryptedDocumentException, InvalidFormatException, IOException, InternalFormatException {
+	public LinkedList<Customer> readFile(File file) throws IllegalFileExtensionException, EncryptedDocumentException, InvalidFormatException, IOException, InternalFormatException, MissingCustomerRowsException {
 
 		// set file to private access only
 		this.file = file;
@@ -120,8 +121,9 @@ public class ExcelParser implements Parser {
 	 * @throws InvalidFormatException
 	 * @throws IOException
 	 * @throws InternalFormatException 
+	 * @throws MissingCustomerRowsException 
 	 */
-	private LinkedList<Customer> readFile() throws EncryptedDocumentException, InvalidFormatException, IOException, InternalFormatException {
+	private LinkedList<Customer> readFile() throws EncryptedDocumentException, InvalidFormatException, IOException, InternalFormatException, MissingCustomerRowsException {
 		ExcelFileToRead = new FileInputStream(this.file);
 
 		this.wb = WorkbookFactory.create(ExcelFileToRead);
@@ -223,6 +225,8 @@ public class ExcelParser implements Parser {
 			 */
 			this.customerList.add(this.createCustomer());
 		}
+		
+		if(this.customerList.size() < 1) throw new MissingCustomerRowsException("There are no rendered Customers. Please make sure customers start on row number 4.");
 		
 		logger.info("Rendered Customers from List: "+this.customerList.size());
 		return this.customerList;

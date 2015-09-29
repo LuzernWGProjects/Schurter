@@ -29,8 +29,8 @@ import ch.ice.controller.web.WebCrawler;
 import ch.ice.exceptions.HttpStatusException;
 import ch.ice.exceptions.IllegalFileExtensionException;
 import ch.ice.exceptions.InternalFormatException;
+import ch.ice.exceptions.MissingCustomerRowsException;
 import ch.ice.model.Customer;
-import ch.ice.utils.JSONUtil;
 
 import org.apache.commons.lang.time.StopWatch;
 
@@ -53,7 +53,7 @@ public class MainController {
 
 	private Integer limitSearchResults = 4;
 
-	public void startMainController() throws InternalFormatException {
+	public void startMainController() throws InternalFormatException, MissingCustomerRowsException {
 		// Core settings
 		boolean isSearchAvail = false;
 		URL defaultUrl = null;
@@ -135,7 +135,6 @@ public class MainController {
 				logger.error(e.getMessage());
 				
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				logger.error(e.getMessage());
 				
@@ -145,16 +144,16 @@ public class MainController {
 		}
 	
 		stopwatch.split();
-		logger.info(stopwatch.toSplitString());
-		System.out.println("Spilt: "+ stopwatch.toSplitString() +" total: "+ stopwatch.toString());
+		logger.info("Spilt: "+ stopwatch.toSplitString() +" total: "+ stopwatch.toString());
+		
 		/*
 		 * Write every enhanced customer object into a new file
 		 */
 		this.startWriter(customerList);
 
 		stopwatch.stop();
-		logger.info(stopwatch.toString());
-		System.out.println("Spilt: "+ stopwatch.toSplitString() +" total: "+ stopwatch.toString());
+		logger.info("Spilt: "+ stopwatch.toSplitString() +" total: "+ stopwatch.toString());
+		
 		logger.info("end");
 	}
 
@@ -202,8 +201,9 @@ public class MainController {
 	 * @param file
 	 * @return List of Customers from file. Each row in a file represents a customer
 	 * @throws InternalFormatException 
+	 * @throws MissingCustomerRowsException 
 	 */
-	public LinkedList<Customer> retrieveCustomerFromFile(File file) throws InternalFormatException {
+	public LinkedList<Customer> retrieveCustomerFromFile(File file) throws InternalFormatException, MissingCustomerRowsException {
 		this.excelParserInstance = new ExcelParser();
 
 		try {
