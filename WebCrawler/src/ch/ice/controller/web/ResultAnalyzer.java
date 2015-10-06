@@ -34,7 +34,7 @@ public class ResultAnalyzer {
 	 * @return	Result which suits the best (as JSONObject)
 	 *
 	 */
-	public static JSONObject analyze(JSONArray results, ArrayList parameters)
+	public static JSONObject analyze(JSONArray results, List<String> parameters)
 	{
 		System.out.println("Laenge: "+results.length()+";");
 		//Go thru each received result of the search request
@@ -52,7 +52,6 @@ public class ResultAnalyzer {
 			try {
 				uri = new URI(url);
 			} catch (URISyntaxException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			String host = uri.getHost().replaceFirst("^(http://|http://www\\.|www\\.)","");
@@ -99,7 +98,6 @@ public class ResultAnalyzer {
 	 */
 	private static String createAcronym(String name)
 	{
-		//TODO Silbentrennung einbinden (hyphenation)
 		String acro = "";
 		String[] words = name.split(" ");
 		
