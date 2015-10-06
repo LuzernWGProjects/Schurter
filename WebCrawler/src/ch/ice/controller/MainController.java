@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.lang.time.StopWatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.EncryptedDocumentException;
@@ -32,9 +33,6 @@ import ch.ice.exceptions.InternalFormatException;
 import ch.ice.exceptions.MissingCustomerRowsException;
 import ch.ice.model.Customer;
 
-import org.apache.commons.lang.time.StopWatch;
-
-
 /**
  * @author Oliver
  *
@@ -45,38 +43,42 @@ public class MainController {
 	ExcelParser excelParserInstance;
 
 	public static File file;
-	public static LinkedList<Customer> customerList;
+	public static List<Customer> customerList;
 	public static int i;
 	public static String progressText;
-	 private static org.apache.commons.lang.time.StopWatch stopwatch;
-	
+	private static org.apache.commons.lang.time.StopWatch stopwatch;
 
 	private Integer limitSearchResults = 4;
 
-	public void startMainController() throws InternalFormatException, MissingCustomerRowsException {
+	public void startMainController() throws InternalFormatException,
+			MissingCustomerRowsException {
+
 		// Core settings
 		boolean isSearchAvail = false;
 		URL defaultUrl = null;
-		
+
 		PropertiesConfiguration config;
 		List<String> metaTagElements = new ArrayList<String>();
-		
+
 		stopwatch = new StopWatch();
 		stopwatch.start();
-		
+
 		// For testing if used without GUI
 		if (file == null) {
-			customerList = retrieveCustomerFromFile(new File("posTest_noCustomers.xlsx"));
+			customerList = retrieveCustomerFromFile(new File(
+					"posTest_noCustomers.xlsx"));
 		} else {
 			customerList = retrieveCustomerFromFile(file);
 
 			// retrieve all customers from file
-			logger.info("Retrieve Customers from File "	+ file.getAbsolutePath());
+			logger.info("Retrieve Customers from File "
+					+ file.getAbsolutePath());
 		}
 
 		stopwatch.split();
-		logger.info("Spilt: "+ stopwatch.toSplitString() +" total: "+ stopwatch.toString());
-		
+		logger.info("Spilt: " + stopwatch.toSplitString() + " total: "
+				+ stopwatch.toString());
+
 		/*
 		 * Load Configuration File
 		 */
@@ -108,7 +110,8 @@ public class MainController {
 				try {
 					URL retrivedUrl = searchForUrl(customer);
 					customer.getWebsite().setUrl(retrivedUrl);
-					progressText = "Gathering data at: " + retrivedUrl.toString();
+					progressText = "Gathering data at: "
+							+ retrivedUrl.toString();
 				} catch (Exception e) {
 					e.printStackTrace();
 					logger.error(e.getMessage());
@@ -127,33 +130,32 @@ public class MainController {
 			} catch (IOException e) {
 				e.printStackTrace();
 				logger.error(e.getMessage());
-				
-			}
-			catch(HttpStatusException e)
-			{
+
+			} catch (HttpStatusException e) {
 				e.printStackTrace();
 				logger.error(e.getMessage());
-				
+
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error(e.getMessage());
-				
+
 			}
 
-			
 		}
-	
+
 		stopwatch.split();
-		logger.info("Spilt: "+ stopwatch.toSplitString() +" total: "+ stopwatch.toString());
-		
+		logger.info("Spilt: " + stopwatch.toSplitString() + " total: "
+				+ stopwatch.toString());
+
 		/*
 		 * Write every enhanced customer object into a new file
 		 */
 		this.startWriter(customerList);
 
 		stopwatch.stop();
-		logger.info("Spilt: "+ stopwatch.toSplitString() +" total: "+ stopwatch.toString());
-		
+		logger.info("Spilt: " + stopwatch.toSplitString() + " total: "
+				+ stopwatch.toString());
+
 		logger.info("end");
 	}
 
@@ -179,11 +181,7 @@ public class MainController {
 			// logger.debug(results.toString());
 
 			// logic to pick the first record ; here should be the search logic!
-			JSONObject aResult =	ResultAnalyzer.analyze(results, params);
-			
-			
-		
-			
+			JSONObject aResult = ResultAnalyzer.analyze(results, params);
 
 			// return only the URL form first object
 			return new URL((String) aResult.get("Url"));
@@ -199,11 +197,13 @@ public class MainController {
 	 * List-Object.
 	 * 
 	 * @param file
-	 * @return List of Customers from file. Each row in a file represents a customer
-	 * @throws InternalFormatException 
-	 * @throws MissingCustomerRowsException 
+	 * @return List of Customers from file. Each row in a file represents a
+	 *         customer
+	 * @throws InternalFormatException
+	 * @throws MissingCustomerRowsException
 	 */
-	public LinkedList<Customer> retrieveCustomerFromFile(File file) throws InternalFormatException, MissingCustomerRowsException {
+	public List<Customer> retrieveCustomerFromFile(File file)
+			throws InternalFormatException, MissingCustomerRowsException {
 		this.excelParserInstance = new ExcelParser();
 
 		try {

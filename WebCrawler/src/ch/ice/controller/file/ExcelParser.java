@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -37,20 +36,21 @@ import ch.ice.model.Website;
  */
 
 public class ExcelParser implements Parser {
-	private static final Logger logger = LogManager.getLogger(ExcelParser.class.getName());
-	
+	private static final Logger logger = LogManager.getLogger(ExcelParser.class
+			.getName());
+
 	private File file;
 	private InputStream ExcelFileToRead;
 	private List<String> allowedFileExtensions = new ArrayList<String>();
 	private int physicalRowCount;
 	private int currentRowCount;
 
-	LinkedList<Customer> customerList = new LinkedList<Customer>();
+	List<Customer> customerList = new ArrayList<Customer>();
 
 	PropertiesConfiguration config;
 
 	Workbook wb;
-	
+
 	// Customer Fields
 	// headers from File
 	List<String> headerInfos = new ArrayList<String>();
@@ -68,15 +68,15 @@ public class ExcelParser implements Parser {
 	String customerFullName;
 	String custonerShortName;
 
-
 	public ExcelParser() {
-		
+
 		// load config file
 		try {
 			this.config = new PropertiesConfiguration("conf/app.properties");
-			
+
 			// get all allowed file extensions (xls,xlsx,csv)
-			this.allowedFileExtensions = Arrays.asList(this.config.getStringArray("parser.allowedFileExtensions"));
+			this.allowedFileExtensions = Arrays.asList(this.config
+					.getStringArray("parser.allowedFileExtensions"));
 		} catch (ConfigurationException e) {
 			System.out.println(e.getLocalizedMessage());
 			e.printStackTrace();
@@ -84,19 +84,26 @@ public class ExcelParser implements Parser {
 	}
 
 	@Override
-	public LinkedList<Customer> readFile(File file) throws IllegalFileExtensionException, EncryptedDocumentException, InvalidFormatException, IOException, InternalFormatException, MissingCustomerRowsException {
+	public List<Customer> readFile(File file)
+			throws IllegalFileExtensionException, EncryptedDocumentException,
+			InvalidFormatException, IOException, InternalFormatException,
+			MissingCustomerRowsException {
 
 		// set file to private access only
 		this.file = file;
 
 		// check if it is an XLS file or a XLSX file
-		String fileExtension = FilenameUtils.getExtension(file.getName()).toLowerCase();
-		
+		String fileExtension = FilenameUtils.getExtension(file.getName())
+				.toLowerCase();
+
 		// check for all allowed file extensions
 		if (!this.allowedFileExtensions.contains(fileExtension)) {
-			logger.error("Wrong Fileextension: "+fileExtension+"; Only "+this.allowedFileExtensions.toString()+" allowed.");
-			
-			throw new IllegalFileExtensionException("Wrong file Extension. Please only use " + this.allowedFileExtensions.toString());
+			logger.error("Wrong Fileextension: " + fileExtension + "; Only "
+					+ this.allowedFileExtensions.toString() + " allowed.");
+
+			throw new IllegalFileExtensionException(
+					"Wrong file Extension. Please only use "
+							+ this.allowedFileExtensions.toString());
 		}
 
 		switch (fileExtension) {
@@ -112,38 +119,39 @@ public class ExcelParser implements Parser {
 		return null;
 	}
 
-
 	/**
-	 * Read a File and ingnore file format (xls, xlsx). Due to the ss usermodel and generic handling.
+	 * Read a File and ingnore file format (xls, xlsx). Due to the ss usermodel
+	 * and generic handling.
 	 * 
 	 * @return LinkedList<Customer>
 	 * @throws EncryptedDocumentException
 	 * @throws InvalidFormatException
 	 * @throws IOException
-	 * @throws InternalFormatException 
-	 * @throws MissingCustomerRowsException 
+	 * @throws InternalFormatException
+	 * @throws MissingCustomerRowsException
 	 */
-	private LinkedList<Customer> readFile() throws EncryptedDocumentException, InvalidFormatException, IOException, InternalFormatException, MissingCustomerRowsException {
+	private List<Customer> readFile() throws EncryptedDocumentException,
+			InvalidFormatException, IOException, InternalFormatException,
+			MissingCustomerRowsException {
 		ExcelFileToRead = new FileInputStream(this.file);
 
 		this.wb = WorkbookFactory.create(ExcelFileToRead);
 
 		// load first sheet in File
 		Sheet sheet = this.wb.getSheetAt(0);
-		
-		//set total amount of rows (Customers)
-		if(sheet.getPhysicalNumberOfRows() == 0){
+
+		// set total amount of rows (Customers)
+		if (sheet.getPhysicalNumberOfRows() == 0) {
 			this.setTotalDataSets(0);
+		} else {
+			this.setTotalDataSets(sheet.getPhysicalNumberOfRows() - 3);
 		}
-		else {
-			this.setTotalDataSets(sheet.getPhysicalNumberOfRows()-3);
-		}
-		
+
 		Row row;
 		Cell cell;
 
-		Iterator<?> rows = sheet.rowIterator();		
-		
+		Iterator<?> rows = sheet.rowIterator();
+
 		while (rows.hasNext()) {
 
 			row = (Row) rows.next();
@@ -154,8 +162,12 @@ public class ExcelParser implements Parser {
 
 			// get table heads
 			if (row.getRowNum() == 2) {
-				if(row.getCell(0) == null && row.getCell(1) == null && row.getCell(3) == null && row.getCell(4) == null && row.getCell(6) == null) throw new InternalFormatException("It seems that the selected File has the wrong internal Format. Customers should start on row 3");
-					
+				if (row.getCell(0) == null && row.getCell(1) == null
+						&& row.getCell(3) == null && row.getCell(4) == null
+						&& row.getCell(6) == null)
+					throw new InternalFormatException(
+							"It seems that the selected File has the wrong internal Format. Customers should start on row 3");
+
 				this.customerIDHeader = row.getCell(0).toString();
 				this.countryNameHeader = row.getCell(1).toString();
 				this.zipCodeHeader = row.getCell(3).toString();
@@ -171,10 +183,10 @@ public class ExcelParser implements Parser {
 				continue;
 
 			}
-			
+
 			// current row number
-			this.setCurrentRow(row.getRowNum()+1);
-			
+			this.setCurrentRow(row.getRowNum() + 1);
+
 			Iterator<?> cells = row.cellIterator();
 
 			while (cells.hasNext()) {
@@ -190,7 +202,7 @@ public class ExcelParser implements Parser {
 					this.customerID = this.checkForCellType(cell);
 					break;
 
-					// country Code
+				// country Code
 				case 1:
 					this.customerCountryCode = this.checkForCellType(cell);
 
@@ -199,17 +211,17 @@ public class ExcelParser implements Parser {
 					this.country = this.checkForCellType(cell);
 					break;
 
-					// Zip code
+				// Zip code
 				case 3:
 					this.zipCode = this.checkForCellType(cell);
 					break;
 
-					// customer name short
+				// customer name short
 				case 4:
 					this.custonerShortName = this.checkForCellType(cell);
 					break;
 
-					// empty cell
+				// empty cell
 				case 5:
 					continue;
 
@@ -225,10 +237,12 @@ public class ExcelParser implements Parser {
 			 */
 			this.customerList.add(this.createCustomer());
 		}
-		
-		if(this.customerList.size() < 1) throw new MissingCustomerRowsException("There are no rendered Customers. Please make sure customers start on row number 4.");
-		
-		logger.info("Rendered Customers from List: "+this.customerList.size());
+
+		if (this.customerList.size() < 1)
+			throw new MissingCustomerRowsException(
+					"There are no rendered Customers. Please make sure customers start on row number 4.");
+
+		logger.info("Rendered Customers from List: " + this.customerList.size());
 		return this.customerList;
 
 	}
@@ -256,12 +270,12 @@ public class ExcelParser implements Parser {
 	}
 
 	/**
-	 * Return all collected Headercells from File.
-	 * Will be used for creating new file with the correct Headers
+	 * Return all collected Headercells from File. Will be used for creating new
+	 * file with the correct Headers
 	 * 
 	 * @return Value in header cells
 	 */
-	public List<String> getCellHeaders(){
+	public List<String> getCellHeaders() {
 		return this.headerInfos;
 	}
 
@@ -278,28 +292,25 @@ public class ExcelParser implements Parser {
 		}
 		return null;
 	}
-	
-	
-	//progress bar and statistic stuff
+
+	// progress bar and statistic stuff
 	public void setTotalDataSets(int totalRows) {
 		this.physicalRowCount = totalRows;
 	}
-	
+
 	public int getTotalDataSets() {
 		return this.physicalRowCount;
 	}
-	
+
 	public void setCurrentRow(int currentRowNumber) {
 		this.currentRowCount = currentRowNumber;
 	}
-	
+
 	public int getCurrentRow() {
 		return this.currentRowCount;
 	}
-	
-	
-	
-	public Workbook getWorkbook(){
+
+	public Workbook getWorkbook() {
 		return this.wb;
 	}
 }
