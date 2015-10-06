@@ -15,7 +15,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -235,15 +234,21 @@ public class GUIController implements Initializable {
 						"SaveFile.fxml"));
 				Parent root1;
 				try {
-					Thread t1 = new Thread() {
-						public void run() {
-							MainController main = new MainController();
+					// Thread t1 = new Thread() {
+					// public void run() {
+					// MainController main = new MainController();
+					//
+					// try {
+					// main.startMainController();
+					// } catch (InternalFormatException e) {
+					// // TODO Auto-generated catch block
+					// e.printStackTrace();
+					//
+					// }
+					// }
+					// };
 
-							main.startMainController();
-						}
-					};
-
-					t1.start();
+					// t1.start();
 					root1 = (Parent) fxmlLoader.load();
 
 					Stage stage = new Stage();
@@ -252,21 +257,14 @@ public class GUIController implements Initializable {
 					stage.initStyle(StageStyle.UNDECORATED);
 					stage.showAndWait();
 
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							t1.interrupt();
-						}
-					});
-
 				} catch (IOException | NullPointerException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					System.out.println("HAAAALLLOOOO");
-					Node source = (Node) event.getSource();
-					Stage stage = (Stage) source.getScene().getWindow();
-					stage.close();
-
+					// // TODO Auto-generated catch block
+					// e.printStackTrace();
+					// System.out.println("HAAAALLLOOOO");
+					// Node source = (Node) event.getSource();
+					// Stage stage = (Stage) source.getScene().getWindow();
+					// stage.close();
+					//
 				}
 
 			}
@@ -290,13 +288,8 @@ public class GUIController implements Initializable {
 					stage.initStyle(StageStyle.UNDECORATED);
 					stage.showAndWait();
 
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							getProperties(metaTagsList);
-
-						}
-					});
+					// Update Selected Meta Tags
+					getProperties(metaTagsList);
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
