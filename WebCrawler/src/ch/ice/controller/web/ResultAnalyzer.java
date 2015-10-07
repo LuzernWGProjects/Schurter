@@ -13,9 +13,12 @@ import java.util.List;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import ch.ice.controller.MainController;
 import ch.ice.utils.JSONUtil;
 
 /**
@@ -25,6 +28,8 @@ import ch.ice.utils.JSONUtil;
 public class ResultAnalyzer {
 	
 	static URI uri;
+	private static final Logger logger = LogManager
+			.getLogger(MainController.class.getName());
 	
 	/**
 	 * Method to analyze which received result suits the best
@@ -34,7 +39,7 @@ public class ResultAnalyzer {
 	 * @return	Result which suits the best (as JSONObject)
 	 *
 	 */
-	public static JSONObject analyze(JSONArray results, ArrayList parameters)
+	public static JSONObject analyze(JSONArray results, List<String> parameters)
 	{
 		System.out.println("Laenge: "+results.length()+";");
 		//Go thru each received result of the search request
@@ -42,6 +47,7 @@ public class ResultAnalyzer {
 			
 			//create a new temporary JSONObject for each result
 			JSONObject singleResult = results.getJSONObject(i);
+			results.getJSONObject(i).put("Unsure", false);
 			
 			//extract the url, title and the desc
 			String url = (String) singleResult.get("Url");
@@ -52,7 +58,6 @@ public class ResultAnalyzer {
 			try {
 				uri = new URI(url);
 			} catch (URISyntaxException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			String host = uri.getHost().replaceFirst("^(http://|http://www\\.|www\\.)","");
@@ -65,8 +70,10 @@ public class ResultAnalyzer {
 			// if the url is on the blacklist, remove this element form the list
 			if(isBlacklist(host))
 				{
-					System.out.println("remove weil blacklist");
+					System.out.println("remove because blacklist");
 					results.remove(i);
+					
+					logger.info("ResultAnalyzer: Blacklisted");
 					//recursive call of the same function
 					analyze(results, parameters);
 				}
@@ -75,13 +82,14 @@ public class ResultAnalyzer {
 			if(host.contains((CharSequence) parameters.get(0)))
 					{
 				System.out.println("----------- NAMEN in URL!" +url +"diese url enthält den namen: "+ parameters.get(0));
-				
+				logger.info("ResultAnalyzer: Contains full name");
 				return singleResult;
 					}
 			// else if the url contains a acronym of the name return this as the best result
 			else if(host.contains((CharSequence) acroOfCompanyName)){
 			
 				System.out.println("-----------ABK in URL: Diese Url enthält die abk: " + acroOfCompanyName);
+				logger.info("ResultAnalyzer: Contains URL");
 			
 				return singleResult;
 			}
@@ -89,7 +97,9 @@ public class ResultAnalyzer {
 		}
 		//if neither the name nor the acronym of the name is contained in the url, return the first result
 		System.out.println("--------- Nicht gefunden nimm erstes");
-		return results.getJSONObject(0);
+		logger.info("ResultAnalyzer: unsure; take first");
+		return results.getJSONObject(0).put("Unsure", true);
+		//return results.getJSONObject(0);
 	}
 	
 	/**
@@ -99,7 +109,6 @@ public class ResultAnalyzer {
 	 */
 	private static String createAcronym(String name)
 	{
-		//TODO Silbentrennung einbinden (hyphenation)
 		String acro = "";
 		String[] words = name.split(" ");
 		

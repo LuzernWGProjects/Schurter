@@ -65,14 +65,12 @@ public class MainController {
 
 		// For testing if used without GUI
 		if (file == null) {
-			customerList = retrieveCustomerFromFile(new File(
-					"posTest_noCustomers.xlsx"));
+			customerList = retrieveCustomerFromFile(new File("posTest.xlsx"));
 		} else {
 			customerList = retrieveCustomerFromFile(file);
 
 			// retrieve all customers from file
-			logger.info("Retrieve Customers from File "
-					+ file.getAbsolutePath());
+			logger.info("Retrieve Customers from File "	+ file.getAbsolutePath());
 		}
 
 		stopwatch.split();
@@ -110,6 +108,7 @@ public class MainController {
 				try {
 					URL retrivedUrl = searchForUrl(customer);
 					customer.getWebsite().setUrl(retrivedUrl);
+					
 					progressText = "Gathering data at: "
 							+ retrivedUrl.toString();
 				} catch (Exception e) {
@@ -175,19 +174,21 @@ public class MainController {
 		try {
 
 			// Start Search
-			JSONArray results = BingSearchEngine.Search(query,
-					this.limitSearchResults);
+			JSONArray results = BingSearchEngine.search(query,this.limitSearchResults);
 
 			// logger.debug(results.toString());
 
 			// logic to pick the first record ; here should be the search logic!
 			JSONObject aResult = ResultAnalyzer.analyze(results, params);
 
+			c.getWebsite().setUnsure((boolean) aResult.get("Unsure"));
+			
 			// return only the URL form first object
 			return new URL((String) aResult.get("Url"));
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			
 		}
 		return null;
 	}

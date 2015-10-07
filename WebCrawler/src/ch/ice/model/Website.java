@@ -6,6 +6,7 @@ import java.util.Map;
 public class Website {
 	
 	private URL url;
+	private boolean unsure;
 	private Map<String,String> metaTags;
 	
 	public Website() {}
@@ -21,6 +22,16 @@ public class Website {
 
 	public void setUrl(URL url) {
 		this.url = url;
+	}
+	
+	public void setUnsure(boolean unsure)
+	{
+		this.unsure = unsure;
+	}
+	
+	public boolean getUnsure()
+	{
+		return unsure;
 	}
 
 	public Map<String,String> getMetaTags() {

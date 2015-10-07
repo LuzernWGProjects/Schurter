@@ -4,20 +4,22 @@
 package ch.ice.controller.web;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import ch.ice.controller.interf.SearchEngine;
+import ch.ice.exceptions.NoUrlFoundException;
 import ch.ice.utils.JSONUtil;
 
 
@@ -25,9 +27,9 @@ import ch.ice.utils.JSONUtil;
  * @author Oliver
  *
  */
-public class BingSearchEngine  {
+public class BingSearchEngine implements SearchEngine {
 
-	public static  JSONArray Search(String requestedQuery, int limitSearchResults) throws Exception {
+	public static JSONArray search(String requestedQuery, int limitSearchResults) throws IOException, NoUrlFoundException {
 	
     	String accountKey = "";
     	String bingUrlPattern = "";
@@ -81,6 +83,9 @@ public class BingSearchEngine  {
             
             final int resultsLength = results.length();
             
+            if(resultsLength < 1) 
+            	throw new NoUrlFoundException("The Search engine delivered " +resultsLength+ " results for ["+requestedQuery+"]. Please change your query");
+            
             return JSONUtil.cleanUp(results);
         }
     }
@@ -91,7 +96,7 @@ public class BingSearchEngine  {
 	 * @param params
 	 * @return String query
 	 */
-	public static String buildQuery(ArrayList<String> params){
+	public static String buildQuery(List<String> params){
 		String query = "";
 		
 		for (String string : params) {
