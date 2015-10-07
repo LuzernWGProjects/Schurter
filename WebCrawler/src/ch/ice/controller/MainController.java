@@ -108,6 +108,7 @@ public class MainController {
 				try {
 					URL retrivedUrl = searchForUrl(customer);
 					customer.getWebsite().setUrl(retrivedUrl);
+					
 					progressText = "Gathering data at: "
 							+ retrivedUrl.toString();
 				} catch (Exception e) {
@@ -180,11 +181,14 @@ public class MainController {
 			// logic to pick the first record ; here should be the search logic!
 			JSONObject aResult = ResultAnalyzer.analyze(results, params);
 
+			c.getWebsite().setUnsure((boolean) aResult.get("Unsure"));
+			
 			// return only the URL form first object
 			return new URL((String) aResult.get("Url"));
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			
 		}
 		return null;
 	}
