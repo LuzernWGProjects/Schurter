@@ -4,6 +4,7 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
@@ -12,13 +13,16 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.stage.Stage;
 import ch.ice.controller.MainController;
 import ch.ice.controller.file.ExcelWriter;
+import ch.ice.exceptions.InternalFormatException;
+import ch.ice.exceptions.MissingCustomerRowsException;
 
 public class SaveWindowController extends Thread implements Initializable {
 
@@ -34,12 +38,28 @@ public class SaveWindowController extends Thread implements Initializable {
 	private Button openFileButton;
 	@FXML
 	private Button cancelButton;
+	@FXML
+	public static Button hobbyButton;
 
-	boolean myBoo = true;
+	public static boolean myBoo = false;
+	public static boolean myBooWriting = false;
+	public static boolean myBooChecking = false;
 	Thread one;
 	String points;
 	Thread t1;
 	Thread th;
+	Task task;
+	Task task1;
+	private static Boolean pauseFlag = false;
+
+	public static void resumeThread() {
+		pauseFlag = false;
+		myBooChecking = false;
+		synchronized (pauseFlag) {
+			pauseFlag.notifyAll();
+
+		}
+	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -49,26 +69,40 @@ public class SaveWindowController extends Thread implements Initializable {
 
 		cancelButton.setOnAction(new EventHandler<ActionEvent>() {
 
-			@SuppressWarnings("deprecation")
 			@Override
 			public void handle(ActionEvent event) {
+				myBooChecking = true;
 
-				t1.stop();
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("Information Dialog");
+				alert.setHeaderText("Your Canceling the Process");
+				alert.setContentText("No file will be saved");
 
-				th.stop();
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.get() == ButtonType.OK) {
+					// ... user chose OK
+					System.exit(0);
+				} else {
+					// ... user chose CANCEL or closed the dialog
+					resumeThread();
+					// Node source = (Node) event.getSource();
+					// Stage stage = (Stage) source.getScene().getWindow();
+					// stage.show();
 
-				Node source = (Node) event.getSource();
-				Stage stage = (Stage) source.getScene().getWindow();
-				stage.close();
+				}
+				// Node source = (Node) event.getSource();
+				// Stage stage = (Stage) source.getScene().getWindow();
+				// stage.close();
 			}
 
 		});
 
-		Task task = new Task<Void>() {
+		task = new Task<Void>() {
 			@Override
 			public Void call() throws Exception {
+
 				int i = 0;
-				while (true) {
+				while (myBooChecking == false) {
 
 					final int finalI = i;
 					if (i == 4) {
@@ -91,6 +125,18 @@ public class SaveWindowController extends Thread implements Initializable {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
+
+							if (myBooChecking == true) {
+								synchronized (pauseFlag) {
+									try {
+										pauseFlag.wait();
+									} catch (InterruptedException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+								}
+							}
+
 							endMessageLabel.setWrapText(true);
 							endMessageLabel.setMaxWidth(400);
 							endMessageLabel.setMaxHeight(80);
@@ -108,13 +154,17 @@ public class SaveWindowController extends Thread implements Initializable {
 										.setText(MainController.progressText);
 								System.out.println(d);
 
-								if (progressBar.getProgress() == 1) {
+								if (myBooWriting == true) {
+									progressLabel.setText("Writing File");
+								}
+
+								if (myBoo == true) {
 
 									endMessageLabel
 											.setText("Your file has been processed and saved to: "
 													+ GUIController.path);
 									progressLabel
-											.setText("Gathering Process ended. We call that AWESOME!");
+											.setText("Gathering Process ended.");
 
 									closeButton.setDisable(false);
 									openFileButton.setDisable(false);
@@ -145,7 +195,8 @@ public class SaveWindowController extends Thread implements Initializable {
 																		+ "/"
 																		+ ExcelWriter.fileName));
 													} catch (IOException e) {
-														// TODO Auto-generated
+														// TODO
+														// Auto-generated
 														// catch block
 														e.printStackTrace();
 													}
@@ -154,10 +205,7 @@ public class SaveWindowController extends Thread implements Initializable {
 											});
 
 									cancel(true);
-
 								}
-
-							} else {
 
 							}
 
@@ -167,6 +215,7 @@ public class SaveWindowController extends Thread implements Initializable {
 					Thread.sleep(250);
 
 				}
+				return null;
 			}
 		};
 
@@ -174,20 +223,34 @@ public class SaveWindowController extends Thread implements Initializable {
 		th.setDaemon(true);
 		th.start();
 
-		Task task1 = new Task<Void>() {
+		task1 = new Task<Void>() {
 			@Override
 			public Void call() throws Exception {
-				while (true) {
 
-					MainController main = new MainController();
+				MainController main = new MainController();
+
+				if (myBooChecking == true) {
+					synchronized (pauseFlag) {
+						pauseFlag.wait();
+					}
+				}
+				try {
 					main.startMainController();
 
+				} catch (InternalFormatException | MissingCustomerRowsException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
+
+				cancel(true);
+				return null;
+
 			}
 
 		};
 		t1 = new Thread(task1);
 		t1.setDaemon(true);
 		t1.start();
+
 	}
 }
