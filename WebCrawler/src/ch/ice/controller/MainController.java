@@ -47,9 +47,9 @@ public class MainController {
 	private static StopWatch stopwatch;
 
 	// search engine
-	private static String searchEngineIdentifier = SearchEngineFactory.GOOGLE;
+	private static String searchEngineIdentifier = SearchEngineFactory.BING;
 	private static SearchEngine searchEngine;
-	private Integer limitSearchResults = 4;
+	private Integer limitSearchResults = 10;
 
 	// file Parser
 	private static Parser fileParser;
@@ -224,9 +224,10 @@ public class MainController {
 		try {
 			// Start Search
 			JSONArray results = MainController.searchEngine.search(lookupQuery, this.limitSearchResults);
-
+			System.out.println("Retrieved Results: "+results.length());
 			// logic to pick the first record ; here should be the search logic!
 			JSONObject aResult = ResultAnalyzer.analyse(results, params);
+			c.getWebsite().setUnsure((boolean) aResult.get("Unsure"));
 
 			// return only the URL form first object
 			return new URL((String) aResult.get(JSONStandardizedKeys.URL));
