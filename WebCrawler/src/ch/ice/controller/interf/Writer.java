@@ -14,6 +14,6 @@ public interface Writer {
 	 *
 	 * @param list
 	 */
-	public  void writeFile(List<Customer> customerList, Workbook wb);
+	public  void writeFile(List<Customer> customerList, Parser fileParserInstance);
 
 }
