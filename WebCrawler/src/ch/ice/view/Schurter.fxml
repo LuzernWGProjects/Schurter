@@ -16,6 +16,7 @@
         <Menu mnemonicParsing="false" text="File">
           <items>
             <MenuItem fx:id="MetaTags" mnemonicParsing="false" text="Meta Tags" />
+                  <MenuItem fx:id="accessKeyMenu" mnemonicParsing="false" text="Access Key" />
                   <MenuItem fx:id="quitMenuItem" mnemonicParsing="false" text="Quit" />
           </items>
         </Menu>

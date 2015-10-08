@@ -18,8 +18,7 @@ public class WelcomeController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
 
-		javaVersion.setText("Java Version:"
-				+ System.getProperty("java.version"));
+		javaVersion.setText(System.getProperty("java.version"));
 
 		String javaVer = System.getProperty("java.version");
 

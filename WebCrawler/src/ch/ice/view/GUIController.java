@@ -22,6 +22,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -33,7 +34,7 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 
 import ch.ice.controller.MainController;
 
-public class GUIController implements Initializable {
+public class GUIController extends VBox implements Initializable {
 
 	@FXML
 	private Button selectFileButton;
@@ -47,7 +48,8 @@ public class GUIController implements Initializable {
 	private MenuItem MetaTags;
 	@FXML
 	private MenuItem quitMenuItem;
-
+	@FXML
+	private MenuItem accessKeyMenu;
 	@FXML
 	private Button cancelMetaButton;
 	@FXML
@@ -305,6 +307,32 @@ public class GUIController implements Initializable {
 			public void handle(ActionEvent event) {
 
 				System.exit(0);
+
+			}
+		});
+
+		accessKeyMenu.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+
+				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
+						"AccessKey.fxml"));
+				Parent root1;
+				try {
+					root1 = (Parent) fxmlLoader.load();
+
+					Stage stage = new Stage();
+					stage.setTitle("Enter AccessKey");
+					stage.setScene(new Scene(root1));
+					stage.initStyle(StageStyle.UNDECORATED);
+					AccessKeyController.haha();
+					stage.showAndWait();
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 			}
 		});
