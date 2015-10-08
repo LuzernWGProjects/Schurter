@@ -1,6 +1,3 @@
-/**
- * 
- */
 package ch.ice.controller;
 
 import java.io.File;
@@ -24,34 +21,30 @@ import org.json.JSONObject;
 
 import ch.ice.controller.file.ExcelParser;
 import ch.ice.controller.file.ExcelWriter;
-import ch.ice.controller.web.BingSearchEngine;
+import ch.ice.controller.interf.SearchEngine;
 import ch.ice.controller.web.ResultAnalyzer;
+import ch.ice.controller.web.SearchEngineFactory;
 import ch.ice.controller.web.WebCrawler;
 import ch.ice.exceptions.HttpStatusException;
 import ch.ice.exceptions.IllegalFileExtensionException;
 import ch.ice.exceptions.InternalFormatException;
 import ch.ice.exceptions.MissingCustomerRowsException;
 import ch.ice.model.Customer;
+import ch.ice.utils.JSONStandardizedKeys;
 
-/**
- * @author Oliver
- *
- */
 public class MainController {
-	private static final Logger logger = LogManager
-			.getLogger(MainController.class.getName());
+	private static final Logger logger = LogManager.getLogger(MainController.class.getName());
 	ExcelParser excelParserInstance;
 
 	public static File file;
 	public static List<Customer> customerList;
 	public static int i;
 	public static String progressText;
-	private static org.apache.commons.lang.time.StopWatch stopwatch;
+	private static StopWatch stopwatch;
 
 	private Integer limitSearchResults = 4;
 
-	public void startMainController() throws InternalFormatException,
-			MissingCustomerRowsException {
+	public void startMainController() throws InternalFormatException, MissingCustomerRowsException {
 
 		// Core settings
 		boolean isSearchAvail = false;
@@ -74,8 +67,7 @@ public class MainController {
 		}
 
 		stopwatch.split();
-		logger.info("Spilt: " + stopwatch.toSplitString() + " total: "
-				+ stopwatch.toString());
+		logger.info("Spilt: " + stopwatch.toSplitString() + " total: "+ stopwatch.toString());
 
 		/*
 		 * Load Configuration File
@@ -85,11 +77,9 @@ public class MainController {
 
 			isSearchAvail = config.getBoolean("core.search.isEnabled");
 			defaultUrl = new URL(config.getString("core.search.defaultUrl"));
-			// this.limitSearchResults =
-			// config.getInteger("searchEngine.bing.limitSearchResults", 15);
+			// this.limitSearchResults = config.getInteger("searchEngine.bing.limitSearchResults", 15);
 
-			metaTagElements = Arrays.asList(config
-					.getStringArray("crawler.searchForMetaTags"));
+			metaTagElements = Arrays.asList(config.getStringArray("crawler.searchForMetaTags"));
 		} catch (ConfigurationException | MalformedURLException e) {
 			logger.error("Faild to load config file");
 			System.out.println(e.getLocalizedMessage());
@@ -108,8 +98,7 @@ public class MainController {
 				try {
 					URL retrivedUrl = searchForUrl(customer);
 					customer.getWebsite().setUrl(retrivedUrl);
-					progressText = "Gathering data at: "
-							+ retrivedUrl.toString();
+					progressText = "Gathering data at: "+ retrivedUrl.toString();
 				} catch (Exception e) {
 					e.printStackTrace();
 					logger.error(e.getMessage());
@@ -122,8 +111,7 @@ public class MainController {
 			// add metadata
 			try {
 				wc.connnect(customer.getWebsite().getUrl().toString());
-				customer.getWebsite().setMetaTags(
-						wc.getMetaTags(metaTagElements));
+				customer.getWebsite().setMetaTags(wc.getMetaTags(metaTagElements));
 				logger.info(customer.getWebsite().toString());
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -138,12 +126,10 @@ public class MainController {
 				logger.error(e.getMessage());
 
 			}
-
 		}
 
 		stopwatch.split();
-		logger.info("Spilt: " + stopwatch.toSplitString() + " total: "
-				+ stopwatch.toString());
+		logger.info("Spilt: " + stopwatch.toSplitString() + " total: "+ stopwatch.toString());
 
 		/*
 		 * Write every enhanced customer object into a new file
@@ -151,21 +137,22 @@ public class MainController {
 		this.startWriter(customerList);
 
 		stopwatch.stop();
-		logger.info("Spilt: " + stopwatch.toSplitString() + " total: "
-				+ stopwatch.toString());
+		logger.info("Spilt: " + stopwatch.toSplitString() + " total: "+ stopwatch.toString());
 
 		logger.info("end");
 	}
 
 	public URL searchForUrl(Customer c) {
 
-		ArrayList<String> params = new ArrayList<String>();
+		List<String> params = new ArrayList<String>();
 		params.add(c.getFullName().toLowerCase());
-		// params.add(c.getCountryName().toLowerCase());
-		// params.add("loc:"+c.getCountryCode().toLowerCase()); -> delivers 0
 		// results sometimes. we have to TEST this!!!!
-
-		String query = BingSearchEngine.buildQuery(params);
+		
+		
+		// request new SearchEngine
+		SearchEngine searchEngine = SearchEngineFactory.requestSearchEngine(SearchEngineFactory.BING);
+		
+		String query = searchEngine.buildQuery(params);
 		progressText = "Loockup on: " + query;
 
 		logger.info("start searchEngine for URL with query: " + query);
@@ -173,15 +160,13 @@ public class MainController {
 		try {
 
 			// Start Search
-			JSONArray results = BingSearchEngine.search(query,this.limitSearchResults);
-
-			// logger.debug(results.toString());
-
+			JSONArray results = searchEngine.search(query, this.limitSearchResults);
+			
 			// logic to pick the first record ; here should be the search logic!
 			JSONObject aResult = ResultAnalyzer.analyze(results, params);
 
 			// return only the URL form first object
-			return new URL((String) aResult.get("Url"));
+			return new URL((String) aResult.get(JSONStandardizedKeys.URL));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -217,8 +202,6 @@ public class MainController {
 	}
 
 	public void startWriter(List<Customer> customerList) {
-
-		// TODO Check if user demands CSV or EXCEL -> if(excel)->getWorkbook,
 		// Else ->write normal
 		// ExcelWriter ew = new
 		// ExcelWriter(this.excelParserInstance.getWorkbook());
