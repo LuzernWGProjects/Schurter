@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ch.ice.controller.MainController;
+import ch.ice.utils.JSONStandardizedKeys;
 import ch.ice.utils.JSONUtil;
 
 /**
@@ -39,7 +40,7 @@ public class ResultAnalyzer {
 	 * @return	Result which suits the best (as JSONObject)
 	 *
 	 */
-	public static JSONObject analyze(JSONArray results, List<String> parameters)
+	public static JSONObject analyse(JSONArray results, List<String> parameters)
 	{
 		System.out.println("Laenge: "+results.length()+";");
 		//Go thru each received result of the search request
@@ -50,10 +51,7 @@ public class ResultAnalyzer {
 			results.getJSONObject(i).put("Unsure", false);
 			
 			//extract the url, title and the desc
-			String url = (String) singleResult.get("Url");
-			String title = (String) singleResult.get("Title");
-			String desc = (String) singleResult.get("Description");
-			
+			String url = (String) singleResult.get(JSONStandardizedKeys.URL);
 			
 			try {
 				uri = new URI(url);
@@ -75,7 +73,7 @@ public class ResultAnalyzer {
 					
 					logger.info("ResultAnalyzer: Blacklisted");
 					//recursive call of the same function
-					analyze(results, parameters);
+					analyse(results, parameters);
 				}
 		
 			// if the url contains the company name return this as the best result
