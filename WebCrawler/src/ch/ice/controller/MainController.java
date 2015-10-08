@@ -35,6 +35,7 @@ import ch.ice.exceptions.MissingCustomerRowsException;
 import ch.ice.exceptions.SearchEngineNotAvailableException;
 import ch.ice.model.Customer;
 import ch.ice.utils.JSONStandardizedKeys;
+import ch.ice.view.SaveWindowController;
 
 public class MainController {
 	public static final Logger logger = LogManager
@@ -47,7 +48,7 @@ public class MainController {
 	private static StopWatch stopwatch;
 
 	// search engine
-	private static String searchEngineIdentifier = SearchEngineFactory.GOOGLE;
+	private static String searchEngineIdentifier = SearchEngineFactory.BING;
 	private static SearchEngine searchEngine;
 	private Integer limitSearchResults = 4;
 	public static URL defaultUrl;
@@ -126,47 +127,71 @@ public class MainController {
 
 		int listSize = customerList.size();
 		int quarterSize = listSize / 4;
-		int firstEnd = quarterSize - 1;
-
-		int secondEnd = quarterSize * 2 - 1;
+		int firstEnd = quarterSize;
+		int secondStart = quarterSize;
+		int secondEnd = (quarterSize) * 2;
 		int thirdStart = 2 * quarterSize;
-		int thirdEnd = quarterSize * 3 - 1;
+		int thirdEnd = quarterSize * 3;
 		int fourthStart = quarterSize * 3;
-		int fourthEnd = listSize - 1;
+		int fourthEnd = listSize;
 
-		// System.out.println("Size: " + firstArray.size());
+		System.out.println(0 + ", " + firstEnd + ", " + secondStart + ", "
+				+ secondEnd + ", " + thirdStart + ", " + thirdEnd + ", "
+				+ fourthStart + ", " + fourthEnd);
 
 		if (listSize < 16) {
 			System.out.println("Below 16");
-			firstArray = customerList;
+			firstArray = new ArrayList<Customer>(customerList);
 			SearchThread s1 = new SearchThread();
 			s1.setCheckNumber(1);
+			s1.setSearchList(firstArray);
 			Thread t1 = new Thread(s1);
+			t1.setName("FIRST THREAD");
 			t1.start();
+			t1.join();
 			customerList.clear();
-			customerList.addAll(firstArray);
+			customerList.addAll(s1.getSearchList());
 		} else {
-			firstArray = customerList.subList(0, firstEnd);
-			secondArray = customerList.subList(quarterSize, secondEnd);
-			thirdArray = customerList.subList(thirdStart, thirdEnd);
-			fourthArray = customerList.subList(fourthStart, fourthEnd);
+			firstArray = new ArrayList<Customer>(customerList.subList(0,
+					firstEnd));
+			secondArray = new ArrayList<Customer>(customerList.subList(
+					secondStart, secondEnd));
+			thirdArray = new ArrayList<Customer>(customerList.subList(
+					thirdStart, thirdEnd));
+			fourthArray = new ArrayList<Customer>(customerList.subList(
+					fourthStart, fourthEnd));
 
 			SearchThread s1 = new SearchThread();
 			s1.setCheckNumber(1);
+			s1.setSearchList(firstArray);
 			Thread t1 = new Thread(s1);
 			t1.setName("FIRST THREAD");
+			System.out.println("First Thread Size: "
+					+ s1.getSearchList().size());
+
 			SearchThread s2 = new SearchThread();
 			s2.setCheckNumber(2);
+			s2.setSearchList(secondArray);
 			Thread t2 = new Thread(s2);
 			t2.setName("SECOND THREAD");
+			System.out.println("Second Thread Size: "
+					+ s2.getSearchList().size());
+
 			SearchThread s3 = new SearchThread();
 			s3.setCheckNumber(4);
+			s3.setSearchList(thirdArray);
 			Thread t3 = new Thread(s3);
 			t3.setName("THIRD THREAD");
+			System.out.println("Third Thread Size: "
+					+ s3.getSearchList().size());
+
 			SearchThread s4 = new SearchThread();
 			s4.setCheckNumber(4);
+			s4.setSearchList(fourthArray);
 			Thread t4 = new Thread(s4);
 			t4.setName("FOURTH THREAD");
+			System.out.println("Fourth Thread Size: "
+					+ s4.getSearchList().size());
 
 			t1.start();
 			t2.start();
@@ -176,11 +201,21 @@ public class MainController {
 			t2.join();
 			t3.join();
 			t4.join();
+
+			System.out.println("First Thread Size: "
+					+ s1.getSearchList().size());
+			System.out.println("Second Thread Size: "
+					+ s2.getSearchList().size());
+			System.out.println("Third Thread Size: "
+					+ s3.getSearchList().size());
+			System.out.println("Fourth Thread Size: "
+					+ s4.getSearchList().size());
+
 			customerList.clear();
 			customerList.addAll(s4.getSearchList());
-			customerList.addAll(thirdArray);
-			customerList.addAll(secondArray);
-			customerList.addAll(firstArray);
+			customerList.addAll(s3.getSearchList());
+			customerList.addAll(s2.getSearchList());
+			customerList.addAll(s1.getSearchList());
 		}
 		// customerList.addAll(s2.getSearchList());
 		// customerList.addAll(s3.getSearchList());
@@ -239,6 +274,8 @@ public class MainController {
 		/*
 		 * Write every enhanced customer object into a new file
 		 */
+		SaveWindowController.myBooWriting = true;
+
 		this.startWriter(MainController.customerList);
 
 		stopwatch.stop();
@@ -246,6 +283,7 @@ public class MainController {
 				+ stopwatch.toString());
 
 		logger.info("end");
+		SaveWindowController.myBoo = true;
 	}
 
 	/**

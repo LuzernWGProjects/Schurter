@@ -18,8 +18,8 @@ public class SearchThread extends Thread {
 	//
 	// }
 
-	List<Customer> searchList;
-	int checkNumber;
+	private List<Customer> searchList;
+	private int checkNumber;
 
 	public List<Customer> getSearchList() {
 		return searchList;
@@ -44,20 +44,22 @@ public class SearchThread extends Thread {
 		WebCrawler wc = new WebCrawler();
 		MainController mc = new MainController();
 		if (checkNumber == 1) {
-			searchList = MainController.firstArray;
+			System.out.println("Thread 1 running");
+
 		}
 		if (checkNumber == 2) {
-			searchList = MainController.secondArray;
+			System.out.println("Thread 2 running");
 		}
 		if (checkNumber == 3) {
-			searchList = MainController.thirdArray;
+			System.out.println("Thread 3 running");
 		}
 		if (checkNumber == 4) {
-			searchList = MainController.fourthArray;
+			System.out.println("Thread 4 running");
 		}
 
 		for (Customer customer : searchList) {
 			MainController.customersEnhanced++;
+			System.out.println("In Customer Loop");
 
 			// only search via SearchEngine if search is enabled. Disable search
 			// for testing purpose
