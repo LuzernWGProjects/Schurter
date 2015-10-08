@@ -10,6 +10,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -89,13 +91,35 @@ public class BingSearchEngine implements SearchEngine {
             if(resultsLength < 1) 
             	throw new NoUrlFoundException("The Search engine delivered " +resultsLength+ " results for ["+requestedQuery+"]. Please change your query");
             
+            
+            // remove unused elements and trim urls
+            JSONUtil.keepLablesInJSONArray = new ArrayList<String>(
+        			// default ones for bing
+        			Arrays.asList(
+        				"Url",
+        				"Description",
+        				"Title"
+        			)
+        	);
+            JSONUtil.urlLabel = "Url";
+            
+            bingResults = JSONUtil.cleanUp(bingResults);
+            
+            System.out.println("Cleaned up results from Bing: "+bingResults);
+            System.out.println("Cleaned up resulsts length: "+bingResults.length());
+            
+            // standardize lables
             Map<String, String> keyNodeMap = new HashMap<String,String>();
-			keyNodeMap.put("Url", JSONStandardizedKeys.URL);
+            keyNodeMap.put("Url", JSONStandardizedKeys.URL);
 			keyNodeMap.put("Description", JSONStandardizedKeys.DESCRIPTION);
 			keyNodeMap.put("Title", JSONStandardizedKeys.TITLE);
 			
-			// standardize jsonarray and clean up.
-			return JSONUtil.cleanUp(this.standardizer(bingResults, keyNodeMap));
+            bingResults = this.standardizer(bingResults, keyNodeMap);
+			
+            System.out.println("STD results from Bing: "+bingResults);
+            System.out.println("STD resulsts length: "+bingResults.length());
+			
+			return bingResults;
         }
     }
 	
