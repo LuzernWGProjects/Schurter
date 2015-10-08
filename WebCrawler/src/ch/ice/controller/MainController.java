@@ -47,9 +47,9 @@ public class MainController {
 	private static StopWatch stopwatch;
 
 	// search engine
-	private static String searchEngineIdentifier = SearchEngineFactory.GOOGLE;
+	private static String searchEngineIdentifier = SearchEngineFactory.BING;
 	private static SearchEngine searchEngine;
-	private Integer limitSearchResults = 4;
+	private Integer limitSearchResults = 10;
 
 	// file Parser
 	private static Parser fileParser;
