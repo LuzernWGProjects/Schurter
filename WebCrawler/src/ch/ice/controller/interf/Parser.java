@@ -24,7 +24,7 @@ public interface Parser {
 			IllegalFileExtensionException, EncryptedDocumentException,
 			InvalidFormatException, InternalFormatException,
 			MissingCustomerRowsException;
-
+	
 	// progress bar and statistic stuff
 	public void setTotalDataSets(int totalRows); // Updated once
 

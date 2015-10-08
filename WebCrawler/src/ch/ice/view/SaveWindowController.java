@@ -144,9 +144,9 @@ public class SaveWindowController extends Thread implements Initializable {
 
 							if (MainController.customerList != null) {
 								System.out.println(MainController.customerList
-										.size() + " : " + MainController.i);
+										.size() + " : " + MainController.customersEnhanced);
 
-								double d = (double) MainController.i
+								double d = (double) MainController.customersEnhanced
 										/ (double) MainController.customerList
 												.size();
 								progressBar.setProgress(d);

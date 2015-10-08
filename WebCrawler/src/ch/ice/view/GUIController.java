@@ -188,9 +188,9 @@ public class GUIController extends VBox implements Initializable {
 									"Excel-File (*.xlsx)", "*.xlsx"),
 							new FileChooser.ExtensionFilter(
 									"Excel-File (*.xls)", "*.xls"));
-					MainController.file = filechooser.showOpenDialog(stage);
-					if (MainController.file != null) {
-						fileTextField.setText(MainController.file
+					MainController.uploadedFileContainingCustomers = filechooser.showOpenDialog(stage);
+					if (MainController.uploadedFileContainingCustomers != null) {
+						fileTextField.setText(MainController.uploadedFileContainingCustomers
 								.getAbsolutePath());
 					}
 				} catch (NullPointerException e) {

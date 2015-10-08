@@ -26,6 +26,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import ch.ice.controller.interf.Parser;
 import ch.ice.controller.interf.Writer;
 import ch.ice.model.Customer;
 
@@ -60,16 +61,20 @@ public class ExcelWriter implements Writer {
 	}
 
 	@Override
-	public void writeFile(List<Customer> customerList, Workbook wb) {
+	public void writeFile(List<Customer> customerList, Parser fileParserInstance) {
+		// convert Parser to actual excelParser. We need getWorkbook() here.
+		ExcelParser excelParser = (ExcelParser) fileParserInstance;
+		
 		// get existing workbook and sheet
-		this.workbook = wb;
-		this.sheet = wb.getSheetAt(0);
+		this.workbook = excelParser.getWorkbook();
+		this.sheet = this.workbook.getSheetAt(0);
+		
 		// Start with row Number 3
 		rownum = 3;
 		// Foreach Customer in CustomerList generate a new row
 		for (Customer c : customerList) {
 			//initialize cell style (needed for foreground color if unsure)
-			style = wb.createCellStyle();
+			style = this.workbook.createCellStyle();
 
 			// get the 3rd row
 			row = sheet.getRow(rownum++);

@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.time.StopWatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,60 +20,54 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import ch.ice.controller.file.ExcelParser;
-import ch.ice.controller.file.ExcelWriter;
+import ch.ice.controller.file.FileParserFactory;
+import ch.ice.controller.file.FileWriterFactory;
+import ch.ice.controller.interf.Parser;
 import ch.ice.controller.interf.SearchEngine;
+import ch.ice.controller.interf.Writer;
 import ch.ice.controller.web.ResultAnalyzer;
 import ch.ice.controller.web.SearchEngineFactory;
 import ch.ice.controller.web.WebCrawler;
+import ch.ice.exceptions.FileParserNotAvailableException;
 import ch.ice.exceptions.HttpStatusException;
 import ch.ice.exceptions.IllegalFileExtensionException;
 import ch.ice.exceptions.InternalFormatException;
 import ch.ice.exceptions.MissingCustomerRowsException;
+import ch.ice.exceptions.SearchEngineNotAvailableException;
 import ch.ice.model.Customer;
 import ch.ice.utils.JSONStandardizedKeys;
 
 public class MainController {
 	private static final Logger logger = LogManager.getLogger(MainController.class.getName());
-	ExcelParser excelParserInstance;
 
-	public static File file;
+	public static File uploadedFileContainingCustomers;
 	public static List<Customer> customerList;
-	public static int i;
+	public static int customersEnhanced;
 	public static String progressText;
 	private static StopWatch stopwatch;
-	private static String searchEngineIdentifier = SearchEngineFactory.BING;
-	private static SearchEngine searchEngine;
 
+	// search engine
+	private static String searchEngineIdentifier = SearchEngineFactory.GOOGLE;
+	private static SearchEngine searchEngine;
 	private Integer limitSearchResults = 4;
 
+	// file Parser
+	private static Parser fileParser;
+
+	/**
+	 * This is the main controller. From here the whole program gets controlled.
+	 * I/O and lookups are also triggered from here.
+	 * 
+	 * @throws InternalFormatException
+	 * @throws MissingCustomerRowsException
+	 */
 	public void startMainController() throws InternalFormatException, MissingCustomerRowsException {
-		// request new SearchEngin
-		MainController.searchEngine = SearchEngineFactory.requestSearchEngine(MainController.searchEngineIdentifier);
-		logger.info("Starting " + searchEngine.getClass().getName() + " Searchengine");
-		
 		// Core settings
 		boolean isSearchAvail = false;
 		URL defaultUrl = null;
-
+		
 		PropertiesConfiguration config;
 		List<String> metaTagElements = new ArrayList<String>();
-
-		stopwatch = new StopWatch();
-		stopwatch.start();
-
-		// For testing if used without GUI
-		if (file == null) {
-			customerList = retrieveCustomerFromFile(new File("posTest.xlsx"));
-		} else {
-			customerList = retrieveCustomerFromFile(file);
-
-			// retrieve all customers from file
-			logger.info("Retrieve Customers from File "	+ file.getAbsolutePath());
-		}
-
-		stopwatch.split();
-		logger.info("Spilt: " + stopwatch.toSplitString() + " total: "+ stopwatch.toString());
 
 		/*
 		 * Load Configuration File
@@ -87,17 +82,44 @@ public class MainController {
 			metaTagElements = Arrays.asList(config.getStringArray("crawler.searchForMetaTags"));
 		} catch (ConfigurationException | MalformedURLException e) {
 			logger.error("Faild to load config file");
-			System.out.println(e.getLocalizedMessage());
-			e.printStackTrace();
 		}
 
+
+		// request new SearchEngine
+		try {
+			MainController.searchEngine = SearchEngineFactory.requestSearchEngine(MainController.searchEngineIdentifier);
+			logger.info("Starting " + searchEngine.getClass().getName());
+		} catch (SearchEngineNotAvailableException e1) {
+			logger.error(e1.getMessage());
+		}
+
+		stopwatch = new StopWatch();
+		stopwatch.start();
+
+		// For testing if used without GUI
+		if (uploadedFileContainingCustomers == null) {
+			MainController.customerList = retrieveCustomerFromFile(new File("posTest.xlsx"));
+		} else {
+			MainController.customerList = retrieveCustomerFromFile(uploadedFileContainingCustomers);
+
+			// retrieve all customers from file
+			logger.info("Retrieve Customers from File "	+ uploadedFileContainingCustomers.getAbsolutePath());
+		}
+
+		stopwatch.split();
+		logger.info("Spilt: " + stopwatch.toSplitString() + " total: "+ stopwatch.toString());
+		
+		
+		/*
+		 *	Start the webcrawler service to gather all meta tags and 
+		 *	additional information from a customers website. 
+		 */
 		WebCrawler wc = new WebCrawler();
 
-		for (Customer customer : customerList) {
-			i++;
+		for (Customer customer : MainController.customerList) {
+			customersEnhanced++;
 
-			// only search via SearchEngine if search is enabled. Disable search
-			// for testing purpose
+			// only search via SearchEngine if search is enabled. Disable search for testing purpose
 			if (isSearchAvail) {
 				// Add url for customer
 				try {
@@ -139,46 +161,12 @@ public class MainController {
 		/*
 		 * Write every enhanced customer object into a new file
 		 */
-		this.startWriter(customerList);
+		this.startWriter(MainController.customerList);
 
 		stopwatch.stop();
 		logger.info("Spilt: " + stopwatch.toSplitString() + " total: "+ stopwatch.toString());
 
 		logger.info("end");
-	}
-
-	/**
-	 * Search for a Customers URL based on his name and other parameters.
-	 * 
-	 * @param Customer
-	 * @return URL of Customer - Depends on the quality of the search engine
-	 */
-	public URL searchForUrl(Customer c) {
-		
-		// more parameters can be added. These parameters are similar to Googles site: input. E.g. Automation site:schurter.com
-		List<String> params = new ArrayList<String>();
-		params.add(c.getFullName().toLowerCase());
-				
-		String lookupQuery = MainController.searchEngine.buildQuery(params);
-		progressText = "Lookup on: " + lookupQuery;
-
-		logger.info("Lookup "+MainController.searchEngine.getClass().getName()+"  with Query \""+ lookupQuery +"\"");
-
-		try {
-			// Start Search
-			JSONArray results = MainController.searchEngine.search(lookupQuery, this.limitSearchResults);
-			
-			// logic to pick the first record ; here should be the search logic!
-			JSONObject aResult = ResultAnalyzer.analyse(results, params);
-
-			// return only the URL form first object
-			return new URL((String) aResult.get(JSONStandardizedKeys.URL));
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return null;
 	}
 
 	/**
@@ -191,30 +179,76 @@ public class MainController {
 	 * @throws InternalFormatException, MissingCustomerRowsException
 	 */
 	public List<Customer> retrieveCustomerFromFile(File file) throws InternalFormatException, MissingCustomerRowsException {
-		this.excelParserInstance = new ExcelParser();
+		String uploadedFileExtension = FilenameUtils.getExtension(file.getName());
+		String fileParserIdentifier = "";
+		
+		switch(uploadedFileExtension) {
+		case "xlsx":
+		case "xls":
+			fileParserIdentifier = FileParserFactory.EXCEL;
+			break;
+		case "csv":
+			fileParserIdentifier = FileParserFactory.CSV;
+			break;
+		}
 
 		try {
+			MainController.fileParser = FileParserFactory.requestParser(fileParserIdentifier);
+			return MainController.fileParser.readFile(file);
 
-			return this.excelParserInstance.readFile(file);
-
-		} catch (IOException | IllegalFileExtensionException
-				| EncryptedDocumentException | InvalidFormatException e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
+		} catch (FileParserNotAvailableException | EncryptedDocumentException | InvalidFormatException | IOException | IllegalFileExtensionException e) {
+			logger.error(e.getMessage());
 		}
 
 		return new LinkedList<Customer>();
 	}
+	
+	
+	/**
+	 * Search for a Customers URL based on his name and other parameters.
+	 * 
+	 * @param Customer
+	 * @return URL of Customer - Depends on the quality of the search engine
+	 */
+	public URL searchForUrl(Customer c) {
 
-	public void startWriter(List<Customer> customerList) {
-		// Else ->write normal
-		// ExcelWriter ew = new
-		// ExcelWriter(this.excelParserInstance.getWorkbook());
+		// more parameters can be added. These parameters are similar to Googles site: input. E.g. Automation site:schurter.com
+		List<String> params = new ArrayList<String>();
+		params.add(c.getFullName().toLowerCase());
 
+		String lookupQuery = MainController.searchEngine.buildQuery(params);
+		progressText = "Lookup on: " + lookupQuery;
+
+		logger.info("Lookup "+MainController.searchEngine.getClass().getName()+"  with Query \""+ lookupQuery +"\"");
+
+		try {
+			// Start Search
+			JSONArray results = MainController.searchEngine.search(lookupQuery, this.limitSearchResults);
+
+			// logic to pick the first record ; here should be the search logic!
+			JSONObject aResult = ResultAnalyzer.analyse(results, params);
+
+			// return only the URL form first object
+			return new URL((String) aResult.get(JSONStandardizedKeys.URL));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	/**
+	 * Write enhanced customer array into a file and save it to the selected directory
+	 * 
+	 * @param customerList
+	 */
+	public void startWriter(List<Customer> enhancedCustomerList) {
 		logger.info("Start writing customers to File");
-
-		ExcelWriter ew = new ExcelWriter();
-
-		ew.writeFile(customerList, this.excelParserInstance.getWorkbook());
+		
+		// TODO: implement CVS Writer if user chooses to do so. Basically just if excel->excelWriter; csv->csvWriter
+		Writer fileWriter = FileWriterFactory.requestFileWriter(FileWriterFactory.EXCEL);
+		
+		fileWriter.writeFile(enhancedCustomerList, MainController.fileParser);
 	}
 }
