@@ -61,19 +61,19 @@ public class GoogleSearchEngine implements SearchEngine {
 			if(resultsLength < 1) 
 				throw new NoUrlFoundException("The Search engine delivered " +resultsLength+ " results for ["+requestedQuery+"]. Please change your query");
 
+			
+			
+			Map<String, String> keyNodeMap = new HashMap<String,String>();
+			keyNodeMap.put("link", "url");
+			
+			JSONArray stdJson = this.standardizer(googleSarchResults, keyNodeMap);
+			
 			// Remove unused labels
 			JSONUtil.keyNodes = new ArrayList<String>(
 					// remove none - can be done in the google api doc
-					);
-
-			// trim url label for google = link
-			JSONUtil.urlLabel = "link";
-			googleSarchResults = JSONUtil.cleanUp(googleSarchResults);
-			System.out.println("raw g r: "+googleSarchResults);
-			Map<String, String> keyNodeMap = new HashMap<String,String>();
-			keyNodeMap.put("link", "url");
-
-			return this.standardizer(googleSarchResults, keyNodeMap);
+			);
+			
+			return JSONUtil.cleanUp(stdJson);
 
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -21,10 +21,14 @@ public final class JSONUtil {
 	// init key search field
 	public static List<String> keyNodes = new ArrayList<String>(
 			// default ones for bing
-			Arrays.asList("Url", "Description", "Title")
-			);
+			Arrays.asList(
+				JSONStandardizedKeys.URL,
+				JSONStandardizedKeys.DESCRIPTION,
+				JSONStandardizedKeys.TITLE
+			)
+	);
 
-	public static String urlLabel = "Url";
+	public static String urlLabel = JSONStandardizedKeys.URL;
 
 	/**
 	 * Starter Function for our analysis methods.

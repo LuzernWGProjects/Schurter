@@ -89,14 +89,13 @@ public class BingSearchEngine implements SearchEngine {
             if(resultsLength < 1) 
             	throw new NoUrlFoundException("The Search engine delivered " +resultsLength+ " results for ["+requestedQuery+"]. Please change your query");
             
-            bingResults = JSONUtil.cleanUp(bingResults);
-            
             Map<String, String> keyNodeMap = new HashMap<String,String>();
 			keyNodeMap.put("Url", JSONStandardizedKeys.URL);
 			keyNodeMap.put("Description", JSONStandardizedKeys.DESCRIPTION);
 			keyNodeMap.put("Title", JSONStandardizedKeys.TITLE);
 			
-            return this.standardizer(bingResults, keyNodeMap);
+			// standardize jsonarray and clean up.
+			return JSONUtil.cleanUp(this.standardizer(bingResults, keyNodeMap));
         }
     }
 	
