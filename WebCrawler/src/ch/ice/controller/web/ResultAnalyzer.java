@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ch.ice.controller.MainController;
+import ch.ice.utils.JSONStandardizedKeys;
 import ch.ice.utils.JSONUtil;
 
 /**
@@ -40,7 +41,7 @@ public class ResultAnalyzer {
 	 * @return	Result which suits the best (as JSONObject)
 	 *
 	 */
-	public static JSONObject analyze(JSONArray results, List<String> parameters)
+	public static JSONObject analyse(JSONArray results, List<String> parameters)
 	{
 		System.out.println("Laenge: "+results.length()+";");
 		
@@ -59,9 +60,9 @@ public class ResultAnalyzer {
 		
 			
 			//extract the url, title and the desc
-			String url = (String) singleResult.get("Url");
-			String title = (String) singleResult.get("Title");
-			String desc = (String) singleResult.get("Description");
+			String url = (String) singleResult.get(JSONStandardizedKeys.URL);
+			String title = (String) singleResult.get(JSONStandardizedKeys.TITLE);
+			String desc = (String) singleResult.get(JSONStandardizedKeys.DESCRIPTION);
 			
 			/* ******************************************
 			 * Pre-processing for further analysis 
