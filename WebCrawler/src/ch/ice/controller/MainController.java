@@ -41,11 +41,16 @@ public class MainController {
 	public static int i;
 	public static String progressText;
 	private static StopWatch stopwatch;
+	private static String searchEngineIdentifier = SearchEngineFactory.BING;
+	private static SearchEngine searchEngine;
 
 	private Integer limitSearchResults = 4;
 
 	public void startMainController() throws InternalFormatException, MissingCustomerRowsException {
-
+		// request new SearchEngin
+		MainController.searchEngine = SearchEngineFactory.requestSearchEngine(MainController.searchEngineIdentifier);
+		logger.info("Starting " + searchEngine.getClass().getName() + " Searchengine");
+		
 		// Core settings
 		boolean isSearchAvail = false;
 		URL defaultUrl = null;
@@ -142,28 +147,29 @@ public class MainController {
 		logger.info("end");
 	}
 
+	/**
+	 * Search for a Customers URL based on his name and other parameters.
+	 * 
+	 * @param Customer
+	 * @return URL of Customer - Depends on the quality of the search engine
+	 */
 	public URL searchForUrl(Customer c) {
-
+		
+		// more parameters can be added. These parameters are similar to Googles site: input. E.g. Automation site:schurter.com
 		List<String> params = new ArrayList<String>();
 		params.add(c.getFullName().toLowerCase());
-		// results sometimes. we have to TEST this!!!!
-		
-		
-		// request new SearchEngine
-		SearchEngine searchEngine = SearchEngineFactory.requestSearchEngine(SearchEngineFactory.BING);
-		
-		String query = searchEngine.buildQuery(params);
-		progressText = "Loockup on: " + query;
+				
+		String lookupQuery = MainController.searchEngine.buildQuery(params);
+		progressText = "Lookup on: " + lookupQuery;
 
-		logger.info("start searchEngine for URL with query: " + query);
+		logger.info("Lookup "+MainController.searchEngine.getClass().getName()+"  with Query \""+ lookupQuery +"\"");
 
 		try {
-
 			// Start Search
-			JSONArray results = searchEngine.search(query, this.limitSearchResults);
+			JSONArray results = MainController.searchEngine.search(lookupQuery, this.limitSearchResults);
 			
 			// logic to pick the first record ; here should be the search logic!
-			JSONObject aResult = ResultAnalyzer.analyze(results, params);
+			JSONObject aResult = ResultAnalyzer.analyse(results, params);
 
 			// return only the URL form first object
 			return new URL((String) aResult.get(JSONStandardizedKeys.URL));
@@ -171,21 +177,20 @@ public class MainController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		return null;
 	}
 
 	/**
-	 * Each Row returns a customer object. These customers are saved in an
+	 * Each Row returns a customer object. These customers are saved in a
 	 * List-Object.
 	 * 
 	 * @param file
 	 * @return List of Customers from file. Each row in a file represents a
 	 *         customer
-	 * @throws InternalFormatException
-	 * @throws MissingCustomerRowsException
+	 * @throws InternalFormatException, MissingCustomerRowsException
 	 */
-	public List<Customer> retrieveCustomerFromFile(File file)
-			throws InternalFormatException, MissingCustomerRowsException {
+	public List<Customer> retrieveCustomerFromFile(File file) throws InternalFormatException, MissingCustomerRowsException {
 		this.excelParserInstance = new ExcelParser();
 
 		try {

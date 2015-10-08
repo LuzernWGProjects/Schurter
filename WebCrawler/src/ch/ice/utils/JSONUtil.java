@@ -28,6 +28,7 @@ public final class JSONUtil {
 			)
 	);
 
+	// set the standard URL label
 	public static String urlLabel = JSONStandardizedKeys.URL;
 
 	/**
@@ -37,6 +38,7 @@ public final class JSONUtil {
 	 * @return 
 	 */
 	public static JSONArray cleanUp(JSONArray results) {
+		logger.info("Started JSON Clean Up");
 		JSONArray stripedResults = removeUnusedElements(results, keyNodes);
 		stripedResults = trimUrls(stripedResults, urlLabel);
 
@@ -111,9 +113,12 @@ public final class JSONUtil {
 			for (int i = 0; i < results.length(); i++) {	
 				JSONObject jObj = new JSONObject();
 				for (String key : keyNodes) {
-					jObj.put(key, results.getJSONObject(i).get(key));
+					String value = (String) results.getJSONObject(i).get(key);
+					
+					logger.info("JSONObject["+ i +"] - Removing Element \""+key+"\" from JSON-Object");
+					jObj.put(key, value);
 				}
-
+				
 				stripedResults.put(jObj);
 			}
 		}
@@ -150,6 +155,8 @@ public final class JSONUtil {
 					String oldKey = entry.getKey();
 					String newKey = entry.getValue();
 					String value = customerDetailObj.getString(oldKey);
+					
+					logger.info("Old Key \"" + oldKey + "\" will be replaced with \"" +newKey+"\"");
 					
 					// replace every key
 					customerDetailObj.remove(oldKey);
