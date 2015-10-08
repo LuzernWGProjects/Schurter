@@ -57,7 +57,7 @@ public class SearchThread extends Thread {
 		}
 
 		for (Customer customer : searchList) {
-			MainController.i++;
+			MainController.customersEnhanced++;
 
 			// only search via SearchEngine if search is enabled. Disable search
 			// for testing purpose
