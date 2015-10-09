@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
@@ -29,17 +31,38 @@ public class GoogleSearchEngine implements SearchEngine {
 
 	public JSONArray search(String requestedQuery, int limitSearchResult) throws NoUrlFoundException {
 		try {
+			
+			String accountKey = "";
+			String config_cx = "";
+			String retreiveFields = "";
+			
+	    	PropertiesConfiguration config;
+	    	
+	    	/*
+			 * Load Configuration File
+			 */
+			try {
+				config = new PropertiesConfiguration("conf/app.properties");
+				
+				accountKey = config.getString("searchEngine.google.accountKey");
+				config_cx = config.getString("searchEngine.google.cx");
+				retreiveFields = config.getString("searchEngine.google.retreiveFields");
+				
+			} catch (ConfigurationException e) {
+				System.out.println(e.getLocalizedMessage());
+				e.printStackTrace();
+			}
 
 			String charset = Charset.defaultCharset().name();
 
-			final String apiKey = URLEncoder.encode("AIzaSyCA4F-ffoVrV-DP4bGK7hHwjnPdrAk-6Jg", charset);
-			final String cx =  URLEncoder.encode("012938936336043454826:yfrotl5pxqu", charset);
+			final String apiKey = URLEncoder.encode(accountKey, charset);
+			final String cx =  URLEncoder.encode(config_cx, charset);
 
 			/*
 			 * for field options check:
 			 * https://developers.google.com/apis-explorer/?hl=de#p/customsearch/v1/search.cse.list
 			 */
-			final String fields =  URLEncoder.encode("items(link,title),searchInformation/searchTime", charset);
+			final String fields =  URLEncoder.encode(retreiveFields, charset);
 			final String googleHost =  URLEncoder.encode("google.com", charset);
 			int searchResultsLimit = limitSearchResult;
 
@@ -52,7 +75,7 @@ public class GoogleSearchEngine implements SearchEngine {
 				searchResultsLimit = 10;
 			}
 
-			String googleSearchUrl = "https://www.googleapis.com/customsearch/v1?q="+ requestedQuery +"&key="+ apiKey +"&cx="+ cx +"&googlehost="+ googleHost +"&fields="+ fields+"&num="+searchResultsLimit;
+			String googleSearchUrl = "https://www.googleapis.com/customsearch/v1?q="+ requestedQuery +"&key="+ apiKey +"&cx="+ cx +"&googlehost="+ googleHost +"&fields="+ fields+"&num="+limitSearchResult;
 			logger.info("Lookup Google with request URL: "+googleSearchUrl);
 
 			URL url = new URL(googleSearchUrl);
