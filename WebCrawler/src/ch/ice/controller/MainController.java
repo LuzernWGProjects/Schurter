@@ -50,9 +50,7 @@ public class MainController {
 	// search engine
 	private static String searchEngineIdentifier = SearchEngineFactory.BING;
 	private static SearchEngine searchEngine;
-<<<<<<< HEAD
-	private Integer limitSearchResults = 10;
-=======
+
 	private Integer limitSearchResults = 8;
 	public static URL defaultUrl;
 	public static boolean isSearchAvail;
@@ -62,7 +60,6 @@ public class MainController {
 	public static List<Customer> secondArray;
 	public static List<Customer> thirdArray;
 	public static List<Customer> fourthArray;
->>>>>>> branch 'master' of https://github.com/LuzernWGProjects/Schurter.git
 
 	// file Parser
 	private static Parser fileParser;
@@ -352,14 +349,10 @@ public class MainController {
 
 		try {
 			// Start Search
-<<<<<<< HEAD
-			JSONArray results = MainController.searchEngine.search(lookupQuery, this.limitSearchResults);
-			System.out.println("Retrieved Results: "+results.length());
-=======
+
 			JSONArray results = MainController.searchEngine.search(lookupQuery,
 					this.limitSearchResults);
 
->>>>>>> branch 'master' of https://github.com/LuzernWGProjects/Schurter.git
 			// logic to pick the first record ; here should be the search logic!
 			JSONObject aResult = ResultAnalyzer.analyse(results, params);
 			c.getWebsite().setUnsure((boolean) aResult.get("Unsure"));
