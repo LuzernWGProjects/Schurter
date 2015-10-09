@@ -52,14 +52,14 @@ public class SaveWindowController extends Thread implements Initializable {
 	Task task1;
 	private static Boolean pauseFlag = false;
 
-	public static void resumeThread() {
-		pauseFlag = false;
-		myBooChecking = false;
-		synchronized (pauseFlag) {
-			pauseFlag.notifyAll();
-
-		}
-	}
+	// public static void resumeThread() {
+	// pauseFlag = false;
+	// myBooChecking = false;
+	// synchronized (pauseFlag) {
+	// pauseFlag.notifyAll();
+	//
+	// }
+	// }
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -84,7 +84,7 @@ public class SaveWindowController extends Thread implements Initializable {
 					System.exit(0);
 				} else {
 					// ... user chose CANCEL or closed the dialog
-					resumeThread();
+					// resumeThread();
 					// Node source = (Node) event.getSource();
 					// Stage stage = (Stage) source.getScene().getWindow();
 					// stage.show();
@@ -126,16 +126,16 @@ public class SaveWindowController extends Thread implements Initializable {
 						@Override
 						public void run() {
 
-							if (myBooChecking == true) {
-								synchronized (pauseFlag) {
-									try {
-										pauseFlag.wait();
-									} catch (InterruptedException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
-								}
-							}
+							// if (myBooChecking == true) {
+							// synchronized (pauseFlag) {
+							// try {
+							// pauseFlag.wait();
+							// } catch (InterruptedException e) {
+							// // TODO Auto-generated catch block
+							// e.printStackTrace();
+							// }
+							// }
+							// }
 
 							endMessageLabel.setWrapText(true);
 							endMessageLabel.setMaxWidth(400);
@@ -144,7 +144,9 @@ public class SaveWindowController extends Thread implements Initializable {
 
 							if (MainController.customerList != null) {
 								System.out.println(MainController.customerList
-										.size() + " : " + MainController.customersEnhanced);
+										.size()
+										+ " : "
+										+ MainController.customersEnhanced);
 
 								double d = (double) MainController.customersEnhanced
 										/ (double) MainController.customerList
@@ -221,6 +223,7 @@ public class SaveWindowController extends Thread implements Initializable {
 
 		th = new Thread(task);
 		th.setDaemon(true);
+		th.setName("THREAD GUI");
 		th.start();
 
 		task1 = new Task<Void>() {
@@ -229,11 +232,11 @@ public class SaveWindowController extends Thread implements Initializable {
 
 				MainController main = new MainController();
 
-				if (myBooChecking == true) {
-					synchronized (pauseFlag) {
-						pauseFlag.wait();
-					}
-				}
+				// if (myBooChecking == true) {
+				// synchronized (pauseFlag) {
+				// pauseFlag.wait();
+				// }
+				// }
 				try {
 					main.startMainController();
 
@@ -250,6 +253,7 @@ public class SaveWindowController extends Thread implements Initializable {
 		};
 		t1 = new Thread(task1);
 		t1.setDaemon(true);
+		t1.setName("THREAD MainController");
 		t1.start();
 
 	}

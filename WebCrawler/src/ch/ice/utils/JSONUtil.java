@@ -19,7 +19,7 @@ public final class JSONUtil {
 	private static final Logger logger = LogManager.getLogger(JSONUtil.class.getName());
 
 	// init key search field
-	public static List<String> keyNodes = new ArrayList<String>(
+	public static List<String> keepLablesInJSONArray = new ArrayList<String>(
 			// default ones for bing
 			Arrays.asList(
 				JSONStandardizedKeys.URL,
@@ -39,7 +39,7 @@ public final class JSONUtil {
 	 */
 	public static JSONArray cleanUp(JSONArray results) {
 		logger.info("Started JSON Clean Up");
-		JSONArray stripedResults = removeUnusedElements(results, keyNodes);
+		JSONArray stripedResults = removeUnusedElements(results, keepLablesInJSONArray);
 		stripedResults = trimUrls(stripedResults, urlLabel);
 
 		return stripedResults;
@@ -114,8 +114,6 @@ public final class JSONUtil {
 				JSONObject jObj = new JSONObject();
 				for (String key : keyNodes) {
 					String value = (String) results.getJSONObject(i).get(key);
-					
-					logger.info("JSONObject["+ i +"] - Removing Element \""+key+"\" from JSON-Object");
 					jObj.put(key, value);
 				}
 				
@@ -133,42 +131,33 @@ public final class JSONUtil {
 	 * e.g. "Url" -> "url"
 	 * 
 	 * @param results
-	 * @param keyNodeMap
+	 * @param renameLabelMap
 	 * @return JSONArray
 	 */
-	public static JSONArray keyNodeMapper(JSONArray results, Map<String,String> keyNodeMap) {
-		JSONArray standardizedJSONSet = new JSONArray();
-		
-		//go through all returned results and JSON elements
-		for(int i = 0; i < results.length(); i++){
-			// get the corresponding JSON Object
-			JSONObject customerDetailObj = results.getJSONObject(i);
+	public static JSONArray keyNodeMapper(JSONArray results, Map<String,String> renameLabelMap) {
+		JSONArray standardizedResults = new JSONArray();
+		if (results != null) {
 			
-			// go through all key and detauls such as url, title, desc, ...
-			for(int j = 0; j < customerDetailObj.length(); j++){
-				Iterator<Entry<String, String>> it = keyNodeMap.entrySet().iterator();
+			// strip everything from array
+			for (int i = 0; i < results.length(); i++) {	
 				
-				// replace every key in the array with a new defined key in de keyNodeMap
-				while(it.hasNext()){
-					Map.Entry<String, String> entry = (Map.Entry<String, String>) it.next();
+				JSONObject customerDetailObject = results.getJSONObject(i);
+				JSONObject jObjContainer = new JSONObject();
+				
+				for (int j = 0; j < customerDetailObject.length(); j++) {
 					
-					String oldKey = entry.getKey();
-					String newKey = entry.getValue();
-					String value = customerDetailObj.getString(oldKey);
-					
-					logger.info("Old Key \"" + oldKey + "\" will be replaced with \"" +newKey+"\"");
-					
-					// replace every key
-					customerDetailObj.remove(oldKey);
-					customerDetailObj.put(newKey, value);
-					
-					it.remove();
-					
-					standardizedJSONSet.put(customerDetailObj);
+					for(Entry<String, String> entry : renameLabelMap.entrySet()){
+						String oldKey = entry.getKey();
+						String newKey = entry.getValue();
+						String value = customerDetailObject.getString(oldKey);
+						
+						jObjContainer.put(newKey, value);
+					}
 				}
+				
+				standardizedResults.put(jObjContainer);
 			}
 		}
-		
-		return standardizedJSONSet;
+		return standardizedResults;
 	}
 }

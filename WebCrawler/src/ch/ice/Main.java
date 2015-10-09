@@ -22,7 +22,7 @@ public class Main {
 		MainController main = new MainController();
 		try {
 			main.startMainController();
-		} catch (InternalFormatException | MissingCustomerRowsException e) {
+		} catch (InternalFormatException | MissingCustomerRowsException | InterruptedException e) {
 			logger.error(e.getMessage());
 		}
 	}

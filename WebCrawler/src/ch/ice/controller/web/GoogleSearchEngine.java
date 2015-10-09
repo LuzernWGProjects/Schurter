@@ -8,10 +8,13 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
@@ -19,25 +22,47 @@ import org.json.JSONObject;
 
 import ch.ice.controller.interf.SearchEngine;
 import ch.ice.exceptions.NoUrlFoundException;
+import ch.ice.utils.JSONStandardizedKeys;
 import ch.ice.utils.JSONUtil;
 
 public class GoogleSearchEngine implements SearchEngine {
-	
+
 	private static final Logger logger = LogManager.getLogger(GoogleSearchEngine.class.getName());
 
 	public JSONArray search(String requestedQuery, int limitSearchResult) throws NoUrlFoundException {
 		try {
+			
+			String accountKey = "";
+			String config_cx = "";
+			String retreiveFields = "";
+			
+	    	PropertiesConfiguration config;
+	    	
+	    	/*
+			 * Load Configuration File
+			 */
+			try {
+				config = new PropertiesConfiguration("conf/app.properties");
+				
+				accountKey = config.getString("searchEngine.google.accountKey");
+				config_cx = config.getString("searchEngine.google.cx");
+				retreiveFields = config.getString("searchEngine.google.retreiveFields");
+				
+			} catch (ConfigurationException e) {
+				System.out.println(e.getLocalizedMessage());
+				e.printStackTrace();
+			}
 
 			String charset = Charset.defaultCharset().name();
 
-			final String apiKey = URLEncoder.encode("AIzaSyCA4F-ffoVrV-DP4bGK7hHwjnPdrAk-6Jg", charset);
-			final String cx =  URLEncoder.encode("012938936336043454826:yfrotl5pxqu", charset);
+			final String apiKey = URLEncoder.encode(accountKey, charset);
+			final String cx =  URLEncoder.encode(config_cx, charset);
 
 			/*
 			 * for field options check:
 			 * https://developers.google.com/apis-explorer/?hl=de#p/customsearch/v1/search.cse.list
 			 */
-			final String fields =  URLEncoder.encode("items(link,title),searchInformation/searchTime", charset);
+			final String fields =  URLEncoder.encode(retreiveFields, charset);
 			final String googleHost =  URLEncoder.encode("google.com", charset);
 			int searchResultsLimit = limitSearchResult;
 
@@ -50,7 +75,7 @@ public class GoogleSearchEngine implements SearchEngine {
 				searchResultsLimit = 10;
 			}
 
-			String googleSearchUrl = "https://www.googleapis.com/customsearch/v1?q="+ requestedQuery +"&key="+ apiKey +"&cx="+ cx +"&googlehost="+ googleHost +"&fields="+ fields+"&num="+searchResultsLimit;
+			String googleSearchUrl = "https://www.googleapis.com/customsearch/v1?q="+ requestedQuery +"&key="+ apiKey +"&cx="+ cx +"&googlehost="+ googleHost +"&fields="+ fields+"&num="+limitSearchResult;
 			logger.info("Lookup Google with request URL: "+googleSearchUrl);
 
 			URL url = new URL(googleSearchUrl);
@@ -74,18 +99,29 @@ public class GoogleSearchEngine implements SearchEngine {
 			if(resultsLength < 1) 
 				throw new NoUrlFoundException("The Search engine delivered " +resultsLength+ " results for ["+requestedQuery+"]. Please change your query");
 
+			// remove unused Elements trim url
+			JSONUtil.keepLablesInJSONArray = new ArrayList<String>(
+					// default ones for bing
+					Arrays.asList(
+							"link",
+							"title"
+							)
+			);
+			
+			JSONUtil.urlLabel = "link";
 
+			googleSarchResults = JSONUtil.cleanUp(googleSarchResults);
+
+			// standardize elements
 			Map<String, String> keyNodeMap = new HashMap<String,String>();
-			keyNodeMap.put("link", "url");
+			keyNodeMap.put("link", JSONStandardizedKeys.URL);
+			keyNodeMap.put("title", JSONStandardizedKeys.TITLE);
 
-			JSONArray stdJson = this.standardizer(googleSarchResults, keyNodeMap);
+			googleSarchResults = this.standardizer(googleSarchResults, keyNodeMap);
 
-			// Remove unused labels
-			JSONUtil.keyNodes = new ArrayList<String>(
-					// remove none - can be done in the google api doc
-					);
 
-			return JSONUtil.cleanUp(stdJson);
+
+			return googleSarchResults;
 
 		} catch (IOException e) {
 			e.printStackTrace();
