@@ -50,7 +50,7 @@ public class MainController {
 	// search engine
 	private static String searchEngineIdentifier = SearchEngineFactory.BING;
 	private static SearchEngine searchEngine;
-	private Integer limitSearchResults = 4;
+	private Integer limitSearchResults = 8;
 	public static URL defaultUrl;
 	public static boolean isSearchAvail;
 
@@ -212,10 +212,10 @@ public class MainController {
 					+ s4.getSearchList().size());
 
 			customerList.clear();
-			customerList.addAll(s4.getSearchList());
-			customerList.addAll(s3.getSearchList());
-			customerList.addAll(s2.getSearchList());
 			customerList.addAll(s1.getSearchList());
+			customerList.addAll(s2.getSearchList());
+			customerList.addAll(s3.getSearchList());
+			customerList.addAll(s4.getSearchList());
 		}
 		// customerList.addAll(s2.getSearchList());
 		// customerList.addAll(s3.getSearchList());
@@ -359,9 +359,10 @@ public class MainController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.out.println("FEHLER!!!!!!!");
 		}
 
-		return null;
+		return defaultUrl;
 	}
 
 	/**
