@@ -34,7 +34,6 @@ public class GoogleSearchEngine implements SearchEngine {
 			
 			String accountKey = "";
 			String config_cx = "";
-			String retreiveFields = "";
 			
 	    	PropertiesConfiguration config;
 	    	
@@ -46,7 +45,6 @@ public class GoogleSearchEngine implements SearchEngine {
 				
 				accountKey = config.getString("searchEngine.google.accountKey");
 				config_cx = config.getString("searchEngine.google.cx");
-				retreiveFields = config.getString("searchEngine.google.retreiveFields");
 				
 			} catch (ConfigurationException e) {
 				System.out.println(e.getLocalizedMessage());
@@ -62,19 +60,18 @@ public class GoogleSearchEngine implements SearchEngine {
 			 * for field options check:
 			 * https://developers.google.com/apis-explorer/?hl=de#p/customsearch/v1/search.cse.list
 			 */
-			final String fields =  URLEncoder.encode(retreiveFields, charset);
+			final String fields =  URLEncoder.encode("items(link,title),searchInformation/searchTime", charset);
 			final String googleHost =  URLEncoder.encode("google.com", charset);
-			int searchResultsLimit = limitSearchResult;
-
+			
 			requestedQuery = URLEncoder.encode(requestedQuery, charset);
 
 			// google only ever returns max 10 results
-			if(searchResultsLimit < 1){
-				searchResultsLimit = 1;
-			} else if(searchResultsLimit > 10){
-				searchResultsLimit = 10;
+			if(limitSearchResult <= 1){
+				limitSearchResult = 1;
+			} else if(limitSearchResult >= 10){
+				limitSearchResult = 10;
 			}
-
+			
 			String googleSearchUrl = "https://www.googleapis.com/customsearch/v1?q="+ requestedQuery +"&key="+ apiKey +"&cx="+ cx +"&googlehost="+ googleHost +"&fields="+ fields+"&num="+limitSearchResult;
 			logger.info("Lookup Google with request URL: "+googleSearchUrl);
 
