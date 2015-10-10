@@ -62,15 +62,14 @@ public class GoogleSearchEngine implements SearchEngine {
 			 */
 			final String fields =  URLEncoder.encode("items(link,title),searchInformation/searchTime", charset);
 			final String googleHost =  URLEncoder.encode("google.com", charset);
-			int searchResultsLimit = limitSearchResult;
-
+			
 			requestedQuery = URLEncoder.encode(requestedQuery, charset);
 
 			// google only ever returns max 10 results
-			if(searchResultsLimit < 1){
-				searchResultsLimit = 1;
-			} else if(searchResultsLimit > 10){
-				searchResultsLimit = 10;
+			if(limitSearchResult <= 1){
+				limitSearchResult = 1;
+			} else if(limitSearchResult >= 10){
+				limitSearchResult = 10;
 			}
 			
 			String googleSearchUrl = "https://www.googleapis.com/customsearch/v1?q="+ requestedQuery +"&key="+ apiKey +"&cx="+ cx +"&googlehost="+ googleHost +"&fields="+ fields+"&num="+limitSearchResult;
