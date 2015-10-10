@@ -61,8 +61,8 @@ public class ResultAnalyzer {
 			
 			//extract the url, title and the desc
 			String url = (String) singleResult.get(JSONStandardizedKeys.URL);
-			String title = (String) singleResult.get(JSONStandardizedKeys.TITLE);
-			String desc = (String) singleResult.get(JSONStandardizedKeys.DESCRIPTION);
+//			String title = (String) singleResult.get(JSONStandardizedKeys.TITLE);
+//			String desc = (String) singleResult.get(JSONStandardizedKeys.DESCRIPTION);
 			
 			/* ******************************************
 			 * Pre-processing for further analysis 
