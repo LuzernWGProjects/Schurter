@@ -31,7 +31,7 @@ public class ResultAnalyzer {
 	static URI uri;
 	private static final Logger logger = LogManager
 			.getLogger(MainController.class.getName());
-	static public double[] candidatesArray ;
+	//static public double[] candidatesArray ;
 	
 	/**
 	 * Method to analyze which received result suits the best
@@ -43,6 +43,7 @@ public class ResultAnalyzer {
 	 */
 	public static JSONObject analyse(JSONArray results, List<String> parameters)
 	{
+		double[] candidatesArray ;
 		System.out.println("Laenge: "+results.length()+";");
 		
 		//initlayze candiatesArray for decision making
@@ -61,8 +62,9 @@ public class ResultAnalyzer {
 			
 			//extract the url, title and the desc
 			String url = (String) singleResult.get(JSONStandardizedKeys.URL);
-//			String title = (String) singleResult.get(JSONStandardizedKeys.TITLE);
-//			String desc = (String) singleResult.get(JSONStandardizedKeys.DESCRIPTION);
+		//	if(singleResult.get())
+		//	String title = (String) singleResult.get(JSONStandardizedKeys.TITLE);
+		//	String desc = (String) singleResult.get(JSONStandardizedKeys.DESCRIPTION);
 			
 			/* ******************************************
 			 * Pre-processing for further analysis 
@@ -132,8 +134,8 @@ public class ResultAnalyzer {
 				}
 				//if the company name contains more than 1 word...
 				if(singleWords.length > 1)
-				{	//does the url any other word of the name?
-					for (int j = 0; j < singleURLWords.length -1; j++) {
+				{	//does the url any other word of the name? TODO: check if length - 1 must be implemented!
+					for (int j = 0; j < singleWords.length -1; j++) {
 						if(host.contains(singleWords[j]))
 						{
 							candidatesArray[i] = candidatesArray[i]+(1*0.1);
