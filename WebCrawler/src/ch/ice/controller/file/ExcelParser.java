@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.EncryptedDocumentException;
@@ -41,9 +40,6 @@ public class ExcelParser implements Parser {
 	private int currentRowCount;
 
 	private List<Customer> customerList = new ArrayList<Customer>();
-
-	private PropertiesConfiguration config;
-
 	private Workbook wb;
 
 	// Customer Fields
@@ -68,7 +64,10 @@ public class ExcelParser implements Parser {
 
 		// set file to private access only
 		this.file = file;
-		return this.readFile();
+		ExcelFileToRead = new FileInputStream(this.file);
+		this.wb = WorkbookFactory.create(ExcelFileToRead);
+
+		return this.readFile(this.wb);
 	}
 
 	/**
@@ -81,11 +80,8 @@ public class ExcelParser implements Parser {
 	 * @throws InternalFormatException
 	 * @throws MissingCustomerRowsException
 	 */
-	private List<Customer> readFile() throws EncryptedDocumentException, InvalidFormatException, IOException, InternalFormatException, MissingCustomerRowsException {
-		ExcelFileToRead = new FileInputStream(this.file);
-
-		this.wb = WorkbookFactory.create(ExcelFileToRead);
-
+	public List<Customer> readFile(Workbook wb) throws EncryptedDocumentException, InvalidFormatException, IOException, InternalFormatException, MissingCustomerRowsException {
+		this.wb = wb;
 		// load first sheet in File
 		Sheet sheet = this.wb.getSheetAt(0);
 
@@ -127,6 +123,7 @@ public class ExcelParser implements Parser {
 				this.headerInfos.add(this.countryNameHeader);
 				this.headerInfos.add(this.zipCodeHeader);
 				this.headerInfos.add(this.customerNameShortHeader);
+				this.headerInfos.add("");
 				this.headerInfos.add(this.customerNameHeader);
 
 				continue;

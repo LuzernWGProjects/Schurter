@@ -1,40 +1,39 @@
 package ch.ice.controller.file;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import au.com.bytecode.opencsv.CSVReader;
 import ch.ice.controller.interf.Parser;
+import ch.ice.exceptions.InternalFormatException;
 import ch.ice.exceptions.MissingCustomerRowsException;
 import ch.ice.model.Customer;
-import ch.ice.model.Website;
 
 public class CSVParser implements Parser{
 	private static final Logger logger = LogManager.getLogger(CSVParser.class.getName());
 
-	private static org.apache.commons.csv.CSVParser parser;
-
 	private File CSVFileToRead;
 	private int physicalRowCount;
 	private int currentRowCount;
+	private Workbook wb;
 
 	// file internals
 	private List<String> headerInfos = new ArrayList<String>();
 
-	private List<Customer> customerList = new ArrayList<Customer>();
-
-
 	@Override
-	public List<Customer> readFile(File file) throws IOException, MissingCustomerRowsException {
+	public List<Customer> readFile(File file) throws IOException, MissingCustomerRowsException, EncryptedDocumentException, InvalidFormatException, InternalFormatException {
 		// set file access to private
 		this.CSVFileToRead = file;
 		return this.readFile();
@@ -42,66 +41,40 @@ public class CSVParser implements Parser{
 
 
 	/**
-	 * Read customer from CSV File
+	 * Read customer from CSV File and covert it to XSSF standard (EXCEL)
 	 * @return List<Customer> customer list
 	 * @throws IOException
 	 * @throws MissingCustomerRowsException 
+	 * @throws InternalFormatException 
+	 * @throws InvalidFormatException 
+	 * @throws EncryptedDocumentException 
 	 */
-	private List<Customer> readFile() throws IOException, MissingCustomerRowsException {
-		Reader in = new BufferedReader(new FileReader(this.CSVFileToRead));
+	private List<Customer> readFile() throws IOException, MissingCustomerRowsException, EncryptedDocumentException, InvalidFormatException, InternalFormatException {
+		String[] nextLine;
+		CSVReader reader = new CSVReader(new FileReader(this.CSVFileToRead),';');
 
-		CSVParser.parser = CSVFormat.DEFAULT.parse(in);
+		this.wb =  new XSSFWorkbook();
+		Sheet sheet = this.wb.createSheet("POS Customer ID");
 
-		List<CSVRecord> records = CSVParser.parser.getRecords();
-
-		this.setTotalDataSets(records.size() - 3);
-		if(records.size() - 3 == 0)
-			throw new MissingCustomerRowsException("There are no rendered Customers. Please make sure customers start on row number 4.");
-
-		for (int i = 0; i < records.size(); i++) {
-			CSVRecord record = records.get(i);
-
-			// skip unused rows
-			if(record.getRecordNumber() <= 2) continue;
-
-
-			// gather csv headers
-			if(record.getRecordNumber() == 3){
-				String headerRecord = record.get(0);
-
-				String[] headerValues = headerRecord.split(";(?=([^\"]*\"[^\"]*\")*[^\"]*$)", 8);
-				//System.out.println(headerRecord);
-
-				for (String cellValue : headerValues) {
-					//System.out.println("value: "+cellValue);
-					this.headerInfos.add(cellValue);
-				}
-
-				continue;
+		int RowNum=0;
+		while ((nextLine = reader.readNext()) != null)
+		{
+			Row currentRow = sheet.createRow(RowNum++);
+			for(int i=0; i<nextLine.length; i++){
+				currentRow.createCell(i).setCellValue(nextLine[i]);
 			}
-
-			// retrieve all customer infos
-			String customerRecord = record.get(0);
-			String[] customerValues = customerRecord.split(";(?=([^\"]*\"[^\"]*\")*[^\"]*$)", 8);
-
-			// create customer
-			Customer c = new Customer();
-			c.setId(customerValues[0]);
-			c.setCountryCode(customerValues[1]);
-			c.setCountryName(customerValues[2]);
-			c.setZipCode(customerValues[3]);
-			c.setShortName(customerValues[4]);
-			c.setFullName(customerValues[6]);
-
-			c.setWebsite(new Website());
-
-
-			this.customerList.add(c);
 		}
+		reader.close();
+		
+		logger.info("Convert CSV File to Excel file.");
+		
+		ExcelParser excelParser = new ExcelParser();
+		List<Customer> customerList = excelParser.readFile(wb);
 
-		logger.info("Rendered Customers from CSV File ("+this.CSVFileToRead.getName()+"): "+this.customerList.size());
-
-		return this.customerList;
+		setCurrentRow(excelParser.getCurrentRow());
+		setTotalDataSets(excelParser.getTotalDataSets());		
+		
+		return customerList;
 	}
 
 	/**
@@ -114,6 +87,10 @@ public class CSVParser implements Parser{
 		return this.headerInfos;
 	}
 
+	@Override
+	public Workbook getWorkbook(){
+		return this.wb;
+	}
 
 	@Override
 	public void setTotalDataSets(int totalRows) {

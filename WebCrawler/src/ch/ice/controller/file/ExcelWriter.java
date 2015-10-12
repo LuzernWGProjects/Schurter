@@ -64,7 +64,7 @@ public class ExcelWriter implements Writer {
 	@Override
 	public void writeFile(List<Customer> customerList, Parser fileParserInstance) throws IOException {
 		// convert Parser to actual excelParser. We need getWorkbook() here.
-		ExcelParser excelParser = (ExcelParser) fileParserInstance;
+		Parser excelParser = fileParserInstance;
 
 		// get existing workbook and sheet
 		this.workbook = excelParser.getWorkbook();
