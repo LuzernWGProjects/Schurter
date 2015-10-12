@@ -188,8 +188,7 @@ public class ExcelParser implements Parser {
 		}
 
 		if (this.customerList.size() < 1)
-			throw new MissingCustomerRowsException(
-					"There are no rendered Customers. Please make sure customers start on row number 4.");
+			throw new MissingCustomerRowsException("There are no rendered Customers. Please make sure customers start on row number 4.");
 
 		logger.info("Rendered Customers from List: " + this.customerList.size());
 		return this.customerList;

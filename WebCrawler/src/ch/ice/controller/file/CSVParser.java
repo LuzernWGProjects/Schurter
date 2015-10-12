@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.ice.controller.interf.Parser;
+import ch.ice.exceptions.MissingCustomerRowsException;
 import ch.ice.model.Customer;
 import ch.ice.model.Website;
 
@@ -33,7 +34,7 @@ public class CSVParser implements Parser{
 
 
 	@Override
-	public List<Customer> readFile(File file) throws IOException {
+	public List<Customer> readFile(File file) throws IOException, MissingCustomerRowsException {
 		// set file access to private
 		this.CSVFileToRead = file;
 		return this.readFile();
@@ -44,8 +45,9 @@ public class CSVParser implements Parser{
 	 * Read customer from CSV File
 	 * @return List<Customer> customer list
 	 * @throws IOException
+	 * @throws MissingCustomerRowsException 
 	 */
-	private List<Customer> readFile() throws IOException {
+	private List<Customer> readFile() throws IOException, MissingCustomerRowsException {
 		Reader in = new BufferedReader(new FileReader(this.CSVFileToRead));
 
 		CSVParser.parser = CSVFormat.DEFAULT.parse(in);
@@ -53,6 +55,8 @@ public class CSVParser implements Parser{
 		List<CSVRecord> records = CSVParser.parser.getRecords();
 
 		this.setTotalDataSets(records.size() - 3);
+		if(records.size() - 3 == 0)
+			throw new MissingCustomerRowsException("There are no rendered Customers. Please make sure customers start on row number 4.");
 
 		for (int i = 0; i < records.size(); i++) {
 			CSVRecord record = records.get(i);
