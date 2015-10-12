@@ -5,13 +5,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.EncryptedDocumentException;
@@ -36,92 +33,46 @@ import ch.ice.model.Website;
  */
 
 public class ExcelParser implements Parser {
-	private static final Logger logger = LogManager.getLogger(ExcelParser.class
-			.getName());
+	private static final Logger logger = LogManager.getLogger(ExcelParser.class.getName());
 
 	private File file;
 	private InputStream ExcelFileToRead;
-	private List<String> allowedFileExtensions = new ArrayList<String>();
 	private int physicalRowCount;
 	private int currentRowCount;
 
-	List<Customer> customerList = new ArrayList<Customer>();
+	private List<Customer> customerList = new ArrayList<Customer>();
 
-	PropertiesConfiguration config;
+	private PropertiesConfiguration config;
 
-	Workbook wb;
+	private Workbook wb;
 
 	// Customer Fields
 	// headers from File
-	List<String> headerInfos = new ArrayList<String>();
-	String customerIDHeader;
-	String countryNameHeader;
-	String zipCodeHeader;
-	String customerNameShortHeader;
-	String customerNameHeader;
+	private List<String> headerInfos = new ArrayList<String>();
+	private String customerIDHeader;
+	private String countryNameHeader;
+	private String zipCodeHeader;
+	private String customerNameShortHeader;
+	private String customerNameHeader;
 
 	// customer data
-	String customerID;
-	String customerCountryCode;
-	String country;
-	String zipCode;
-	String customerFullName;
-	String custonerShortName;
-
-	public ExcelParser() {
-
-		// load config file
-		try {
-			this.config = new PropertiesConfiguration("conf/app.properties");
-
-			// get all allowed file extensions (xls,xlsx,csv)
-			this.allowedFileExtensions = Arrays.asList(this.config
-					.getStringArray("parser.allowedFileExtensions"));
-		} catch (ConfigurationException e) {
-			System.out.println(e.getLocalizedMessage());
-			e.printStackTrace();
-		}
-	}
+	private String customerID;
+	private String customerCountryCode;
+	private String country;
+	private String zipCode;
+	private String customerFullName;
+	private String custonerShortName;
 
 	@Override
-	public List<Customer> readFile(File file)
-			throws IllegalFileExtensionException, EncryptedDocumentException,
-			InvalidFormatException, IOException, InternalFormatException,
-			MissingCustomerRowsException {
+	public List<Customer> readFile(File file) throws IllegalFileExtensionException, EncryptedDocumentException,	InvalidFormatException, IOException, InternalFormatException, MissingCustomerRowsException {
 
 		// set file to private access only
 		this.file = file;
-
-		// check if it is an XLS file or a XLSX file
-		String fileExtension = FilenameUtils.getExtension(file.getName())
-				.toLowerCase();
-
-		// check for all allowed file extensions
-		if (!this.allowedFileExtensions.contains(fileExtension)) {
-			logger.error("Wrong Fileextension: " + fileExtension + "; Only "
-					+ this.allowedFileExtensions.toString() + " allowed.");
-
-			throw new IllegalFileExtensionException(
-					"Wrong file Extension. Please only use "
-							+ this.allowedFileExtensions.toString());
-		}
-
-		switch (fileExtension) {
-		case "xlsx":
-		case "xls":
-			return this.readFile();
-
-		case "cvs":
-			// return readCVSFile();
-			break;
-		}
-
-		return null;
+		return this.readFile();
 	}
 
 	/**
-	 * Read a File and ingnore file format (xls, xlsx). Due to the ss usermodel
-	 * and generic handling.
+	 * Parse a given xlsx or xls File and create new customers
 	 * 
 	 * @return LinkedList<Customer>
 	 * @throws EncryptedDocumentException
@@ -130,9 +81,7 @@ public class ExcelParser implements Parser {
 	 * @throws InternalFormatException
 	 * @throws MissingCustomerRowsException
 	 */
-	private List<Customer> readFile() throws EncryptedDocumentException,
-			InvalidFormatException, IOException, InternalFormatException,
-			MissingCustomerRowsException {
+	private List<Customer> readFile() throws EncryptedDocumentException, InvalidFormatException, IOException, InternalFormatException, MissingCustomerRowsException {
 		ExcelFileToRead = new FileInputStream(this.file);
 
 		this.wb = WorkbookFactory.create(ExcelFileToRead);
@@ -202,7 +151,7 @@ public class ExcelParser implements Parser {
 					this.customerID = this.checkForCellType(cell);
 					break;
 
-				// country Code
+					// country Code
 				case 1:
 					this.customerCountryCode = this.checkForCellType(cell);
 
@@ -211,17 +160,17 @@ public class ExcelParser implements Parser {
 					this.country = this.checkForCellType(cell);
 					break;
 
-				// Zip code
+					// Zip code
 				case 3:
 					this.zipCode = this.checkForCellType(cell);
 					break;
 
-				// customer name short
+					// customer name short
 				case 4:
 					this.custonerShortName = this.checkForCellType(cell);
 					break;
 
-				// empty cell
+					// empty cell
 				case 5:
 					continue;
 

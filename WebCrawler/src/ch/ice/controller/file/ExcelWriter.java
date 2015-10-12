@@ -47,7 +47,6 @@ public class ExcelWriter implements Writer {
 	private int cellnum;
 	private int rownum;
 	private int mapCellNum;
-	private Row headerRow;
 	private Configuration config;
 	public static String fileName;
 	CellStyle style = null;
