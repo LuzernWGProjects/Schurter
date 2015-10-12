@@ -369,8 +369,12 @@ public class MainController {
 
 		// TODO: implement CVS Writer if user chooses to do so. Basically just
 		// if excel->excelWriter; csv->csvWriter
-		Writer fileWriter = FileWriterFactory
-				.requestFileWriter(FileWriterFactory.EXCEL);
+		Writer fileWriter = null;
+		try {
+			fileWriter = FileWriterFactory.requestFileWriter(FileWriterFactory.EXCEL);
+		} catch (FileParserNotAvailableException e) {
+			e.printStackTrace();
+		}
 
 		fileWriter.writeFile(enhancedCustomerList, MainController.fileParser);
 	}
