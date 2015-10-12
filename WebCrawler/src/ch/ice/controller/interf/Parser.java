@@ -22,6 +22,8 @@ public interface Parser {
 	// input can either be a Excel File or a CSV file
 	public List<Customer> readFile(File file) throws IOException, IllegalFileExtensionException, EncryptedDocumentException, InvalidFormatException, InternalFormatException, MissingCustomerRowsException;
 
+	public List<String> getCellHeaders();
+	
 	// progress bar and statistic stuff
 	public void setTotalDataSets(int totalRows); // Updated once
 
