@@ -62,6 +62,7 @@ public class MainController {
 
 	// file Parser
 	private static Parser fileParser;
+	public static Writer fileWriter = null;
 
 	/**
 	 * This is the main controller. From here the whole program gets controlled.
@@ -369,13 +370,20 @@ public class MainController {
 
 		// TODO: implement CVS Writer if user chooses to do so. Basically just
 		// if excel->excelWriter; csv->csvWriter
-		Writer fileWriter = null;
+
 		try {
-			fileWriter = FileWriterFactory.requestFileWriter(FileWriterFactory.EXCEL);
+			fileWriter = FileWriterFactory.requestFileWriter(FileWriterFactory.CSV);
 		} catch (FileParserNotAvailableException e) {
 			e.printStackTrace();
 		}
 
-		fileWriter.writeFile(enhancedCustomerList, MainController.fileParser);
+		try {
+			
+			fileWriter.writeFile(enhancedCustomerList, MainController.fileParser);
+		} catch (IOException e) {
+			// TODO Throw this to gui!!!!!!!!!!!!!!!!!!!!!!!!!
+			e.printStackTrace();
+			
+		}
 	}
 }

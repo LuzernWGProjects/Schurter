@@ -1,5 +1,6 @@
 package ch.ice.controller.interf;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Workbook;
@@ -14,6 +15,6 @@ public interface Writer {
 	 *
 	 * @param list
 	 */
-	public  void writeFile(List<Customer> customerList, Parser fileParserInstance);
+	public  void writeFile(List<Customer> customerList, Parser fileParserInstance) throws IOException;
 
 }
