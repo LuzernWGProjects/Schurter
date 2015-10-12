@@ -42,12 +42,7 @@ public class ResultAnalyzerTest {
 		
 		params = new ArrayList<String>();
 		params.add(c1.getFullName().toLowerCase());
-		try {
-			this.searechengine = SearchEngineFactory.requestSearchEngine(SearchEngineFactory.BING);
-		} catch (SearchEngineNotAvailableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		this.searechengine = SearchEngineFactory.requestSearchEngine(SearchEngineFactory.BING);
 	}
 	
 	/**

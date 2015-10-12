@@ -26,12 +26,7 @@ public class GoogleWebTest {
 	@Test
 	public void startWebTestGoogle()
 	{
-				try {
-					searchEngine = SearchEngineFactory.requestSearchEngine(searchEngineIdentifier);
-				} catch (SearchEngineNotAvailableException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				searchEngine = SearchEngineFactory.requestSearchEngine(searchEngineIdentifier);
 				
 				int numOfResults = 5;
 				ResultAnalyzerTest google = new ResultAnalyzerTest();

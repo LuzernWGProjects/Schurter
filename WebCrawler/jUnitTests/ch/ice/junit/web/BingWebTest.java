@@ -27,12 +27,9 @@ public class BingWebTest {
 	@Test
 	public void startWebTestBing() {
 
-		try {
+	
 			searchEngine = SearchEngineFactory.requestSearchEngine(searchEngineIdentifier);
-		} catch (SearchEngineNotAvailableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
 		
 		int numOfResults = 5;
 		ResultAnalyzerTest bing = new ResultAnalyzerTest();
