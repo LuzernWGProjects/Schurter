@@ -68,7 +68,10 @@ public class ExcelParser implements Parser {
 
 		// set file to private access only
 		this.file = file;
-		return this.readFile();
+		ExcelFileToRead = new FileInputStream(this.file);
+		this.wb = WorkbookFactory.create(ExcelFileToRead);
+		
+		return this.readFile(this.wb);
 	}
 
 	/**
@@ -81,11 +84,8 @@ public class ExcelParser implements Parser {
 	 * @throws InternalFormatException
 	 * @throws MissingCustomerRowsException
 	 */
-	private List<Customer> readFile() throws EncryptedDocumentException, InvalidFormatException, IOException, InternalFormatException, MissingCustomerRowsException {
-		ExcelFileToRead = new FileInputStream(this.file);
-
-		this.wb = WorkbookFactory.create(ExcelFileToRead);
-
+	public List<Customer> readFile(Workbook wb) throws EncryptedDocumentException, InvalidFormatException, IOException, InternalFormatException, MissingCustomerRowsException {
+		this.wb = wb;
 		// load first sheet in File
 		Sheet sheet = this.wb.getSheetAt(0);
 
@@ -127,6 +127,7 @@ public class ExcelParser implements Parser {
 				this.headerInfos.add(this.countryNameHeader);
 				this.headerInfos.add(this.zipCodeHeader);
 				this.headerInfos.add(this.customerNameShortHeader);
+				this.headerInfos.add("");
 				this.headerInfos.add(this.customerNameHeader);
 
 				continue;
