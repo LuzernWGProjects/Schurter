@@ -97,13 +97,8 @@ public class MainController {
 		}
 
 		// request new SearchEngine
-		try {
-			MainController.searchEngine = SearchEngineFactory
-					.requestSearchEngine(MainController.searchEngineIdentifier);
-			logger.info("Starting " + searchEngine.getClass().getName());
-		} catch (SearchEngineNotAvailableException e1) {
-			logger.error(e1.getMessage());
-		}
+		MainController.searchEngine = SearchEngineFactory.requestSearchEngine(MainController.searchEngineIdentifier);
+		logger.info("Starting " + searchEngine.getClass().getName());
 
 		stopwatch = new StopWatch();
 		stopwatch.start();
