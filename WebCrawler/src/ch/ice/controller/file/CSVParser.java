@@ -1,14 +1,11 @@
 package ch.ice.controller.file;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.csv.CSVFormat;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.EncryptedDocumentException;
@@ -27,8 +24,6 @@ import ch.ice.model.Customer;
 public class CSVParser implements Parser{
 	private static final Logger logger = LogManager.getLogger(CSVParser.class.getName());
 
-	private static org.apache.commons.csv.CSVParser parser;
-
 	private File CSVFileToRead;
 	private int physicalRowCount;
 	private int currentRowCount;
@@ -36,9 +31,6 @@ public class CSVParser implements Parser{
 
 	// file internals
 	private List<String> headerInfos = new ArrayList<String>();
-
-	private List<Customer> customerList = new ArrayList<Customer>();
-
 
 	@Override
 	public List<Customer> readFile(File file) throws IOException, MissingCustomerRowsException, EncryptedDocumentException, InvalidFormatException, InternalFormatException {
@@ -58,13 +50,9 @@ public class CSVParser implements Parser{
 	 * @throws EncryptedDocumentException 
 	 */
 	private List<Customer> readFile() throws IOException, MissingCustomerRowsException, EncryptedDocumentException, InvalidFormatException, InternalFormatException {
-		Reader in = new BufferedReader(new FileReader(this.CSVFileToRead));
-
-		CSVParser.parser = CSVFormat.DEFAULT.parse(in);
-		
 		String[] nextLine;
 		CSVReader reader = new CSVReader(new FileReader(this.CSVFileToRead),';');
-		
+
 		this.wb =  new XSSFWorkbook();
 		Sheet sheet = this.wb.createSheet("POS Customer ID");
 
@@ -76,10 +64,13 @@ public class CSVParser implements Parser{
 				currentRow.createCell(i).setCellValue(nextLine[i]);
 			}
 		}
+		reader.close();
+		
+		logger.info("Convert CSV File to Excel file.");
 		
 		ExcelParser excelParser = new ExcelParser();
 		List<Customer> customerList = excelParser.readFile(wb);
-		
+
 		setCurrentRow(excelParser.getCurrentRow());
 		setTotalDataSets(excelParser.getTotalDataSets());		
 		

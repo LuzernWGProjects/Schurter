@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.EncryptedDocumentException;
@@ -41,9 +40,6 @@ public class ExcelParser implements Parser {
 	private int currentRowCount;
 
 	private List<Customer> customerList = new ArrayList<Customer>();
-
-	private PropertiesConfiguration config;
-
 	private Workbook wb;
 
 	// Customer Fields
@@ -70,7 +66,7 @@ public class ExcelParser implements Parser {
 		this.file = file;
 		ExcelFileToRead = new FileInputStream(this.file);
 		this.wb = WorkbookFactory.create(ExcelFileToRead);
-		
+
 		return this.readFile(this.wb);
 	}
 
