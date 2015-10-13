@@ -3,13 +3,13 @@
 		<code>AF</code>
 		<name>Afghanistan</name>
 		<market></market>
-		<tld>af</tld>
+		<tld>com.af</tld>
 	</country>
 	<country>
 		<code>AX</code>
 		<name>Åland Islands</name>
 		<market></market>
-		<tld>ax</tld>
+		<tld></tld>
 	</country>
 	<country>
 		<code>AL</code>
@@ -21,31 +21,31 @@
 		<code>DZ</code>
 		<name>Algeria</name>
 		<market></market>
-		<tld></tld>
+		<tld>dz</tld>
 	</country>
 	<country>
 		<code>AS</code>
 		<name>American Samoa</name>
 		<market></market>
-		<tld></tld>
+		<tld>as</tld>
 	</country>
 	<country>
 		<code>AD</code>
 		<name>Andorra</name>
 		<market></market>
-		<tld></tld>
+		<tld>ad</tld>
 	</country>
 	<country>
 		<code>AO</code>
 		<name>Angola</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.ao</tld>
 	</country>
 	<country>
 		<code>AI</code>
 		<name>Anguilla</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.ai</tld>
 	</country>
 	<country>
 		<code>AQ</code>
@@ -57,19 +57,19 @@
 		<code>AG</code>
 		<name>Antigua and Barbuda</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.ag</tld>
 	</country>
 	<country>
 		<code>AR</code>
 		<name>Argentina</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.ar</tld>
 	</country>
 	<country>
 		<code>AM</code>
 		<name>Armenia</name>
 		<market></market>
-		<tld></tld>
+		<tld>am</tld>
 	</country>
 	<country>
 		<code>AW</code>
@@ -81,37 +81,37 @@
 		<code>AU</code>
 		<name>Australia</name>
 		<market></market>
-		<tld></tld>
+		<tld>au</tld>
 	</country>
 	<country>
 		<code>AT</code>
 		<name>Austria</name>
 		<market></market>
-		<tld></tld>
+		<tld>at</tld>
 	</country>
 	<country>
 		<code>AZ</code>
 		<name>Azerbaijan</name>
 		<market></market>
-		<tld></tld>
+		<tld>az</tld>
 	</country>
 	<country>
 		<code>BS</code>
 		<name>Bahamas</name>
 		<market></market>
-		<tld></tld>
+		<tld>bs</tld>
 	</country>
 	<country>
 		<code>BH</code>
 		<name>Bahrain</name>
 		<market></market>
-		<tld></tld>
+		<tld>bh</tld>
 	</country>
 	<country>
 		<code>BD</code>
 		<name>Bangladesh</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.bd</tld>
 	</country>
 	<country>
 		<code>BB</code>
@@ -123,25 +123,25 @@
 		<code>BY</code>
 		<name>Belarus</name>
 		<market></market>
-		<tld></tld>
+		<tld>by</tld>
 	</country>
 	<country>
 		<code>BE</code>
 		<name>Belgium</name>
 		<market></market>
-		<tld></tld>
+		<tld>be</tld>
 	</country>
 	<country>
 		<code>BZ</code>
 		<name>Belize</name>
 		<market></market>
-		<tld></tld>
+		<tld>bz</tld>
 	</country>
 	<country>
 		<code>BJ</code>
 		<name>Benin</name>
 		<market></market>
-		<tld></tld>
+		<tld>bj</tld>
 	</country>
 	<country>
 		<code>BM</code>
@@ -153,13 +153,13 @@
 		<code>BT</code>
 		<name>Bhutan</name>
 		<market></market>
-		<tld></tld>
+		<tld>bt</tld>
 	</country>
 	<country>
 		<code>BO</code>
 		<name>Bolivia, Plurinational State of</name>
 		<market></market>
-		<tld></tld>
+		<tld>bo</tld>
 	</country>
 	<country>
 		<code>BQ</code>
@@ -171,13 +171,13 @@
 		<code>BA</code>
 		<name>Bosnia and Herzegovina</name>
 		<market></market>
-		<tld></tld>
+		<tld>ba</tld>
 	</country>
 	<country>
 		<code>BW</code>
 		<name>Botswana</name>
 		<market></market>
-		<tld></tld>
+		<tld>bw</tld>
 	</country>
 	<country>
 		<code>BV</code>
@@ -189,13 +189,13 @@
 		<code>BR</code>
 		<name>Brazil</name>
 		<market></market>
-		<tld></tld>
+		<tld>br</tld>
 	</country>
 	<country>
 		<code>IO</code>
 		<name>British Indian Ocean Territory</name>
 		<market></market>
-		<tld></tld>
+		<tld>io</tld>
 	</country>
 	<country>
 		<code>BN</code>
@@ -207,43 +207,43 @@
 		<code>BG</code>
 		<name>Bulgaria</name>
 		<market></market>
-		<tld></tld>
+		<tld>bg</tld>
 	</country>
 	<country>
 		<code>BF</code>
 		<name>Burkina Faso</name>
 		<market></market>
-		<tld></tld>
+		<tld>bf</tld>
 	</country>
 	<country>
 		<code>BI</code>
 		<name>Burundi</name>
 		<market></market>
-		<tld></tld>
+		<tld>bi</tld>
 	</country>
 	<country>
 		<code>KH</code>
 		<name>Cambodia</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.kh</tld>
 	</country>
 	<country>
 		<code>CM</code>
 		<name>Cameroon</name>
 		<market></market>
-		<tld></tld>
+		<tld>cm</tld>
 	</country>
 	<country>
 		<code>CA</code>
 		<name>Canada</name>
 		<market></market>
-		<tld></tld>
+		<tld>ca</tld>
 	</country>
 	<country>
 		<code>CV</code>
 		<name>Cape Verde</name>
 		<market></market>
-		<tld></tld>
+		<tld>cv</tld>
 	</country>
 	<country>
 		<code>KY</code>
@@ -255,25 +255,25 @@
 		<code>CF</code>
 		<name>Central African Republic</name>
 		<market></market>
-		<tld></tld>
+		<tld>cf</tld>
 	</country>
 	<country>
 		<code>TD</code>
 		<name>Chad</name>
 		<market></market>
-		<tld></tld>
+		<tld>td</tld>
 	</country>
 	<country>
 		<code>CL</code>
 		<name>Chile</name>
 		<market></market>
-		<tld></tld>
+		<tld>cl</tld>
 	</country>
 	<country>
 		<code>CN</code>
 		<name>China</name>
 		<market></market>
-		<tld></tld>
+		<tld>cn</tld>
 	</country>
 	<country>
 		<code>CX</code>
@@ -285,13 +285,13 @@
 		<code>CC</code>
 		<name>Cocos (Keeling) Islands</name>
 		<market></market>
-		<tld></tld>
+		<tld>cc</tld>
 	</country>
 	<country>
 		<code>CO</code>
 		<name>Colombia</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.co</tld>
 	</country>
 	<country>
 		<code>KM</code>
@@ -303,25 +303,25 @@
 		<code>CG</code>
 		<name>Congo</name>
 		<market></market>
-		<tld></tld>
+		<tld>cg</tld>
 	</country>
 	<country>
 		<code>CD</code>
 		<name>Congo, the Democratic Republic of the</name>
 		<market></market>
-		<tld></tld>
+		<tld>cd</tld>
 	</country>
 	<country>
 		<code>CK</code>
 		<name>Cook Islands</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.ck</tld>
 	</country>
 	<country>
 		<code>CR</code>
 		<name>Costa Rica</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.cr</tld>
 	</country>
 	<country>
 		<code>CI</code>
@@ -333,13 +333,13 @@
 		<code>HR</code>
 		<name>Croatia</name>
 		<market></market>
-		<tld></tld>
+		<tld>hr</tld>
 	</country>
 	<country>
 		<code>CU</code>
 		<name>Cuba</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.cu</tld>
 	</country>
 	<country>
 		<code>CW</code>
@@ -351,55 +351,55 @@
 		<code>CY</code>
 		<name>Cyprus</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.cy</tld>
 	</country>
 	<country>
 		<code>CZ</code>
 		<name>Czech Republic</name>
 		<market></market>
-		<tld></tld>
+		<tld>cz</tld>
 	</country>
 	<country>
 		<code>DK</code>
 		<name>Denmark</name>
 		<market></market>
-		<tld></tld>
+		<tld>dk</tld>
 	</country>
 	<country>
 		<code>DJ</code>
 		<name>Djibouti</name>
 		<market></market>
-		<tld></tld>
+		<tld>dj</tld>
 	</country>
 	<country>
 		<code>DM</code>
 		<name>Dominica</name>
 		<market></market>
-		<tld></tld>
+		<tld>dm</tld>
 	</country>
 	<country>
 		<code>DO</code>
 		<name>Dominican Republic</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.do</tld>
 	</country>
 	<country>
 		<code>EC</code>
 		<name>Ecuador</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.ec</tld>
 	</country>
 	<country>
 		<code>EG</code>
 		<name>Egypt</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.eg</tld>
 	</country>
 	<country>
 		<code>SV</code>
 		<name>El Salvador</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.sv</tld>
 	</country>
 	<country>
 		<code>GQ</code>
@@ -417,13 +417,13 @@
 		<code>EE</code>
 		<name>Estonia</name>
 		<market></market>
-		<tld></tld>
+		<tld>ee</tld>
 	</country>
 	<country>
 		<code>ET</code>
 		<name>Ethiopia</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.et</tld>
 	</country>
 	<country>
 		<code>FK</code>
@@ -441,25 +441,25 @@
 		<code>FJ</code>
 		<name>Fiji</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.fj</tld>
 	</country>
 	<country>
 		<code>FI</code>
 		<name>Finland</name>
 		<market></market>
-		<tld></tld>
+		<tld>fi</tld>
 	</country>
 	<country>
 		<code>FR</code>
 		<name>France</name>
 		<market></market>
-		<tld></tld>
+		<tld>fr</tld>
 	</country>
 	<country>
 		<code>GF</code>
 		<name>French Guiana</name>
 		<market></market>
-		<tld></tld>
+		<tld>gf</tld>
 	</country>
 	<country>
 		<code>PF</code>
@@ -477,43 +477,43 @@
 		<code>GA</code>
 		<name>Gabon</name>
 		<market></market>
-		<tld></tld>
+		<tld>ga</tld>
 	</country>
 	<country>
 		<code>GM</code>
 		<name>Gambia</name>
 		<market></market>
-		<tld></tld>
+		<tld>gm</tld>
 	</country>
 	<country>
 		<code>GE</code>
 		<name>Georgia</name>
 		<market></market>
-		<tld></tld>
+		<tld>ge</tld>
 	</country>
 	<country>
 		<code>DE</code>
 		<name>Germany</name>
 		<market></market>
-		<tld></tld>
+		<tld>de</tld>
 	</country>
 	<country>
 		<code>GH</code>
 		<name>Ghana</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.gh</tld>
 	</country>
 	<country>
 		<code>GI</code>
 		<name>Gibraltar</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.gi</tld>
 	</country>
 	<country>
 		<code>GR</code>
 		<name>Greece</name>
 		<market></market>
-		<tld></tld>
+		<tld>gr</tld>
 	</country>
 	<country>
 		<code>GL</code>
@@ -531,7 +531,7 @@
 		<code>GP</code>
 		<name>Guadeloupe</name>
 		<market></market>
-		<tld></tld>
+		<tld>gp</tld>
 	</country>
 	<country>
 		<code>GU</code>
@@ -543,19 +543,19 @@
 		<code>GT</code>
 		<name>Guatemala</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.gt</tld>
 	</country>
 	<country>
 		<code>GG</code>
 		<name>Guernsey</name>
 		<market></market>
-		<tld></tld>
+		<tld>gg</tld>
 	</country>
 	<country>
 		<code>GN</code>
 		<name>Guinea</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.pg</tld>
 	</country>
 	<country>
 		<code>GW</code>
@@ -567,13 +567,13 @@
 		<code>GY</code>
 		<name>Guyana</name>
 		<market></market>
-		<tld></tld>
+		<tld>gy</tld>
 	</country>
 	<country>
 		<code>HT</code>
 		<name>Haiti</name>
 		<market></market>
-		<tld></tld>
+		<tld>ht</tld>
 	</country>
 	<country>
 		<code>HM</code>
@@ -591,37 +591,37 @@
 		<code>HN</code>
 		<name>Honduras</name>
 		<market></market>
-		<tld></tld>
+		<tld>hn</tld>
 	</country>
 	<country>
 		<code>HK</code>
 		<name>Hong Kong</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.hk</tld>
 	</country>
 	<country>
 		<code>HU</code>
 		<name>Hungary</name>
 		<market></market>
-		<tld></tld>
+		<tld>hu</tld>
 	</country>
 	<country>
 		<code>IS</code>
 		<name>Iceland</name>
 		<market></market>
-		<tld></tld>
+		<tld>is</tld>
 	</country>
 	<country>
 		<code>IN</code>
 		<name>India</name>
 		<market></market>
-		<tld></tld>
+		<tld>con.in</tld>
 	</country>
 	<country>
 		<code>ID</code>
 		<name>Indonesia</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.id</tld>
 	</country>
 	<country>
 		<code>IR</code>
@@ -633,67 +633,67 @@
 		<code>IQ</code>
 		<name>Iraq</name>
 		<market></market>
-		<tld></tld>
+		<tld>iq</tld>
 	</country>
 	<country>
 		<code>IE</code>
 		<name>Ireland</name>
 		<market></market>
-		<tld></tld>
+		<tld>ie</tld>
 	</country>
 	<country>
 		<code>IM</code>
 		<name>Isle of Man</name>
 		<market></market>
-		<tld></tld>
+		<tld>im</tld>
 	</country>
 	<country>
 		<code>IL</code>
 		<name>Israel</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.il</tld>
 	</country>
 	<country>
 		<code>IT</code>
 		<name>Italy</name>
 		<market></market>
-		<tld></tld>
+		<tld>it</tld>
 	</country>
 	<country>
 		<code>JM</code>
 		<name>Jamaica</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.jm</tld>
 	</country>
 	<country>
 		<code>JP</code>
 		<name>Japan</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.jp</tld>
 	</country>
 	<country>
 		<code>JE</code>
 		<name>Jersey</name>
 		<market></market>
-		<tld></tld>
+		<tld>je</tld>
 	</country>
 	<country>
 		<code>JO</code>
 		<name>Jordan</name>
 		<market></market>
-		<tld></tld>
+		<tld>jo</tld>
 	</country>
 	<country>
 		<code>KZ</code>
 		<name>Kazakhstan</name>
 		<market></market>
-		<tld></tld>
+		<tld>kz</tld>
 	</country>
 	<country>
 		<code>KE</code>
 		<name>Kenya</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.ke</tld>
 	</country>
 	<country>
 		<code>KI</code>
@@ -711,43 +711,43 @@
 		<code>KR</code>
 		<name>Korea, Republic of</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.kr</tld>
 	</country>
 	<country>
 		<code>KW</code>
 		<name>Kuwait</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.kw</tld>
 	</country>
 	<country>
 		<code>KG</code>
 		<name>Kyrgyzstan</name>
 		<market></market>
-		<tld></tld>
+		<tld>kg</tld>
 	</country>
 	<country>
 		<code>LA</code>
 		<name>Lao People's Democratic Republic</name>
 		<market></market>
-		<tld></tld>
+		<tld>la</tld>
 	</country>
 	<country>
 		<code>LV</code>
 		<name>Latvia</name>
 		<market></market>
-		<tld></tld>
+		<tld>lv</tld>
 	</country>
 	<country>
 		<code>LB</code>
 		<name>Lebanon</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.lb</tld>
 	</country>
 	<country>
 		<code>LS</code>
 		<name>Lesotho</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.ls</tld>
 	</country>
 	<country>
 		<code>LR</code>
@@ -759,25 +759,25 @@
 		<code>LY</code>
 		<name>Libya</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.ly</tld>
 	</country>
 	<country>
 		<code>LI</code>
 		<name>Liechtenstein</name>
 		<market></market>
-		<tld></tld>
+		<tld>li</tld>
 	</country>
 	<country>
 		<code>LT</code>
 		<name>Lithuania</name>
 		<market></market>
-		<tld></tld>
+		<tld>lt</tld>
 	</country>
 	<country>
 		<code>LU</code>
 		<name>Luxembourg</name>
 		<market></market>
-		<tld></tld>
+		<tld>lu</tld>
 	</country>
 	<country>
 		<code>MO</code>
@@ -789,43 +789,43 @@
 		<code>MK</code>
 		<name>Macedonia, the Former Yugoslav Republic of</name>
 		<market></market>
-		<tld></tld>
+		<tld>mk</tld>
 	</country>
 	<country>
 		<code>MG</code>
 		<name>Madagascar</name>
 		<market></market>
-		<tld></tld>
+		<tld>mg</tld>
 	</country>
 	<country>
 		<code>MW</code>
 		<name>Malawi</name>
-		<market></market>
+		<market>mw</market>
 		<tld></tld>
 	</country>
 	<country>
 		<code>MY</code>
 		<name>Malaysia</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.my</tld>
 	</country>
 	<country>
 		<code>MV</code>
 		<name>Maldives</name>
 		<market></market>
-		<tld></tld>
+		<tld>mv</tld>
 	</country>
 	<country>
 		<code>ML</code>
 		<name>Mali</name>
 		<market></market>
-		<tld></tld>
+		<tld>ml</tld>
 	</country>
 	<country>
 		<code>MT</code>
 		<name>Malta</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.mt</tld>
 	</country>
 	<country>
 		<code>MH</code>
@@ -843,13 +843,13 @@
 		<code>MR</code>
 		<name>Mauritania</name>
 		<market></market>
-		<tld></tld>
+		<tld>mr</tld>
 	</country>
 	<country>
 		<code>MU</code>
 		<name>Mauritius</name>
 		<market></market>
-		<tld></tld>
+		<tld>mu</tld>
 	</country>
 	<country>
 		<code>YT</code>
@@ -861,19 +861,19 @@
 		<code>MX</code>
 		<name>Mexico</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.mx</tld>
 	</country>
 	<country>
 		<code>FM</code>
 		<name>Micronesia, Federated States of</name>
 		<market></market>
-		<tld></tld>
+		<tld>fm</tld>
 	</country>
 	<country>
 		<code>MD</code>
 		<name>Moldova, Republic of</name>
 		<market></market>
-		<tld></tld>
+		<tld>md</tld>
 	</country>
 	<country>
 		<code>MC</code>
@@ -885,61 +885,61 @@
 		<code>MN</code>
 		<name>Mongolia</name>
 		<market></market>
-		<tld></tld>
+		<tld>mn</tld>
 	</country>
 	<country>
 		<code>ME</code>
 		<name>Montenegro</name>
 		<market></market>
-		<tld></tld>
+		<tld>me</tld>
 	</country>
 	<country>
 		<code>MS</code>
 		<name>Montserrat</name>
 		<market></market>
-		<tld></tld>
+		<tld>ms</tld>
 	</country>
 	<country>
 		<code>MA</code>
 		<name>Morocco</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.ma</tld>
 	</country>
 	<country>
 		<code>MZ</code>
 		<name>Mozambique</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.mz</tld>
 	</country>
 	<country>
 		<code>MM</code>
 		<name>Myanmar</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.mm</tld>
 	</country>
 	<country>
 		<code>NA</code>
 		<name>Namibia</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.na</tld>
 	</country>
 	<country>
 		<code>NR</code>
 		<name>Nauru</name>
 		<market></market>
-		<tld></tld>
+		<tld>nr</tld>
 	</country>
 	<country>
 		<code>NP</code>
 		<name>Nepal</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.np</tld>
 	</country>
 	<country>
 		<code>NL</code>
 		<name>Netherlands</name>
 		<market></market>
-		<tld></tld>
+		<tld>nl</tld>
 	</country>
 	<country>
 		<code>NC</code>
@@ -951,37 +951,37 @@
 		<code>NZ</code>
 		<name>New Zealand</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.nz</tld>
 	</country>
 	<country>
 		<code>NI</code>
 		<name>Nicaragua</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.ni</tld>
 	</country>
 	<country>
 		<code>NE</code>
 		<name>Niger</name>
 		<market></market>
-		<tld></tld>
+		<tld>ne</tld>
 	</country>
 	<country>
 		<code>NG</code>
 		<name>Nigeria</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.ng</tld>
 	</country>
 	<country>
 		<code>NU</code>
 		<name>Niue</name>
 		<market></market>
-		<tld></tld>
+		<tld>nu</tld>
 	</country>
 	<country>
 		<code>NF</code>
 		<name>Norfolk Island</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.nf</tld>
 	</country>
 	<country>
 		<code>MP</code>
@@ -993,19 +993,19 @@
 		<code>NO</code>
 		<name>Norway</name>
 		<market></market>
-		<tld></tld>
+		<tld>no</tld>
 	</country>
 	<country>
 		<code>OM</code>
 		<name>Oman</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.om</tld>
 	</country>
 	<country>
 		<code>PK</code>
 		<name>Pakistan</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.pk</tld>
 	</country>
 	<country>
 		<code>PW</code>
@@ -1017,67 +1017,67 @@
 		<code>PS</code>
 		<name>Palestine, State of</name>
 		<market></market>
-		<tld></tld>
+		<tld>ps</tld>
 	</country>
 	<country>
 		<code>PA</code>
 		<name>Panama</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.pa</tld>
 	</country>
 	<country>
 		<code>PG</code>
 		<name>Papua New Guinea</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.pg</tld>
 	</country>
 	<country>
 		<code>PY</code>
 		<name>Paraguay</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.py</tld>
 	</country>
 	<country>
 		<code>PE</code>
 		<name>Peru</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.pe</tld>
 	</country>
 	<country>
 		<code>PH</code>
 		<name>Philippines</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.ph</tld>
 	</country>
 	<country>
 		<code>PN</code>
 		<name>Pitcairn</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.pn</tld>
 	</country>
 	<country>
 		<code>PL</code>
 		<name>Poland</name>
 		<market></market>
-		<tld></tld>
+		<tld>pl</tld>
 	</country>
 	<country>
 		<code>PT</code>
 		<name>Portugal</name>
 		<market></market>
-		<tld></tld>
+		<tld>pt</tld>
 	</country>
 	<country>
 		<code>PR</code>
 		<name>Puerto Rico</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.pr</tld>
 	</country>
 	<country>
 		<code>QA</code>
 		<name>Qatar</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.qa</tld>
 	</country>
 	<country>
 		<code>RE</code>
@@ -1089,19 +1089,19 @@
 		<code>RO</code>
 		<name>Romania</name>
 		<market></market>
-		<tld></tld>
+		<tld>ro</tld>
 	</country>
 	<country>
 		<code>RU</code>
 		<name>Russian Federation</name>
 		<market></market>
-		<tld></tld>
+		<tld>ru</tld>
 	</country>
 	<country>
 		<code>RW</code>
 		<name>Rwanda</name>
 		<market></market>
-		<tld></tld>
+		<tld>rw</tld>
 	</country>
 	<country>
 		<code>BL</code>
@@ -1113,7 +1113,7 @@
 		<code>SH</code>
 		<name>Saint Helena, Ascension and Tristan da Cunha</name>
 		<market></market>
-		<tld></tld>
+		<tld>sh</tld>
 	</country>
 	<country>
 		<code>KN</code>
@@ -1125,7 +1125,7 @@
 		<code>LC</code>
 		<name>Saint Lucia</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.lc</tld>
 	</country>
 	<country>
 		<code>MF</code>
@@ -1143,61 +1143,61 @@
 		<code>VC</code>
 		<name>Saint Vincent and the Grenadines</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.vc</tld>
 	</country>
 	<country>
 		<code>WS</code>
 		<name>Samoa</name>
 		<market></market>
-		<tld></tld>
+		<tld>ws</tld>
 	</country>
 	<country>
 		<code>SM</code>
 		<name>San Marino</name>
 		<market></market>
-		<tld></tld>
+		<tld>sm</tld>
 	</country>
 	<country>
 		<code>ST</code>
 		<name>Sao Tome and Principe</name>
 		<market></market>
-		<tld></tld>
+		<tld>st</tld>
 	</country>
 	<country>
 		<code>SA</code>
 		<name>Saudi Arabia</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.sa</tld>
 	</country>
 	<country>
 		<code>SN</code>
 		<name>Senegal</name>
 		<market></market>
-		<tld></tld>
+		<tld>sn</tld>
 	</country>
 	<country>
 		<code>RS</code>
 		<name>Serbia</name>
 		<market></market>
-		<tld></tld>
+		<tld>rs</tld>
 	</country>
 	<country>
 		<code>SC</code>
 		<name>Seychelles</name>
 		<market></market>
-		<tld></tld>
+		<tld>sc</tld>
 	</country>
 	<country>
 		<code>SL</code>
 		<name>Sierra Leone</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.sl</tld>
 	</country>
 	<country>
 		<code>SG</code>
 		<name>Singapore</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.sg</tld>
 	</country>
 	<country>
 		<code>SX</code>
@@ -1209,31 +1209,31 @@
 		<code>SK</code>
 		<name>Slovakia</name>
 		<market></market>
-		<tld></tld>
+		<tld>sk</tld>
 	</country>
 	<country>
 		<code>SI</code>
 		<name>Slovenia</name>
 		<market></market>
-		<tld></tld>
+		<tld>si</tld>
 	</country>
 	<country>
 		<code>SB</code>
 		<name>Solomon Islands</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.sb</tld>
 	</country>
 	<country>
 		<code>SO</code>
 		<name>Somalia</name>
 		<market></market>
-		<tld></tld>
+		<tld>so</tld>
 	</country>
 	<country>
 		<code>ZA</code>
 		<name>South Africa</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.za</tld>
 	</country>
 	<country>
 		<code>GS</code>
@@ -1251,13 +1251,13 @@
 		<code>ES</code>
 		<name>Spain</name>
 		<market></market>
-		<tld></tld>
+		<tld>es</tld>
 	</country>
 	<country>
 		<code>LK</code>
 		<name>Sri Lanka</name>
 		<market></market>
-		<tld></tld>
+		<tld>lk</tld>
 	</country>
 	<country>
 		<code>SD</code>
@@ -1269,7 +1269,7 @@
 		<code>SR</code>
 		<name>Suriname</name>
 		<market></market>
-		<tld></tld>
+		<tld>sr</tld>
 	</country>
 	<country>
 		<code>SJ</code>
@@ -1287,13 +1287,13 @@
 		<code>SE</code>
 		<name>Sweden</name>
 		<market></market>
-		<tld></tld>
+		<tld>se</tld>
 	</country>
 	<country>
 		<code>CH</code>
 		<name>Switzerland</name>
 		<market></market>
-		<tld></tld>
+		<tld>ch</tld>
 	</country>
 	<country>
 		<code>SY</code>
@@ -1305,73 +1305,73 @@
 		<code>TW</code>
 		<name>Taiwan, Province of China</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.tw</tld>
 	</country>
 	<country>
 		<code>TJ</code>
 		<name>Tajikistan</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.tj</tld>
 	</country>
 	<country>
 		<code>TZ</code>
 		<name>Tanzania, United Republic of</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.tz</tld>
 	</country>
 	<country>
 		<code>TH</code>
 		<name>Thailand</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.th</tld>
 	</country>
 	<country>
 		<code>TL</code>
 		<name>Timor-Leste</name>
 		<market></market>
-		<tld></tld>
+		<tld>tl</tld>
 	</country>
 	<country>
 		<code>TG</code>
 		<name>Togo</name>
 		<market></market>
-		<tld></tld>
+		<tld>tg</tld>
 	</country>
 	<country>
 		<code>TK</code>
 		<name>Tokelau</name>
 		<market></market>
-		<tld></tld>
+		<tld>tk</tld>
 	</country>
 	<country>
 		<code>TO</code>
 		<name>Tonga</name>
 		<market></market>
-		<tld></tld>
+		<tld>to</tld>
 	</country>
 	<country>
 		<code>TT</code>
 		<name>Trinidad and Tobago</name>
 		<market></market>
-		<tld></tld>
+		<tld>tt</tld>
 	</country>
 	<country>
 		<code>TN</code>
 		<name>Tunisia</name>
 		<market></market>
-		<tld></tld>
+		<tld>tn</tld>
 	</country>
 	<country>
 		<code>TR</code>
 		<name>Turkey</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.tr</tld>
 	</country>
 	<country>
 		<code>TM</code>
 		<name>Turkmenistan</name>
 		<market></market>
-		<tld></tld>
+		<tld>tm</tld>
 	</country>
 	<country>
 		<code>TC</code>
@@ -1389,31 +1389,31 @@
 		<code>UG</code>
 		<name>Uganda</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.ug</tld>
 	</country>
 	<country>
 		<code>UA</code>
 		<name>Ukraine</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.ua</tld>
 	</country>
 	<country>
 		<code>AE</code>
 		<name>United Arab Emirates</name>
 		<market></market>
-		<tld></tld>
+		<tld>ae</tld>
 	</country>
 	<country>
 		<code>GB</code>
 		<name>United Kingdom</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.uk</tld>
 	</country>
 	<country>
 		<code>US</code>
 		<name>United States</name>
 		<market></market>
-		<tld></tld>
+		<tld>com</tld>
 	</country>
 	<country>
 		<code>UM</code>
@@ -1425,43 +1425,43 @@
 		<code>UY</code>
 		<name>Uruguay</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.uy</tld>
 	</country>
 	<country>
 		<code>UZ</code>
 		<name>Uzbekistan</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.uz</tld>
 	</country>
 	<country>
 		<code>VU</code>
 		<name>Vanuatu</name>
 		<market></market>
-		<tld></tld>
+		<tld>vu</tld>
 	</country>
 	<country>
 		<code>VE</code>
 		<name>Venezuela, Bolivarian Republic of</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.ve</tld>
 	</country>
 	<country>
 		<code>VN</code>
 		<name>Viet Nam</name>
 		<market></market>
-		<tld></tld>
+		<tld>com.vm</tld>
 	</country>
 	<country>
 		<code>VG</code>
 		<name>Virgin Islands, British</name>
 		<market></market>
-		<tld></tld>
+		<tld>vg</tld>
 	</country>
 	<country>
 		<code>VI</code>
 		<name>Virgin Islands, U.S.</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.vi</tld>
 	</country>
 	<country>
 		<code>WF</code>
@@ -1485,11 +1485,11 @@
 		<code>ZM</code>
 		<name>Zambia</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.zm</tld>
 	</country>
 	<country>
 		<code>ZW</code>
 		<name>Zimbabwe</name>
 		<market></market>
-		<tld></tld>
+		<tld>co.zw</tld>
 	</country>
