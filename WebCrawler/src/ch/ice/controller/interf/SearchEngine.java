@@ -10,6 +10,7 @@ import ch.ice.exceptions.NoUrlFoundException;
 
 public interface SearchEngine {
 	public JSONArray search(String requestedQuery, int limitSearchResult) throws IOException, NoUrlFoundException;
+	public JSONArray search(String requestedQuery, int limitSearchResult, String countryCode) throws IOException, NoUrlFoundException;
 
 	public String buildQuery(List<String> params);
 	

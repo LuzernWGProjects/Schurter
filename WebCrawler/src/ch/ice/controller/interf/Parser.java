@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import ch.ice.exceptions.IllegalFileExtensionException;
 import ch.ice.exceptions.InternalFormatException;
@@ -20,10 +21,11 @@ import ch.ice.model.Customer;
 public interface Parser {
 
 	// input can either be a Excel File or a CSV file
-	public List<Customer> readFile(File file) throws IOException,
-			IllegalFileExtensionException, EncryptedDocumentException,
-			InvalidFormatException, InternalFormatException,
-			MissingCustomerRowsException;
+	public List<Customer> readFile(File file) throws IOException, IllegalFileExtensionException, EncryptedDocumentException, InvalidFormatException, InternalFormatException, MissingCustomerRowsException;
+
+	public List<String> getCellHeaders();
+	
+	public Workbook getWorkbook();
 	
 	// progress bar and statistic stuff
 	public void setTotalDataSets(int totalRows); // Updated once

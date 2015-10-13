@@ -29,6 +29,7 @@ import org.joda.time.format.DateTimeFormatter;
 import ch.ice.controller.interf.Parser;
 import ch.ice.controller.interf.Writer;
 import ch.ice.model.Customer;
+import ch.ice.utils.FileOutputNameGenerator;
 import ch.ice.view.SaveWindowController;
 
 /**
@@ -47,7 +48,6 @@ public class ExcelWriter implements Writer {
 	private int cellnum;
 	private int rownum;
 	private int mapCellNum;
-	private Row headerRow;
 	private Configuration config;
 	public static String fileName;
 	CellStyle style = null;
@@ -62,9 +62,9 @@ public class ExcelWriter implements Writer {
 	}
 
 	@Override
-	public void writeFile(List<Customer> customerList, Parser fileParserInstance) {
+	public void writeFile(List<Customer> customerList, Parser fileParserInstance) throws IOException {
 		// convert Parser to actual excelParser. We need getWorkbook() here.
-		ExcelParser excelParser = (ExcelParser) fileParserInstance;
+		Parser excelParser = fileParserInstance;
 
 		// get existing workbook and sheet
 		this.workbook = excelParser.getWorkbook();
@@ -135,21 +135,23 @@ public class ExcelWriter implements Writer {
 
 		try {
 
-			// Timestamp Format
-			String timestampPattern = config
-					.getString("writer.timestampPattern");
-			DateTime dt = new DateTime();
-			DateTimeFormatter fmt = DateTimeFormat.forPattern(timestampPattern);
-			String timestampFormat = fmt.print(dt);
+			FileOutputStream out = new FileOutputStream(new File(FileOutputNameGenerator.createName()));
+			
+//			// Timestamp Format
+//			String timestampPattern = config
+//					.getString("writer.timestampPattern");
+//			DateTime dt = new DateTime();
+//			DateTimeFormatter fmt = DateTimeFormat.forPattern(timestampPattern);
+//			String timestampFormat = fmt.print(dt);
+//
+//			// Write File
+//			FileOutputStream out = new FileOutputStream(new File(
+//					config.getString("writer.file.path") + "/"
+//							+ config.getString("writer.fileNamePattern") + "_"
+//							+ timestampFormat + ".xlsx"));
 
-			// Write File
-			FileOutputStream out = new FileOutputStream(new File(
-					config.getString("writer.file.path") + "/"
-							+ config.getString("writer.fileNamePattern") + "_"
-							+ timestampFormat + ".xlsx"));
-
-			fileName = config.getString("writer.fileNamePattern") + "_"
-					+ timestampFormat + ".xlsx";
+//			fileName = config.getString("writer.fileNamePattern") + "_"
+//					+ timestampFormat + ".xlsx";
 			workbook.write(out);
 			out.close();
 			logger.info("Excel file sucessfully written.");
@@ -157,11 +159,9 @@ public class ExcelWriter implements Writer {
 
 		} catch (FileNotFoundException e) {
 			logger.error(e.getMessage());
-
-		} catch (IOException e) {
-
-			logger.error(e.getMessage());
 		}
+
+	
 
 	}
 
