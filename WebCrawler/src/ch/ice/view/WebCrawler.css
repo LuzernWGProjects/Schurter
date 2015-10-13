@@ -1,4 +1,11 @@
+.root {
+	-fx-background-color: white;
+}
 
+#flowPaneBlackList {
+	-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,1) , 5, 0.0 , 0 , 1 );
+	-fx-background-color:aliceblue;
+}
 
 #startSearchButton:pressed {
 	-fx-background-color: #555555;

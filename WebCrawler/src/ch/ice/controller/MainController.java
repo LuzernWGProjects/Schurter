@@ -48,7 +48,7 @@ public class MainController {
 	private static StopWatch stopwatch;
 
 	// search engine
-	private static String searchEngineIdentifier = SearchEngineFactory.BING;
+	public static String searchEngineIdentifier;
 	private static SearchEngine searchEngine;
 	private static Integer limitSearchResults;
 	public static URL defaultUrl;
@@ -88,8 +88,9 @@ public class MainController {
 
 			isSearchAvail = config.getBoolean("core.search.isEnabled");
 			defaultUrl = new URL(config.getString("core.search.defaultUrl"));
-			MainController.limitSearchResults = config.getInteger("searchEngine.limitSearchResult", 5);
-					
+			MainController.limitSearchResults = config.getInteger(
+					"searchEngine.limitSearchResult", 5);
+
 			metaTagElements = Arrays.asList(config
 					.getStringArray("crawler.searchForMetaTags"));
 		} catch (ConfigurationException | MalformedURLException e) {
@@ -344,10 +345,11 @@ public class MainController {
 		logger.info("Lookup "
 				+ MainController.searchEngine.getClass().getName()
 				+ "  with Query \"" + lookupQuery + "\"");
-		
+
 		try {
 			// Start Search
-			JSONArray results = MainController.searchEngine.search(lookupQuery, MainController.limitSearchResults);
+			JSONArray results = MainController.searchEngine.search(lookupQuery,
+					MainController.limitSearchResults);
 
 			// logic to pick the first record ; here should be the search logic!
 			JSONObject aResult = ResultAnalyzer.analyse(results, params);
