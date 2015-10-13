@@ -33,6 +33,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 import ch.ice.controller.MainController;
+import ch.ice.controller.web.SearchEngineFactory;
 
 public class GUIController extends VBox implements Initializable {
 
@@ -73,13 +74,16 @@ public class GUIController extends VBox implements Initializable {
 
 	public static String path;
 
+	public static String searchGlobal;
+
 	public static void getProperties(Label label) {
 		try {
 			config = new PropertiesConfiguration("conf/app.properties");
 			metaTagElements = new CopyOnWriteArrayList<String>(
 					Arrays.asList(config
 							.getStringArray("crawler.searchForMetaTags")));
-			label.setText(metaTagElements.toString());
+			label.setText(metaTagElements.toString().replace("[", "")
+					.replace("]", ""));
 		} catch (ConfigurationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -112,12 +116,32 @@ public class GUIController extends VBox implements Initializable {
 
 	}
 
+	public static void getSearchEngine() {
+		try {
+			config = new PropertiesConfiguration("conf/app.properties");
+			searchGlobal = config.getString(("searchEngine.global"));
+			if (searchGlobal.equals("GOOGLE")) {
+				MainController.searchEngineIdentifier = SearchEngineFactory.GOOGLE;
+			}
+			if (searchGlobal.equals("BING")) {
+				MainController.searchEngineIdentifier = SearchEngineFactory.BING;
+			}
+
+		} catch (ConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
 		metaTagsList.setWrapText(true);
 		metaTagsList.setMaxWidth(550);
 		metaTagsList.setMaxHeight(80);
+
+		getSearchEngine();
 
 		// Task task = new Task<Void>() {
 		// @Override
@@ -187,11 +211,15 @@ public class GUIController extends VBox implements Initializable {
 							new FileChooser.ExtensionFilter(
 									"Excel-File (*.xlsx)", "*.xlsx"),
 							new FileChooser.ExtensionFilter(
-									"Excel-File (*.xls)", "*.xls"));
-					MainController.uploadedFileContainingCustomers = filechooser.showOpenDialog(stage);
+									"Excel-File (*.xls)", "*.xls"),
+							new FileChooser.ExtensionFilter("CSV-File (*.csv)",
+									"*.csv"));
+					MainController.uploadedFileContainingCustomers = filechooser
+							.showOpenDialog(stage);
 					if (MainController.uploadedFileContainingCustomers != null) {
-						fileTextField.setText(MainController.uploadedFileContainingCustomers
-								.getAbsolutePath());
+						fileTextField
+								.setText(MainController.uploadedFileContainingCustomers
+										.getAbsolutePath());
 					}
 				} catch (NullPointerException e) {
 

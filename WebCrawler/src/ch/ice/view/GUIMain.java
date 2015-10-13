@@ -85,7 +85,7 @@ public class GUIMain extends Application {
 		// public void run() {
 		// System.out.println(internetCheck + "   " + bingCheck);
 
-		// externalNetCheck();
+		externalNetCheck();
 
 		// }
 		// };

@@ -7,12 +7,30 @@
 
 <VBox fx:id="vBox" minHeight="-Infinity" minWidth="-Infinity" spacing="15.0" stylesheets="@WebCrawler.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ice.view.MetaController">
    <children>
+      <AnchorPane minHeight="180.0">
+         <children>
+            <Label layoutX="2.0" text="Choose your Search Engine:" />
+            <ComboBox fx:id="selectEngine" layoutX="2.0" layoutY="30.0" prefWidth="150.0" />
+            <Label fx:id="keyLabel" layoutX="216.0" layoutY="8.0" text="AccessKey:" />
+            <Label fx:id="othersLabel" layoutX="216.0" layoutY="67.0" text="Others:" />
+            <TextField fx:id="keyTextField" layoutX="216.0" layoutY="30.0" />
+            <TextField fx:id="othersTextField" layoutX="216.0" layoutY="96.0" />
+            <Hyperlink fx:id="unselectAll" layoutY="154.0" text="Unselect All" />
+            <Hyperlink fx:id="selectAll" layoutX="90.0" layoutY="154.0" text="Select All" />
+         </children>
+      </AnchorPane>
       <FlowPane fx:id="flowPane" hgap="2.0" vgap="2.0" VBox.vgrow="ALWAYS">
          <padding>
             <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
          </padding></FlowPane>
       <Label text="Chosen Meta Tags: " />
       <Label fx:id="metaTagsLabel" VBox.vgrow="ALWAYS" />
+      <AnchorPane prefHeight="200.0">
+         <children>
+            <Label layoutY="14.0" text="On Blacklist:" />
+            <ListView fx:id="blackListView" prefHeight="100.0" prefWidth="400.0" />
+         </children>
+      </AnchorPane>
       <HBox alignment="BOTTOM_RIGHT" prefHeight="40.0" prefWidth="200.0" spacing="15.0">
          <children>
             <Button id="cancelMetaButton" fx:id="cancelMetaButton" mnemonicParsing="false" text="Cancel" textFill="WHITE" />
@@ -24,6 +42,6 @@
       </HBox>
    </children>
    <padding>
-      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+      <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
    </padding>
 </VBox>
