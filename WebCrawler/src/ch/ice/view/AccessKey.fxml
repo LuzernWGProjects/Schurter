@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.HBox?>
+
+
+<VBox prefHeight="150.0" prefWidth="600.0" spacing="20.0" stylesheets="@WebCrawler.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ice.view.AccessKeyController">
+   <children>
+      <Label fx:id="keyLabel" text="Access Key:" />
+      <TextField fx:id="keyTextField" promptText="Enter your Access Key" VBox.vgrow="ALWAYS" />
+      <HBox alignment="TOP_RIGHT" spacing="20.0">
+         <children>
+            <Button fx:id="cancelButton" mnemonicParsing="false" text="Cancel" textFill="WHITE" />
+            <Button fx:id="okButton" mnemonicParsing="false" text="Ok" textFill="WHITE" />
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox>

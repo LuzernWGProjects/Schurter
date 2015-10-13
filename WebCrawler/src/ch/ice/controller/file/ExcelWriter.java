@@ -17,6 +17,8 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -24,8 +26,10 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import ch.ice.controller.interf.Parser;
 import ch.ice.controller.interf.Writer;
 import ch.ice.model.Customer;
+import ch.ice.view.SaveWindowController;
 
 /**
  * @author Oliver
@@ -43,9 +47,9 @@ public class ExcelWriter implements Writer {
 	private int cellnum;
 	private int rownum;
 	private int mapCellNum;
-	private Row headerRow;
 	private Configuration config;
 	public static String fileName;
+	CellStyle style = null;
 
 	public ExcelWriter() {
 		try {
@@ -57,15 +61,20 @@ public class ExcelWriter implements Writer {
 	}
 
 	@Override
-	public void writeFile(List<Customer> customerList, Workbook wb) {
+	public void writeFile(List<Customer> customerList, Parser fileParserInstance) {
+		// convert Parser to actual excelParser. We need getWorkbook() here.
+		Parser excelParser = fileParserInstance;
+
 		// get existing workbook and sheet
-		this.workbook = wb;
-		this.sheet = wb.getSheetAt(0);
+		this.workbook = excelParser.getWorkbook();
+		this.sheet = this.workbook.getSheetAt(0);
 
 		// Start with row Number 3
 		rownum = 3;
 		// Foreach Customer in CustomerList generate a new row
 		for (Customer c : customerList) {
+			// initialize cell style (needed for foreground color if unsure)
+			style = this.workbook.createCellStyle();
 
 			// get the 3rd row
 			row = sheet.getRow(rownum++);
@@ -78,15 +87,14 @@ public class ExcelWriter implements Writer {
 			// Start at cell number 8 -> H
 			cellnum = 8;
 
-			// TODO get style of existing cells
-			// Cell existingCell =
-			// if(sheet.getRow(3).getCell(cellnum) == null){
-			// System.out.println("null s");
-			// }else{
-			// System.out.println("zelleninhalt:"
-			// +sheet.getRow(4).getCell(0).getStringCellValue());
-			// System.out.println("inhalt der zelle welche style hat: "+cell.getStringCellValue());
-			// }
+			// check if found result is unsure, if yes, set forground colort
+			// yellow
+			if (c.getWebsite().getUnsure() == true) {
+				style.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+				style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+
+				row.setRowStyle(style);
+			}
 
 			// iterate thru the customerObjectArray and write them into a new
 			// cell
@@ -102,6 +110,7 @@ public class ExcelWriter implements Writer {
 					// the value
 					cell = sheet.getRow(row.getRowNum()).createCell(cellnum);
 					// TODO add cellstyle setting logic here
+					cell.setCellStyle(style);
 
 					cell.setCellValue((String) obj.toString());
 				} else if (obj instanceof Map) {
@@ -115,6 +124,8 @@ public class ExcelWriter implements Writer {
 			// reset the counting variable to 0 in order to not shift the
 			// alignment
 			mapCellNum = 0;
+			// reset style
+			style = null;
 		}
 
 		// Autosize Columns
@@ -141,6 +152,7 @@ public class ExcelWriter implements Writer {
 			workbook.write(out);
 			out.close();
 			logger.info("Excel file sucessfully written.");
+			SaveWindowController.myBoo = true;
 
 		} catch (FileNotFoundException e) {
 			logger.error(e.getMessage());
@@ -168,6 +180,7 @@ public class ExcelWriter implements Writer {
 		// write cell values (Value)
 		cell = row.createCell(cellnum + mapCellNum);
 		cell.setCellValue((String) v);
+		cell.setCellStyle(style);
 		mapCellNum++;
 
 	}

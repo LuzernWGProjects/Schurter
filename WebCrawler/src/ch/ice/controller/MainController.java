@@ -1,6 +1,3 @@
-/**
- * 
- */
 package ch.ice.controller;
 
 import java.io.File;
@@ -14,6 +11,8 @@ import java.util.List;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.time.StopWatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.EncryptedDocumentException;
@@ -21,63 +20,65 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import ch.ice.controller.file.ExcelParser;
-import ch.ice.controller.file.ExcelWriter;
-import ch.ice.controller.web.BingSearchEngine;
+import ch.ice.controller.file.FileParserFactory;
+import ch.ice.controller.file.FileWriterFactory;
+import ch.ice.controller.interf.Parser;
+import ch.ice.controller.interf.SearchEngine;
+import ch.ice.controller.interf.Writer;
+import ch.ice.controller.threads.SearchThread;
 import ch.ice.controller.web.ResultAnalyzer;
-import ch.ice.controller.web.WebCrawler;
-import ch.ice.exceptions.HttpStatusException;
+import ch.ice.controller.web.SearchEngineFactory;
+import ch.ice.exceptions.FileParserNotAvailableException;
 import ch.ice.exceptions.IllegalFileExtensionException;
+import ch.ice.exceptions.InternalFormatException;
+import ch.ice.exceptions.MissingCustomerRowsException;
+import ch.ice.exceptions.SearchEngineNotAvailableException;
 import ch.ice.model.Customer;
-import ch.ice.utils.JSONUtil;
+import ch.ice.utils.JSONStandardizedKeys;
+import ch.ice.view.SaveWindowController;
 
-import org.apache.commons.lang.time.StopWatch;
-
-
-/**
- * @author Oliver
- *
- */
 public class MainController {
-	private static final Logger logger = LogManager
+	public static final Logger logger = LogManager
 			.getLogger(MainController.class.getName());
-	ExcelParser excelParserInstance;
 
-	public static File file;
-	public static LinkedList<Customer> customerList;
-	public static int i;
+	public static File uploadedFileContainingCustomers;
+	public static List<Customer> customerList;
+	public static int customersEnhanced;
 	public static String progressText;
-	 private static org.apache.commons.lang.time.StopWatch stopwatch;
-	
+	private static StopWatch stopwatch;
 
-	private Integer limitSearchResults = 4;
+	// search engine
+	private static String searchEngineIdentifier = SearchEngineFactory.BING;
+	private static SearchEngine searchEngine;
+	private static Integer limitSearchResults;
+	public static URL defaultUrl;
+	public static boolean isSearchAvail;
 
-	public void startMainController() {
+	public static List<String> metaTagElements;
+	public static List<Customer> firstArray;
+	public static List<Customer> secondArray;
+	public static List<Customer> thirdArray;
+	public static List<Customer> fourthArray;
 
-		stopwatch = new StopWatch();
-		stopwatch.start();
-		
-		PropertiesConfiguration config;
-		List<String> metaTagElements = new ArrayList<String>();
+	// file Parser
+	private static Parser fileParser;
 
-		// For testing if used without GUI
-		if (file == null) {
-			customerList = retrieveCustomerFromFile(new File("posTest.xlsx"));
-		} else {
-			customerList = retrieveCustomerFromFile(file);
-
-			// retrieve all customers from file
-			logger.info("Retrieve Customers from File "
-					+ file.getAbsolutePath());
-		}
-
-		stopwatch.split();
-		logger.info(stopwatch.toSplitString());
-		System.out.println("Spilt: "+ stopwatch.toSplitString() +" total: "+ stopwatch.toString());
-		
+	/**
+	 * This is the main controller. From here the whole program gets controlled.
+	 * I/O and lookups are also triggered from here.
+	 * 
+	 * @throws InternalFormatException
+	 * @throws MissingCustomerRowsException
+	 * @throws InterruptedException
+	 */
+	public void startMainController() throws InternalFormatException,
+			MissingCustomerRowsException, InterruptedException {
 		// Core settings
-		boolean isSearchAvail = false;
-		URL defaultUrl = null;
+		isSearchAvail = false;
+		defaultUrl = null;
+
+		PropertiesConfiguration config;
+		metaTagElements = new ArrayList<String>();
 
 		/*
 		 * Load Configuration File
@@ -87,150 +88,294 @@ public class MainController {
 
 			isSearchAvail = config.getBoolean("core.search.isEnabled");
 			defaultUrl = new URL(config.getString("core.search.defaultUrl"));
-			// this.limitSearchResults =
-			// config.getInteger("searchEngine.bing.limitSearchResults", 15);
-
+			MainController.limitSearchResults = config.getInteger("searchEngine.limitSearchResult", 5);
+					
 			metaTagElements = Arrays.asList(config
 					.getStringArray("crawler.searchForMetaTags"));
 		} catch (ConfigurationException | MalformedURLException e) {
 			logger.error("Faild to load config file");
-			System.out.println(e.getLocalizedMessage());
-			e.printStackTrace();
 		}
 
-		WebCrawler wc = new WebCrawler();
+		// request new SearchEngine
+		MainController.searchEngine = SearchEngineFactory.requestSearchEngine(MainController.searchEngineIdentifier);
+		logger.info("Starting " + searchEngine.getClass().getName());
 
-		for (Customer customer : customerList) {
-			i++;
+		stopwatch = new StopWatch();
+		stopwatch.start();
 
-			// only search via SearchEngine if search is enabled. Disable search
-			// for testing purpose
-			if (isSearchAvail) {
-				// Add url for customer
-				try {
-					URL retrivedUrl = searchForUrl(customer);
-					customer.getWebsite().setUrl(retrivedUrl);
-					progressText = "Gathering data at: " + retrivedUrl.toString();
-				} catch (Exception e) {
-					e.printStackTrace();
-					logger.error(e.getMessage());
-				}
+		// For testing if used without GUI
+		if (uploadedFileContainingCustomers == null) {
+			MainController.customerList = retrieveCustomerFromFile(new File(
+					"posTest.xlsx"));
+		} else {
+			MainController.customerList = retrieveCustomerFromFile(uploadedFileContainingCustomers);
 
-			} else {
-				customer.getWebsite().setUrl(defaultUrl);
-			}
-
-			// add metadata
-			try {
-				wc.connnect(customer.getWebsite().getUrl().toString());
-				customer.getWebsite().setMetaTags(
-						wc.getMetaTags(metaTagElements));
-				logger.info(customer.getWebsite().toString());
-			} catch (IOException e) {
-				e.printStackTrace();
-				logger.error(e.getMessage());
-				
-			}
-			catch(HttpStatusException e)
-			{
-				e.printStackTrace();
-				logger.error(e.getMessage());
-				
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				logger.error(e.getMessage());
-				
-			}
-
-			
+			// retrieve all customers from file
+			logger.info("Retrieve Customers from File "
+					+ uploadedFileContainingCustomers.getAbsolutePath());
 		}
-	
+
 		stopwatch.split();
-		logger.info(stopwatch.toSplitString());
-		System.out.println("Spilt: "+ stopwatch.toSplitString() +" total: "+ stopwatch.toString());
+		logger.info("Spilt: " + stopwatch.toSplitString() + " total: "
+				+ stopwatch.toString());
+
+		int listSize = customerList.size();
+		int quarterSize = listSize / 4;
+		int firstEnd = quarterSize;
+		int secondStart = quarterSize;
+		int secondEnd = (quarterSize) * 2;
+		int thirdStart = 2 * quarterSize;
+		int thirdEnd = quarterSize * 3;
+		int fourthStart = quarterSize * 3;
+		int fourthEnd = listSize;
+
+		System.out.println(0 + ", " + firstEnd + ", " + secondStart + ", "
+				+ secondEnd + ", " + thirdStart + ", " + thirdEnd + ", "
+				+ fourthStart + ", " + fourthEnd);
+
+		if (listSize < 16) {
+			System.out.println("Below 16");
+			firstArray = new ArrayList<Customer>(customerList);
+			SearchThread s1 = new SearchThread();
+			s1.setCheckNumber(1);
+			s1.setSearchList(firstArray);
+			Thread t1 = new Thread(s1);
+			t1.setName("FIRST THREAD");
+			t1.start();
+			t1.join();
+			customerList.clear();
+			customerList.addAll(s1.getSearchList());
+		} else {
+			firstArray = new ArrayList<Customer>(customerList.subList(0,
+					firstEnd));
+			secondArray = new ArrayList<Customer>(customerList.subList(
+					secondStart, secondEnd));
+			thirdArray = new ArrayList<Customer>(customerList.subList(
+					thirdStart, thirdEnd));
+			fourthArray = new ArrayList<Customer>(customerList.subList(
+					fourthStart, fourthEnd));
+
+			SearchThread s1 = new SearchThread();
+			s1.setCheckNumber(1);
+			s1.setSearchList(firstArray);
+			Thread t1 = new Thread(s1);
+			t1.setName("FIRST THREAD");
+			System.out.println("First Thread Size: "
+					+ s1.getSearchList().size());
+
+			SearchThread s2 = new SearchThread();
+			s2.setCheckNumber(2);
+			s2.setSearchList(secondArray);
+			Thread t2 = new Thread(s2);
+			t2.setName("SECOND THREAD");
+			System.out.println("Second Thread Size: "
+					+ s2.getSearchList().size());
+
+			SearchThread s3 = new SearchThread();
+			s3.setCheckNumber(4);
+			s3.setSearchList(thirdArray);
+			Thread t3 = new Thread(s3);
+			t3.setName("THIRD THREAD");
+			System.out.println("Third Thread Size: "
+					+ s3.getSearchList().size());
+
+			SearchThread s4 = new SearchThread();
+			s4.setCheckNumber(4);
+			s4.setSearchList(fourthArray);
+			Thread t4 = new Thread(s4);
+			t4.setName("FOURTH THREAD");
+			System.out.println("Fourth Thread Size: "
+					+ s4.getSearchList().size());
+
+			t1.start();
+			t2.start();
+			t3.start();
+			t4.start();
+			t1.join();
+			t2.join();
+			t3.join();
+			t4.join();
+
+			System.out.println("First Thread Size: "
+					+ s1.getSearchList().size());
+			System.out.println("Second Thread Size: "
+					+ s2.getSearchList().size());
+			System.out.println("Third Thread Size: "
+					+ s3.getSearchList().size());
+			System.out.println("Fourth Thread Size: "
+					+ s4.getSearchList().size());
+
+			customerList.clear();
+			customerList.addAll(s1.getSearchList());
+			customerList.addAll(s2.getSearchList());
+			customerList.addAll(s3.getSearchList());
+			customerList.addAll(s4.getSearchList());
+		}
+		// customerList.addAll(s2.getSearchList());
+		// customerList.addAll(s3.getSearchList());
+		// customerList.addAll(s4.getSearchList());
+
+		/*
+		 * Start the webcrawler service to gather all meta tags and additional
+		 * information from a customers website.
+		 */
+		// WebCrawler wc = new WebCrawler();
+		//
+		// for (Customer customer : MainController.customerList) {
+		// customersEnhanced++;
+		//
+		// // only search via SearchEngine if search is enabled. Disable search
+		// for testing purpose
+		// if (isSearchAvail) {
+		// // Add url for customer
+		// try {
+		// URL retrivedUrl = searchForUrl(customer);
+		// customer.getWebsite().setUrl(retrivedUrl);
+		// progressText = "Gathering data at: "+ retrivedUrl.toString();
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// logger.error(e.getMessage());
+		// }
+		//
+		// } else {
+		// customer.getWebsite().setUrl(defaultUrl);
+		// }
+		//
+		// // add metadata
+		// try {
+		// wc.connnect(customer.getWebsite().getUrl().toString());
+		// customer.getWebsite().setMetaTags(wc.getMetaTags(metaTagElements));
+		// logger.info(customer.getWebsite().toString());
+		// } catch (IOException e) {
+		// e.printStackTrace();
+		// logger.error(e.getMessage());
+		//
+		// } catch (HttpStatusException e) {
+		// e.printStackTrace();
+		// logger.error(e.getMessage());
+		//
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// logger.error(e.getMessage());
+		//
+		// }
+		// }
+
+		stopwatch.split();
+		logger.info("Spilt: " + stopwatch.toSplitString() + " total: "
+				+ stopwatch.toString());
+
 		/*
 		 * Write every enhanced customer object into a new file
 		 */
-		this.startWriter(customerList);
+		SaveWindowController.myBooWriting = true;
+
+		this.startWriter(MainController.customerList);
 
 		stopwatch.stop();
-		logger.info(stopwatch.toString());
-		System.out.println("Spilt: "+ stopwatch.toSplitString() +" total: "+ stopwatch.toString());
+		logger.info("Spilt: " + stopwatch.toSplitString() + " total: "
+				+ stopwatch.toString());
+
 		logger.info("end");
-	}
-
-	public URL searchForUrl(Customer c) {
-
-		ArrayList<String> params = new ArrayList<String>();
-		params.add(c.getFullName().toLowerCase());
-		// params.add(c.getCountryName().toLowerCase());
-		// params.add("loc:"+c.getCountryCode().toLowerCase()); -> delivers 0
-		// results sometimes. we have to TEST this!!!!
-
-		String query = BingSearchEngine.buildQuery(params);
-		progressText = "Loockup on: " + query;
-
-		logger.info("start searchEngine for URL with query: " + query);
-
-		try {
-
-			// Start Search
-			JSONArray results = BingSearchEngine.Search(query,
-					this.limitSearchResults);
-
-			// logger.debug(results.toString());
-
-			// logic to pick the first record ; here should be the search logic!
-			JSONObject aResult =	ResultAnalyzer.analyze(results, params);
-			
-			
-		
-			
-
-			// return only the URL form first object
-			return new URL((String) aResult.get("Url"));
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+		SaveWindowController.myBoo = true;
 	}
 
 	/**
-	 * Each Row returns a customer object. These customers are saved in an
+	 * Each Row returns a customer object. These customers are saved in a
 	 * List-Object.
 	 * 
 	 * @param file
-	 * @return LinkedList<Customer>
+	 * @return List of Customers from file. Each row in a file represents a
+	 *         customer
+	 * @throws InternalFormatException
+	 *             , MissingCustomerRowsException
 	 */
-	public LinkedList<Customer> retrieveCustomerFromFile(File file) {
-		this.excelParserInstance = new ExcelParser();
+	public List<Customer> retrieveCustomerFromFile(File file)
+			throws InternalFormatException, MissingCustomerRowsException {
+		String uploadedFileExtension = FilenameUtils.getExtension(file
+				.getName());
+		String fileParserIdentifier = "";
+
+		switch (uploadedFileExtension) {
+		case "xlsx":
+		case "xls":
+			fileParserIdentifier = FileParserFactory.EXCEL;
+			break;
+		case "csv":
+			fileParserIdentifier = FileParserFactory.CSV;
+			break;
+		}
 
 		try {
+			MainController.fileParser = FileParserFactory
+					.requestParser(fileParserIdentifier);
+			return MainController.fileParser.readFile(file);
 
-			return this.excelParserInstance.readFile(file);
-
-		} catch (IOException | IllegalFileExtensionException
-				| EncryptedDocumentException | InvalidFormatException e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
+		} catch (FileParserNotAvailableException | EncryptedDocumentException
+				| InvalidFormatException | IOException
+				| IllegalFileExtensionException e) {
+			logger.error(e.getMessage());
 		}
 
 		return new LinkedList<Customer>();
 	}
 
-	public void startWriter(List<Customer> customerList) {
+	/**
+	 * Search for a Customers URL based on his name and other parameters.
+	 * 
+	 * @param Customer
+	 * @return URL of Customer - Depends on the quality of the search engine
+	 */
+	public URL searchForUrl(Customer c) {
 
-		// TODO Check if user demands CSV or EXCEL -> if(excel)->getWorkbook,
-		// Else ->write normal
-		// ExcelWriter ew = new
-		// ExcelWriter(this.excelParserInstance.getWorkbook());
+		// more parameters can be added. These parameters are similar to Googles
+		// site: input. E.g. Automation site:schurter.com
+		List<String> params = new ArrayList<String>();
+		params.add(c.getFullName().toLowerCase());
 
+		String lookupQuery = MainController.searchEngine.buildQuery(params);
+		progressText = "Lookup on: " + lookupQuery;
+
+		logger.info("Lookup "
+				+ MainController.searchEngine.getClass().getName()
+				+ "  with Query \"" + lookupQuery + "\"");
+		
+		try {
+			// Start Search
+			JSONArray results = MainController.searchEngine.search(lookupQuery, MainController.limitSearchResults);
+
+			// logic to pick the first record ; here should be the search logic!
+			JSONObject aResult = ResultAnalyzer.analyse(results, params);
+
+			// return only the URL form first object
+			return new URL((String) aResult.get(JSONStandardizedKeys.URL));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("FEHLER!!!!!!!");
+		}
+
+		return defaultUrl;
+	}
+
+	/**
+	 * Write enhanced customer array into a file and save it to the selected
+	 * directory
+	 * 
+	 * @param customerList
+	 */
+	public void startWriter(List<Customer> enhancedCustomerList) {
 		logger.info("Start writing customers to File");
 
-		ExcelWriter ew = new ExcelWriter();
+		// TODO: implement CVS Writer if user chooses to do so. Basically just
+		// if excel->excelWriter; csv->csvWriter
+		Writer fileWriter = null;
+		try {
+			fileWriter = FileWriterFactory.requestFileWriter(FileWriterFactory.EXCEL);
+		} catch (FileParserNotAvailableException e) {
+			e.printStackTrace();
+		}
 
-		ew.writeFile(customerList, this.excelParserInstance.getWorkbook());
+		fileWriter.writeFile(enhancedCustomerList, MainController.fileParser);
 	}
 }

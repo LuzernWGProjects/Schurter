@@ -15,7 +15,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -23,6 +22,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -33,7 +34,7 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 
 import ch.ice.controller.MainController;
 
-public class GUIController implements Initializable {
+public class GUIController extends VBox implements Initializable {
 
 	@FXML
 	private Button selectFileButton;
@@ -47,7 +48,8 @@ public class GUIController implements Initializable {
 	private MenuItem MetaTags;
 	@FXML
 	private MenuItem quitMenuItem;
-
+	@FXML
+	private MenuItem accessKeyMenu;
 	@FXML
 	private Button cancelMetaButton;
 	@FXML
@@ -58,6 +60,10 @@ public class GUIController implements Initializable {
 	private TextField pathTextField;
 	@FXML
 	private Button changeDirectory;
+	@FXML
+	private Label internetLabel;
+	@FXML
+	private Label bingLabel;
 
 	public static ObservableValue<? extends String> test;
 
@@ -113,6 +119,27 @@ public class GUIController implements Initializable {
 		metaTagsList.setMaxWidth(550);
 		metaTagsList.setMaxHeight(80);
 
+		// Task task = new Task<Void>() {
+		// @Override
+		// public Void call() throws Exception {
+		// int i = 0;
+		// while (true) {
+		// Platform.runLater(new Runnable() {
+		// @Override
+		// public void run() {
+
+		// }
+		// });
+		// i++;
+		// Thread.sleep(1000);
+		//
+		// }
+		// }
+		// };
+		// Thread th = new Thread(task);
+		// th.setDaemon(true);
+		// th.start();
+
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
@@ -126,6 +153,29 @@ public class GUIController implements Initializable {
 		getSaveProperties();
 		pathTextField.setText(path);
 
+		GUIMain.externalNetCheck();
+
+		if (GUIMain.internetCheck == true) {
+			internetLabel.setText("Internet Connection Established");
+			internetLabel.setTextFill(Color.GREEN);
+
+		} else {
+			internetLabel.setText("No Internet Connection");
+			internetLabel.setTextFill(Color.RED);
+			startSearchButton.setDisable(true);
+
+		}
+
+		if (GUIMain.bingCheck == true) {
+			bingLabel.setText("Bing is reachable");
+			bingLabel.setTextFill(Color.GREEN);
+
+		} else {
+			bingLabel.setText("Bing is unreachable");
+			bingLabel.setTextFill(Color.RED);
+			startSearchButton.setDisable(true);
+		}
+
 		selectFileButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -138,9 +188,9 @@ public class GUIController implements Initializable {
 									"Excel-File (*.xlsx)", "*.xlsx"),
 							new FileChooser.ExtensionFilter(
 									"Excel-File (*.xls)", "*.xls"));
-					MainController.file = filechooser.showOpenDialog(stage);
-					if (MainController.file != null) {
-						fileTextField.setText(MainController.file
+					MainController.uploadedFileContainingCustomers = filechooser.showOpenDialog(stage);
+					if (MainController.uploadedFileContainingCustomers != null) {
+						fileTextField.setText(MainController.uploadedFileContainingCustomers
 								.getAbsolutePath());
 					}
 				} catch (NullPointerException e) {
@@ -186,15 +236,21 @@ public class GUIController implements Initializable {
 						"SaveFile.fxml"));
 				Parent root1;
 				try {
-					Thread t1 = new Thread() {
-						public void run() {
-							MainController main = new MainController();
+					// Thread t1 = new Thread() {
+					// public void run() {
+					// MainController main = new MainController();
+					//
+					// try {
+					// main.startMainController();
+					// } catch (InternalFormatException e) {
+					// // TODO Auto-generated catch block
+					// e.printStackTrace();
+					//
+					// }
+					// }
+					// };
 
-							main.startMainController();
-						}
-					};
-
-					t1.start();
+					// t1.start();
 					root1 = (Parent) fxmlLoader.load();
 
 					Stage stage = new Stage();
@@ -203,21 +259,14 @@ public class GUIController implements Initializable {
 					stage.initStyle(StageStyle.UNDECORATED);
 					stage.showAndWait();
 
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							t1.interrupt();
-						}
-					});
-
 				} catch (IOException | NullPointerException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					System.out.println("HAAAALLLOOOO");
-					Node source = (Node) event.getSource();
-					Stage stage = (Stage) source.getScene().getWindow();
-					stage.close();
-
+					// // TODO Auto-generated catch block
+					// e.printStackTrace();
+					// System.out.println("HAAAALLLOOOO");
+					// Node source = (Node) event.getSource();
+					// Stage stage = (Stage) source.getScene().getWindow();
+					// stage.close();
+					//
 				}
 
 			}
@@ -241,12 +290,8 @@ public class GUIController implements Initializable {
 					stage.initStyle(StageStyle.UNDECORATED);
 					stage.showAndWait();
 
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							getProperties(metaTagsList);
-						}
-					});
+					// Update Selected Meta Tags
+					getProperties(metaTagsList);
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -262,6 +307,32 @@ public class GUIController implements Initializable {
 			public void handle(ActionEvent event) {
 
 				System.exit(0);
+
+			}
+		});
+
+		accessKeyMenu.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+
+				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
+						"AccessKey.fxml"));
+				Parent root1;
+				try {
+					root1 = (Parent) fxmlLoader.load();
+
+					Stage stage = new Stage();
+					stage.setTitle("Enter AccessKey");
+					stage.setScene(new Scene(root1));
+					stage.initStyle(StageStyle.UNDECORATED);
+					AccessKeyController.haha();
+					stage.showAndWait();
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 			}
 		});

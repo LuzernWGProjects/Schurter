@@ -5,14 +5,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.EncryptedDocumentException;
@@ -25,6 +20,8 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import ch.ice.controller.interf.Parser;
 import ch.ice.exceptions.IllegalFileExtensionException;
+import ch.ice.exceptions.InternalFormatException;
+import ch.ice.exceptions.MissingCustomerRowsException;
 import ch.ice.model.Customer;
 import ch.ice.model.Website;
 
@@ -36,111 +33,70 @@ import ch.ice.model.Website;
 
 public class ExcelParser implements Parser {
 	private static final Logger logger = LogManager.getLogger(ExcelParser.class.getName());
-	
+
 	private File file;
 	private InputStream ExcelFileToRead;
-	private List<String> allowedFileExtensions = new ArrayList<String>();
 	private int physicalRowCount;
 	private int currentRowCount;
 
-	LinkedList<Customer> customerList = new LinkedList<Customer>();
+	private List<Customer> customerList = new ArrayList<Customer>();
+	private Workbook wb;
 
-	PropertiesConfiguration config;
-
-	Workbook wb;
-	
 	// Customer Fields
 	// headers from File
-	List<String> headerInfos = new ArrayList<String>();
-	String customerIDHeader;
-	String countryNameHeader;
-	String zipCodeHeader;
-	String customerNameShortHeader;
-	String customerNameHeader;
+	private List<String> headerInfos = new ArrayList<String>();
+	private String customerIDHeader;
+	private String countryNameHeader;
+	private String zipCodeHeader;
+	private String customerNameShortHeader;
+	private String customerNameHeader;
 
 	// customer data
-	String customerID;
-	String customerCountryCode;
-	String country;
-	String zipCode;
-	String customerFullName;
-	String custonerShortName;
-
-
-	public ExcelParser() {
-		
-		// load config file
-		try {
-			this.config = new PropertiesConfiguration("conf/app.properties");
-			
-			// get all allowed file extensions (xls,xlsx,csv)
-			this.allowedFileExtensions = Arrays.asList(this.config.getStringArray("parser.allowedFileExtensions"));
-		} catch (ConfigurationException e) {
-			System.out.println(e.getLocalizedMessage());
-			e.printStackTrace();
-		}
-	}
+	private String customerID;
+	private String customerCountryCode;
+	private String country;
+	private String zipCode;
+	private String customerFullName;
+	private String custonerShortName;
 
 	@Override
-	public LinkedList<Customer> readFile(File file) throws IOException, IllegalFileExtensionException, EncryptedDocumentException, InvalidFormatException {
+	public List<Customer> readFile(File file) throws IllegalFileExtensionException, EncryptedDocumentException,	InvalidFormatException, IOException, InternalFormatException, MissingCustomerRowsException {
 
 		// set file to private access only
 		this.file = file;
+		ExcelFileToRead = new FileInputStream(this.file);
+		this.wb = WorkbookFactory.create(ExcelFileToRead);
 
-		// check if it is an XLS file or a XLSX file
-		String fileExtension = FilenameUtils.getExtension(file.getName()).toLowerCase();
-
-		if (!this.allowedFileExtensions.contains(fileExtension)) {
-			logger.error("Wrong Fileextension: "+fileExtension+"; Only "+this.allowedFileExtensions.toString()+" allowed.");
-			throw new IllegalFileExtensionException(
-					"Wrong file Extension. Please only use " + this.allowedFileExtensions.toString());
-		}
-
-		switch (fileExtension) {
-		case "xlsx":
-		case "xls":
-			return this.readFile();
-
-		case "cvs":
-			// return readCVSFile();
-			break;
-		}
-
-		return null;
+		return this.readFile(this.wb);
 	}
 
-
 	/**
-	 * Read a File and ingnore file format (xls, xlsx). Due to the ss usermodel and generic handling.
+	 * Parse a given xlsx or xls File and create new customers
 	 * 
 	 * @return LinkedList<Customer>
 	 * @throws EncryptedDocumentException
 	 * @throws InvalidFormatException
 	 * @throws IOException
+	 * @throws InternalFormatException
+	 * @throws MissingCustomerRowsException
 	 */
-	private LinkedList<Customer> readFile() throws EncryptedDocumentException, InvalidFormatException, IOException {
-		ExcelFileToRead = new FileInputStream(this.file);
-
-		this.wb = WorkbookFactory.create(ExcelFileToRead);
-
+	public List<Customer> readFile(Workbook wb) throws EncryptedDocumentException, InvalidFormatException, IOException, InternalFormatException, MissingCustomerRowsException {
+		this.wb = wb;
 		// load first sheet in File
 		Sheet sheet = this.wb.getSheetAt(0);
-		
-		//set total amount of rows (Customers)
-		if(sheet.getPhysicalNumberOfRows() == 0){
+
+		// set total amount of rows (Customers)
+		if (sheet.getPhysicalNumberOfRows() == 0) {
 			this.setTotalDataSets(0);
+		} else {
+			this.setTotalDataSets(sheet.getPhysicalNumberOfRows() - 3);
 		}
-		else {
-			this.setTotalDataSets(sheet.getPhysicalNumberOfRows()-3);
-		}
-		
+
 		Row row;
 		Cell cell;
 
 		Iterator<?> rows = sheet.rowIterator();
-		
-		
-		
+
 		while (rows.hasNext()) {
 
 			row = (Row) rows.next();
@@ -150,7 +106,13 @@ public class ExcelParser implements Parser {
 				continue;
 
 			// get table heads
-			if (row.getRowNum() == 2 && row.getCell(0) != null) {
+			if (row.getRowNum() == 2) {
+				if (row.getCell(0) == null && row.getCell(1) == null
+						&& row.getCell(3) == null && row.getCell(4) == null
+						&& row.getCell(6) == null)
+					throw new InternalFormatException(
+							"It seems that the selected File has the wrong internal Format. Customers should start on row 3");
+
 				this.customerIDHeader = row.getCell(0).toString();
 				this.countryNameHeader = row.getCell(1).toString();
 				this.zipCodeHeader = row.getCell(3).toString();
@@ -161,18 +123,16 @@ public class ExcelParser implements Parser {
 				this.headerInfos.add(this.countryNameHeader);
 				this.headerInfos.add(this.zipCodeHeader);
 				this.headerInfos.add(this.customerNameShortHeader);
+				this.headerInfos.add("");
 				this.headerInfos.add(this.customerNameHeader);
 
 				continue;
 
-			} else {
-				// throw custom exception -> IlligalInternalFileFormat (Falsches pos file, random file)
-				
 			}
-			
+
 			// current row number
-			this.setCurrentRow(row.getRowNum()+1);
-			
+			this.setCurrentRow(row.getRowNum() + 1);
+
 			Iterator<?> cells = row.cellIterator();
 
 			while (cells.hasNext()) {
@@ -223,8 +183,11 @@ public class ExcelParser implements Parser {
 			 */
 			this.customerList.add(this.createCustomer());
 		}
-		
-		logger.info("Rendered Customers from List: "+this.customerList.size());
+
+		if (this.customerList.size() < 1)
+			throw new MissingCustomerRowsException("There are no rendered Customers. Please make sure customers start on row number 4.");
+
+		logger.info("Rendered Customers from List: " + this.customerList.size());
 		return this.customerList;
 
 	}
@@ -252,12 +215,12 @@ public class ExcelParser implements Parser {
 	}
 
 	/**
-	 * Return all collected Headercells from File.
-	 * Will be used for creating new file with the correct Headers
+	 * Return all collected Headercells from File. Will be used for creating new
+	 * file with the correct Headers
 	 * 
 	 * @return Value in header cells
 	 */
-	public List<String> getCellHeaders(){
+	public List<String> getCellHeaders() {
 		return this.headerInfos;
 	}
 
@@ -274,28 +237,25 @@ public class ExcelParser implements Parser {
 		}
 		return null;
 	}
-	
-	
-	//progress bar and statistic stuff
+
+	// progress bar and statistic stuff
 	public void setTotalDataSets(int totalRows) {
 		this.physicalRowCount = totalRows;
 	}
-	
+
 	public int getTotalDataSets() {
 		return this.physicalRowCount;
 	}
-	
+
 	public void setCurrentRow(int currentRowNumber) {
 		this.currentRowCount = currentRowNumber;
 	}
-	
+
 	public int getCurrentRow() {
 		return this.currentRowCount;
 	}
-	
-	
-	
-	public Workbook getWorkbook(){
+
+	public Workbook getWorkbook() {
 		return this.wb;
 	}
 }

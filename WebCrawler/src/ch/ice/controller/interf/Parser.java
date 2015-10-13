@@ -1,14 +1,16 @@
-
 package ch.ice.controller.interf;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import ch.ice.exceptions.IllegalFileExtensionException;
+import ch.ice.exceptions.InternalFormatException;
+import ch.ice.exceptions.MissingCustomerRowsException;
 import ch.ice.model.Customer;
 
 /**
@@ -17,16 +19,21 @@ import ch.ice.model.Customer;
  *
  */
 public interface Parser {
-	
+
 	// input can either be a Excel File or a CSV file
-	public LinkedList<Customer> readFile(File file) throws IOException, IllegalFileExtensionException, EncryptedDocumentException, InvalidFormatException;
+	public List<Customer> readFile(File file) throws IOException, IllegalFileExtensionException, EncryptedDocumentException, InvalidFormatException, InternalFormatException, MissingCustomerRowsException;
+
+	public List<String> getCellHeaders();
 	
-	//progress bar and statistic stuff
+	public Workbook getWorkbook();
+	
+	// progress bar and statistic stuff
 	public void setTotalDataSets(int totalRows); // Updated once
+
 	public int getTotalDataSets();
-	
+
 	public void setCurrentRow(int currentRowNumber); // Updated within for-loop
+
 	public int getCurrentRow();
-	
-		
+
 }

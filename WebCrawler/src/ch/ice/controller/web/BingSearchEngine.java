@@ -4,6 +4,7 @@
 package ch.ice.controller.web;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
@@ -12,12 +13,18 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import ch.ice.controller.interf.SearchEngine;
+import ch.ice.exceptions.NoUrlFoundException;
+import ch.ice.utils.JSONStandardizedKeys;
 import ch.ice.utils.JSONUtil;
 
 
@@ -25,9 +32,9 @@ import ch.ice.utils.JSONUtil;
  * @author Oliver
  *
  */
-public class BingSearchEngine  {
+public class BingSearchEngine implements SearchEngine {
 
-	public static  JSONArray Search(String requestedQuery, int limitSearchResults) throws Exception {
+	public JSONArray search(String requestedQuery, int limitSearchResults) throws IOException, NoUrlFoundException {
 	
     	String accountKey = "";
     	String bingUrlPattern = "";
@@ -77,11 +84,42 @@ public class BingSearchEngine  {
             final JSONObject json = new JSONObject(response.toString());
             JSONObject d = json.getJSONObject("d");
             
-            JSONArray results = d.getJSONArray("results");
+            JSONArray bingResults = d.getJSONArray("results");
             
-            final int resultsLength = results.length();
+            final int resultsLength = bingResults.length();
             
-            return JSONUtil.cleanUp(results);
+            if(resultsLength < 1) 
+            	throw new NoUrlFoundException("The Search engine delivered " +resultsLength+ " results for ["+requestedQuery+"]. Please change your query");
+            
+            
+            // remove unused elements and trim urls
+            JSONUtil.keepLablesInJSONArray = new ArrayList<String>(
+        			// default ones for bing
+        			Arrays.asList(
+        				"Url",
+        				"Description",
+        				"Title"
+        			)
+        	);
+            JSONUtil.urlLabel = "Url";
+            
+            bingResults = JSONUtil.cleanUp(bingResults);
+            
+            System.out.println("Cleaned up results from Bing: "+bingResults);
+            System.out.println("Cleaned up resulsts length: "+bingResults.length());
+            
+            // standardize lables
+            Map<String, String> keyNodeMap = new HashMap<String,String>();
+            keyNodeMap.put("Url", JSONStandardizedKeys.URL);
+			keyNodeMap.put("Description", JSONStandardizedKeys.DESCRIPTION);
+			keyNodeMap.put("Title", JSONStandardizedKeys.TITLE);
+			
+            bingResults = this.standardizer(bingResults, keyNodeMap);
+			
+            System.out.println("STD results from Bing: "+bingResults);
+            System.out.println("STD resulsts length: "+bingResults.length());
+			
+			return bingResults;
         }
     }
 	
@@ -91,7 +129,7 @@ public class BingSearchEngine  {
 	 * @param params
 	 * @return String query
 	 */
-	public static String buildQuery(ArrayList<String> params){
+	public String buildQuery(List<String> params){
 		String query = "";
 		
 		for (String string : params) {
@@ -99,5 +137,11 @@ public class BingSearchEngine  {
 		}
 		
 		return query;
+	}
+
+	@Override
+	public JSONArray standardizer(JSONArray results, Map<String, String> keyNodeMap) {
+		JSONArray stdJson = JSONUtil.keyNodeMapper(results, keyNodeMap);
+		return stdJson;
 	}
 }

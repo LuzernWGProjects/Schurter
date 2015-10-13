@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="200.0" minWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ice.view.WelcomeController">
    <children>
-      <Label alignment="TOP_LEFT" layoutX="45.0" layoutY="73.0" text="Hello">
+      <Label alignment="CENTER" contentDisplay="CENTER" text="Hello">
          <font>
             <Font size="44.0" />
          </font>
+         <StackPane.margin>
+            <Insets />
+         </StackPane.margin>
+      </Label>
+      <Label text="Java Version:">
+         <StackPane.margin>
+            <Insets top="70.0" />
+         </StackPane.margin>
+      </Label>
+      <Label fx:id="javaVersion" alignment="CENTER" contentDisplay="CENTER" text="Java Version">
+         <StackPane.margin>
+            <Insets top="110.0" />
+         </StackPane.margin>
       </Label>
    </children>
-</Pane>
+</StackPane>

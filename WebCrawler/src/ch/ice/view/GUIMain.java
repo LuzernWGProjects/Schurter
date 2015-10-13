@@ -1,6 +1,9 @@
 package ch.ice.view;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -10,14 +13,83 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 public class GUIMain extends Application {
 
+	public static boolean internetCheck = false;
+	public static boolean bingCheck = false;
+
+	public static boolean netIsAvailable(String urlString) {
+
+		try {
+			URL url = new URL(urlString);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setUseCaches(false);
+			// conn.setConnectTimeout(1000);
+			conn.connect();
+			// Object objData = conn.getContent();
+
+			conn = null;
+			return true;
+
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+	}
+
+	public static void externalNetCheck() {
+		if (netIsAvailable("http://www.google.com") == true) {
+			internetCheck = true;
+
+			if (netIsAvailable("http://www.bing.com") == true) {
+				bingCheck = true;
+
+			}
+
+			if (netIsAvailable("http://www.bing.com") == false) {
+				bingCheck = false;
+
+			}
+
+		}
+
+		if (netIsAvailable("http://www.google.com") == false) {
+			internetCheck = false;
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Internet Connection");
+			alert.setHeaderText("No Internet Connection");
+			alert.setContentText("Please establish Internet Connection");
+			alert.showAndWait();
+			System.exit(0);
+
+		}
+	}
+
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+
+		// int initialDelay = 0; // start after 30 seconds
+		// int period = 1000;
+		// Timer timer = new Timer();
+		// TimerTask task = new TimerTask() {
+		// public void run() {
+		// System.out.println(internetCheck + "   " + bingCheck);
+
+		// externalNetCheck();
+
+		// }
+		// };
+		// timer.scheduleAtFixedRate(task, initialDelay, period);
 
 		Parent root = FXMLLoader.load(getClass().getResource("Welcome.fxml"));
 
@@ -54,11 +126,13 @@ public class GUIMain extends Application {
 		Parent root1;
 		try {
 			root1 = (Parent) fxmlLoader.load();
-
+			Scene scene = new Scene(root1);
+			scene.setFill(Color.TRANSPARENT);
 			Stage stage = new Stage();
 			stage.setTitle("Schurter POS-Data-Enhancement System (SPOSDES) ");
-			stage.setScene(new Scene(root1));
-			stage.initStyle(StageStyle.UNDECORATED);
+			stage.setScene(scene);
+			stage.initStyle(StageStyle.DECORATED);
+
 			stage.show();
 
 		} catch (IOException e) {
