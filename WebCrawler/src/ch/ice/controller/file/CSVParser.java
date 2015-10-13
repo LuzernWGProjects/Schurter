@@ -49,7 +49,7 @@ public class CSVParser implements Parser{
 	 * @throws InvalidFormatException 
 	 * @throws EncryptedDocumentException 
 	 */
-	private List<Customer> readFile() throws IOException, MissingCustomerRowsException, EncryptedDocumentException, InvalidFormatException, InternalFormatException {
+	private List<Customer> readFile() throws IOException, EncryptedDocumentException, InvalidFormatException, InternalFormatException, MissingCustomerRowsException {
 		String[] nextLine;
 		CSVReader reader = new CSVReader(new FileReader(this.CSVFileToRead),';');
 
@@ -66,13 +66,14 @@ public class CSVParser implements Parser{
 		}
 		reader.close();
 		
-		logger.info("Convert CSV File to Excel file.");
+		logger.info("Convert CSV File to XSSF Standard.");
 		
 		ExcelParser excelParser = new ExcelParser();
 		List<Customer> customerList = excelParser.readFile(wb);
 
 		setCurrentRow(excelParser.getCurrentRow());
 		setTotalDataSets(excelParser.getTotalDataSets());		
+		this.headerInfos = excelParser.getCellHeaders();
 		
 		return customerList;
 	}

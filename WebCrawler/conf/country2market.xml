@@ -1,1246 +1,1495 @@
 <?xml version='1.0' encoding='UTF-8'?>
-	<country>
+	<country id="af">
 		<code>AF</code>
 		<name>Afghanistan</name>
 		<market></market>
+		<tld>com.af</tld>
 	</country>
-	<country>
+	<country id="ax">
 		<code>AX</code>
 		<name>Åland Islands</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="al">
 		<code>AL</code>
 		<name>Albania</name>
 		<market></market>
+		<tld>al</tld>
 	</country>
-	<country>
+	<country id="dz">
 		<code>DZ</code>
 		<name>Algeria</name>
 		<market></market>
+		<tld>dz</tld>
 	</country>
-	<country>
+	<country id="as">
 		<code>AS</code>
 		<name>American Samoa</name>
 		<market></market>
+		<tld>as</tld>
 	</country>
-	<country>
+	<country id="ad">
 		<code>AD</code>
 		<name>Andorra</name>
 		<market></market>
+		<tld>ad</tld>
 	</country>
-	<country>
+	<country id="ao">
 		<code>AO</code>
 		<name>Angola</name>
 		<market></market>
+		<tld>co.ao</tld>
 	</country>
-	<country>
+	<country id="ai">
 		<code>AI</code>
 		<name>Anguilla</name>
 		<market></market>
+		<tld>com.ai</tld>
 	</country>
-	<country>
+	<country id="aq">
 		<code>AQ</code>
 		<name>Antarctica</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="ag">
 		<code>AG</code>
 		<name>Antigua and Barbuda</name>
 		<market></market>
+		<tld>com.ag</tld>
 	</country>
-	<country>
+	<country id="ar">
 		<code>AR</code>
 		<name>Argentina</name>
-		<market>es-AR</market>
+		<market></market>
+		<tld>com.ar</tld>
 	</country>
-	<country>
+	<country id="am">
 		<code>AM</code>
 		<name>Armenia</name>
 		<market></market>
+		<tld>am</tld>
 	</country>
-	<country>
+	<country id="aw">
 		<code>AW</code>
 		<name>Aruba</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="au">
 		<code>AU</code>
 		<name>Australia</name>
-		<market>en-AU</market>
+		<market></market>
+		<tld>au</tld>
 	</country>
-	<country>
+	<country id="at">
 		<code>AT</code>
 		<name>Austria</name>
-		<market>de-AT</market>
+		<market></market>
+		<tld>at</tld>
 	</country>
-	<country>
+	<country id="az">
 		<code>AZ</code>
 		<name>Azerbaijan</name>
 		<market></market>
+		<tld>az</tld>
 	</country>
-	<country>
+	<country id="bs">
 		<code>BS</code>
 		<name>Bahamas</name>
 		<market></market>
+		<tld>bs</tld>
 	</country>
-	<country>
+	<country id="bh">
 		<code>BH</code>
 		<name>Bahrain</name>
 		<market></market>
+		<tld>bh</tld>
 	</country>
-	<country>
+	<country id="bd">
 		<code>BD</code>
 		<name>Bangladesh</name>
 		<market></market>
+		<tld>com.bd</tld>
 	</country>
-	<country>
+	<country id="bb">
 		<code>BB</code>
 		<name>Barbados</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="by">
 		<code>BY</code>
 		<name>Belarus</name>
 		<market></market>
+		<tld>by</tld>
 	</country>
-	<country>
+	<country id="be">
 		<code>BE</code>
 		<name>Belgium</name>
-		<market>nl-BE</market>
+		<market></market>
+		<tld>be</tld>
 	</country>
-	<country>
+	<country id="bz">
 		<code>BZ</code>
 		<name>Belize</name>
 		<market></market>
+		<tld>bz</tld>
 	</country>
-	<country>
+	<country id="bj">
 		<code>BJ</code>
 		<name>Benin</name>
 		<market></market>
+		<tld>bj</tld>
 	</country>
-	<country>
+	<country id="bm">
 		<code>BM</code>
 		<name>Bermuda</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="bt">
 		<code>BT</code>
 		<name>Bhutan</name>
 		<market></market>
+		<tld>bt</tld>
 	</country>
-	<country>
+	<country id="bo">
 		<code>BO</code>
 		<name>Bolivia, Plurinational State of</name>
 		<market></market>
+		<tld>bo</tld>
 	</country>
-	<country>
+	<country id="bq">
 		<code>BQ</code>
 		<name>Bonaire, Sint Eustatius and Saba</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="ba">
 		<code>BA</code>
 		<name>Bosnia and Herzegovina</name>
 		<market></market>
+		<tld>ba</tld>
 	</country>
-	<country>
+	<country id="bw">
 		<code>BW</code>
 		<name>Botswana</name>
 		<market></market>
+		<tld>bw</tld>
 	</country>
-	<country>
+	<country id="bv">
 		<code>BV</code>
 		<name>Bouvet Island</name>
 		<market></market>
+		<tld></tld>
 	</country>
 	<country>
 		<code>BR</code>
 		<name>Brazil</name>
-		<market>pt-BR</market>
+		<market></market>
+		<tld>br</tld>
 	</country>
-	<country>
+	<country id="io">
 		<code>IO</code>
 		<name>British Indian Ocean Territory</name>
 		<market></market>
+		<tld>io</tld>
 	</country>
-	<country>
+	<country id="bn">
 		<code>BN</code>
 		<name>Brunei Darussalam</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="bg">
 		<code>BG</code>
 		<name>Bulgaria</name>
-		<market>bg-BG</market>
+		<market></market>
+		<tld>bg</tld>
 	</country>
-	<country>
+	<country id="bf">
 		<code>BF</code>
 		<name>Burkina Faso</name>
 		<market></market>
+		<tld>bf</tld>
 	</country>
-	<country>
+	<country id="bi">
 		<code>BI</code>
 		<name>Burundi</name>
 		<market></market>
+		<tld>bi</tld>
 	</country>
-	<country>
+	<country id="kh">
 		<code>KH</code>
 		<name>Cambodia</name>
 		<market></market>
+		<tld>com.kh</tld>
 	</country>
-	<country>
+	<country id="cm">
 		<code>CM</code>
 		<name>Cameroon</name>
 		<market></market>
+		<tld>cm</tld>
 	</country>
-	<country>
+	<country id="ca">
 		<code>CA</code>
 		<name>Canada</name>
-		<market>en-CA</market>
+		<market></market>
+		<tld>ca</tld>
 	</country>
-	<country>
+	<country id="cv">
 		<code>CV</code>
 		<name>Cape Verde</name>
 		<market></market>
+		<tld>cv</tld>
 	</country>
-	<country>
+	<country id="ky">
 		<code>KY</code>
 		<name>Cayman Islands</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="cf">
 		<code>CF</code>
 		<name>Central African Republic</name>
 		<market></market>
+		<tld>cf</tld>
 	</country>
-	<country>
+	<country id="td">
 		<code>TD</code>
 		<name>Chad</name>
 		<market></market>
+		<tld>td</tld>
 	</country>
-	<country>
+	<country id="cl">
 		<code>CL</code>
 		<name>Chile</name>
-		<market>es-CL</market>
+		<market></market>
+		<tld>cl</tld>
 	</country>
-	<country>
+	<country id="cn">
 		<code>CN</code>
 		<name>China</name>
-		<market>zh-CN</market>
+		<market></market>
+		<tld>cn</tld>
 	</country>
-	<country>
+	<country id="cx">
 		<code>CX</code>
 		<name>Christmas Island</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="cc">
 		<code>CC</code>
 		<name>Cocos (Keeling) Islands</name>
 		<market></market>
+		<tld>cc</tld>
 	</country>
-	<country>
+	<country id="co">
 		<code>CO</code>
 		<name>Colombia</name>
 		<market></market>
+		<tld>com.co</tld>
 	</country>
-	<country>
+	<country id="km">
 		<code>KM</code>
 		<name>Comoros</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="cg">
 		<code>CG</code>
 		<name>Congo</name>
 		<market></market>
+		<tld>cg</tld>
 	</country>
-	<country>
+	<country id="cd">
 		<code>CD</code>
 		<name>Congo, the Democratic Republic of the</name>
 		<market></market>
+		<tld>cd</tld>
 	</country>
-	<country>
+	<country id="ck">
 		<code>CK</code>
 		<name>Cook Islands</name>
 		<market></market>
+		<tld>co.ck</tld>
 	</country>
-	<country>
+	<country id="cr">
 		<code>CR</code>
 		<name>Costa Rica</name>
 		<market></market>
+		<tld>co.cr</tld>
 	</country>
-	<country>
+	<country id="ci">
 		<code>CI</code>
 		<name>Côte d'Ivoire</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="hr">
 		<code>HR</code>
 		<name>Croatia</name>
-		<market>hr-HR</market>
+		<market></market>
+		<tld>hr</tld>
 	</country>
-	<country>
+	<country id="cu">
 		<code>CU</code>
 		<name>Cuba</name>
 		<market></market>
+		<tld>com.cu</tld>
 	</country>
-	<country>
+	<country id="cw">
 		<code>CW</code>
 		<name>Curaçao</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="cy">
 		<code>CY</code>
 		<name>Cyprus</name>
 		<market></market>
+		<tld>com.cy</tld>
 	</country>
-	<country>
+	<country id="cz">
 		<code>CZ</code>
 		<name>Czech Republic</name>
-		<market>cs-CZ</market>
+		<market></market>
+		<tld>cz</tld>
 	</country>
-	<country>
+	<country id="dk">
 		<code>DK</code>
 		<name>Denmark</name>
-		<market>da-DK</market>
+		<market></market>
+		<tld>dk</tld>
 	</country>
-	<country>
+	<country id="dj">
 		<code>DJ</code>
 		<name>Djibouti</name>
 		<market></market>
+		<tld>dj</tld>
 	</country>
-	<country>
+	<country id="dm">
 		<code>DM</code>
 		<name>Dominica</name>
 		<market></market>
+		<tld>dm</tld>
 	</country>
-	<country>
+	<country id="do">
 		<code>DO</code>
 		<name>Dominican Republic</name>
 		<market></market>
+		<tld>com.do</tld>
 	</country>
-	<country>
+	<country id="ec">
 		<code>EC</code>
 		<name>Ecuador</name>
 		<market></market>
+		<tld>com.ec</tld>
 	</country>
-	<country>
+	<country id="eg">
 		<code>EG</code>
 		<name>Egypt</name>
 		<market></market>
+		<tld>com.eg</tld>
 	</country>
-	<country>
+	<country id="sv">
 		<code>SV</code>
 		<name>El Salvador</name>
 		<market></market>
+		<tld>com.sv</tld>
 	</country>
-	<country>
+	<country id="gq">
 		<code>GQ</code>
 		<name>Equatorial Guinea</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="er">
 		<code>ER</code>
 		<name>Eritrea</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="ee">
 		<code>EE</code>
 		<name>Estonia</name>
-		<market>et-EE</market>
+		<market></market>
+		<tld>ee</tld>
 	</country>
-	<country>
+	<country id="et">
 		<code>ET</code>
 		<name>Ethiopia</name>
 		<market></market>
+		<tld>com.et</tld>
 	</country>
-	<country>
+	<country id="fk">
 		<code>FK</code>
 		<name>Falkland Islands (Malvinas)</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="fo">
 		<code>FO</code>
 		<name>Faroe Islands</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="fj">
 		<code>FJ</code>
 		<name>Fiji</name>
 		<market></market>
+		<tld>com.fj</tld>
 	</country>
-	<country>
+	<country id="fi">
 		<code>FI</code>
 		<name>Finland</name>
-		<market>fi-FI</market>
+		<market></market>
+		<tld>fi</tld>
 	</country>
-	<country>
+	<country id="fr">
 		<code>FR</code>
 		<name>France</name>
-		<market>fr-FR</market>
+		<market></market>
+		<tld>fr</tld>
 	</country>
-	<country>
+	<country id="gf">
 		<code>GF</code>
 		<name>French Guiana</name>
 		<market></market>
+		<tld>gf</tld>
 	</country>
-	<country>
+	<country id="pf">
 		<code>PF</code>
 		<name>French Polynesia</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="tf">
 		<code>TF</code>
 		<name>French Southern Territories</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="ga">
 		<code>GA</code>
 		<name>Gabon</name>
 		<market></market>
+		<tld>ga</tld>
 	</country>
-	<country>
+	<country id="gm">
 		<code>GM</code>
 		<name>Gambia</name>
 		<market></market>
+		<tld>gm</tld>
 	</country>
-	<country>
+	<country id="ge">
 		<code>GE</code>
 		<name>Georgia</name>
 		<market></market>
+		<tld>ge</tld>
 	</country>
-	<country>
+	<country id="de">
 		<code>DE</code>
 		<name>Germany</name>
-		<market>de-DE</market>
+		<market></market>
+		<tld>de</tld>
 	</country>
-	<country>
+	<country id="gh">
 		<code>GH</code>
 		<name>Ghana</name>
 		<market></market>
+		<tld>com.gh</tld>
 	</country>
-	<country>
+	<country id="gi">
 		<code>GI</code>
 		<name>Gibraltar</name>
 		<market></market>
+		<tld>com.gi</tld>
 	</country>
-	<country>
+	<country id="gr">
 		<code>GR</code>
 		<name>Greece</name>
-		<market>el-GR</market>
+		<market></market>
+		<tld>gr</tld>
 	</country>
-	<country>
+	<country id="gl">
 		<code>GL</code>
 		<name>Greenland</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="gd">
 		<code>GD</code>
 		<name>Grenada</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="gp">
 		<code>GP</code>
 		<name>Guadeloupe</name>
 		<market></market>
+		<tld>gp</tld>
 	</country>
-	<country>
+	<country id="gu">
 		<code>GU</code>
 		<name>Guam</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="gt">
 		<code>GT</code>
 		<name>Guatemala</name>
 		<market></market>
+		<tld>com.gt</tld>
 	</country>
-	<country>
+	<country id="gg">
 		<code>GG</code>
 		<name>Guernsey</name>
 		<market></market>
+		<tld>gg</tld>
 	</country>
-	<country>
+	<country id="gn">
 		<code>GN</code>
 		<name>Guinea</name>
 		<market></market>
+		<tld>com.pg</tld>
 	</country>
-	<country>
+	<country id="gw">
 		<code>GW</code>
 		<name>Guinea-Bissau</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="gy">
 		<code>GY</code>
 		<name>Guyana</name>
 		<market></market>
+		<tld>gy</tld>
 	</country>
-	<country>
+	<country id="ht">
 		<code>HT</code>
 		<name>Haiti</name>
 		<market></market>
+		<tld>ht</tld>
 	</country>
-	<country>
+	<country id="hm">
 		<code>HM</code>
 		<name>Heard Island and McDonald Islands</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="va">
 		<code>VA</code>
 		<name>Holy See (Vatican City State)</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="hn">
 		<code>HN</code>
 		<name>Honduras</name>
 		<market></market>
+		<tld>hn</tld>
 	</country>
-	<country>
+	<country id="hk">
 		<code>HK</code>
 		<name>Hong Kong</name>
-		<market>zh-HK</market>
+		<market></market>
+		<tld>com.hk</tld>
 	</country>
-	<country>
+	<country id="hu">
 		<code>HU</code>
 		<name>Hungary</name>
-		<market>hu-HU</market>
+		<market></market>
+		<tld>hu</tld>
 	</country>
-	<country>
+	<country id="is">
 		<code>IS</code>
 		<name>Iceland</name>
 		<market></market>
+		<tld>is</tld>
 	</country>
-	<country>
+	<country id="in">
 		<code>IN</code>
 		<name>India</name>
-		<market>en-IN</market>
+		<market></market>
+		<tld>con.in</tld>
 	</country>
-	<country>
+	<country id="id">
 		<code>ID</code>
 		<name>Indonesia</name>
-		<market>en-ID</market>
+		<market></market>
+		<tld>co.id</tld>
 	</country>
-	<country>
+	<country id="ir">
 		<code>IR</code>
 		<name>Iran, Islamic Republic of</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="iq">
 		<code>IQ</code>
 		<name>Iraq</name>
 		<market></market>
+		<tld>iq</tld>
 	</country>
-	<country>
+	<country id="ie">
 		<code>IE</code>
 		<name>Ireland</name>
-		<market>en-IE</market>
+		<market></market>
+		<tld>ie</tld>
 	</country>
-	<country>
+	<country id="im">
 		<code>IM</code>
 		<name>Isle of Man</name>
 		<market></market>
+		<tld>im</tld>
 	</country>
-	<country>
+	<country id="il">
 		<code>IL</code>
 		<name>Israel</name>
-		<market>he-IL</market>
+		<market></market>
+		<tld>co.il</tld>
 	</country>
-	<country>
+	<country id="it">
 		<code>IT</code>
 		<name>Italy</name>
-		<market>it-IT</market>
+		<market></market>
+		<tld>it</tld>
 	</country>
-	<country>
+	<country id="jm">
 		<code>JM</code>
 		<name>Jamaica</name>
 		<market></market>
+		<tld>com.jm</tld>
 	</country>
-	<country>
+	<country id="jp">
 		<code>JP</code>
 		<name>Japan</name>
-		<market>ja-JP</market>
+		<market></market>
+		<tld>co.jp</tld>
 	</country>
-	<country>
+	<country id="je">
 		<code>JE</code>
 		<name>Jersey</name>
 		<market></market>
+		<tld>je</tld>
 	</country>
-	<country>
+	<country id="jo">
 		<code>JO</code>
 		<name>Jordan</name>
 		<market></market>
+		<tld>jo</tld>
 	</country>
-	<country>
+	<country id="kz">
 		<code>KZ</code>
 		<name>Kazakhstan</name>
 		<market></market>
+		<tld>kz</tld>
 	</country>
-	<country>
+	<country id="ke">
 		<code>KE</code>
 		<name>Kenya</name>
 		<market></market>
+		<tld>co.ke</tld>
 	</country>
-	<country>
+	<country id="ki">
 		<code>KI</code>
 		<name>Kiribati</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="kp">
 		<code>KP</code>
 		<name>Korea, Democratic People's Republic of</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="kr">
 		<code>KR</code>
 		<name>Korea, Republic of</name>
-		<market>ko-KR</market>
+		<market></market>
+		<tld>co.kr</tld>
 	</country>
-	<country>
+	<country id="kw">
 		<code>KW</code>
 		<name>Kuwait</name>
 		<market></market>
+		<tld>com.kw</tld>
 	</country>
-	<country>
+	<country id="kg">
 		<code>KG</code>
 		<name>Kyrgyzstan</name>
 		<market></market>
+		<tld>kg</tld>
 	</country>
-	<country>
+	<country id="la">
 		<code>LA</code>
 		<name>Lao People's Democratic Republic</name>
 		<market></market>
+		<tld>la</tld>
 	</country>
-	<country>
+	<country id="lv">
 		<code>LV</code>
 		<name>Latvia</name>
-		<market>lv-LV</market>
+		<market></market>
+		<tld>lv</tld>
 	</country>
-	<country>
+	<country id="lb">
 		<code>LB</code>
 		<name>Lebanon</name>
 		<market></market>
+		<tld>com.lb</tld>
 	</country>
-	<country>
+	<country id="ls">
 		<code>LS</code>
 		<name>Lesotho</name>
 		<market></market>
+		<tld>co.ls</tld>
 	</country>
-	<country>
+	<country id="lr">
 		<code>LR</code>
 		<name>Liberia</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="ly">
 		<code>LY</code>
 		<name>Libya</name>
 		<market></market>
+		<tld>com.ly</tld>
 	</country>
-	<country>
+	<country id="li">
 		<code>LI</code>
 		<name>Liechtenstein</name>
 		<market></market>
+		<tld>li</tld>
 	</country>
-	<country>
+	<country id="lt">
 		<code>LT</code>
 		<name>Lithuania</name>
-		<market>lt-LT</market>
+		<market></market>
+		<tld>lt</tld>
 	</country>
-	<country>
+	<country id="lu">
 		<code>LU</code>
 		<name>Luxembourg</name>
 		<market></market>
+		<tld>lu</tld>
 	</country>
-	<country>
+	<country id="mo">
 		<code>MO</code>
 		<name>Macao</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="mk">
 		<code>MK</code>
 		<name>Macedonia, the Former Yugoslav Republic of</name>
 		<market></market>
+		<tld>mk</tld>
 	</country>
-	<country>
+	<country id="mg">
 		<code>MG</code>
 		<name>Madagascar</name>
 		<market></market>
+		<tld>mg</tld>
 	</country>
-	<country>
+	<country id="mw">
 		<code>MW</code>
 		<name>Malawi</name>
-		<market></market>
+		<market>mw</market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="my">
 		<code>MY</code>
 		<name>Malaysia</name>
-		<market>en-MY</market>
+		<market></market>
+		<tld>com.my</tld>
 	</country>
-	<country>
+	<country id="mv">
 		<code>MV</code>
 		<name>Maldives</name>
 		<market></market>
+		<tld>mv</tld>
 	</country>
-	<country>
+	<country id="ml">
 		<code>ML</code>
 		<name>Mali</name>
 		<market></market>
+		<tld>ml</tld>
 	</country>
-	<country>
+	<country id="mt">
 		<code>MT</code>
 		<name>Malta</name>
 		<market></market>
+		<tld>com.mt</tld>
 	</country>
-	<country>
+	<country id="mh">
 		<code>MH</code>
 		<name>Marshall Islands</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="mq">
 		<code>MQ</code>
 		<name>Martinique</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="mr">
 		<code>MR</code>
 		<name>Mauritania</name>
 		<market></market>
+		<tld>mr</tld>
 	</country>
-	<country>
+	<country id="mu">
 		<code>MU</code>
 		<name>Mauritius</name>
 		<market></market>
+		<tld>mu</tld>
 	</country>
-	<country>
+	<country id="yt">
 		<code>YT</code>
 		<name>Mayotte</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="mx">
 		<code>MX</code>
 		<name>Mexico</name>
-		<market>es-MX</market>
+		<market></market>
+		<tld>com.mx</tld>
 	</country>
-	<country>
+	<country id="fm">
 		<code>FM</code>
 		<name>Micronesia, Federated States of</name>
 		<market></market>
+		<tld>fm</tld>
 	</country>
-	<country>
+	<country id="md">
 		<code>MD</code>
 		<name>Moldova, Republic of</name>
 		<market></market>
+		<tld>md</tld>
 	</country>
-	<country>
+	<country id="mc">
 		<code>MC</code>
 		<name>Monaco</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="mn">
 		<code>MN</code>
 		<name>Mongolia</name>
 		<market></market>
+		<tld>mn</tld>
 	</country>
-	<country>
+	<country id="me">
 		<code>ME</code>
 		<name>Montenegro</name>
 		<market></market>
+		<tld>me</tld>
 	</country>
-	<country>
+	<country id="ms">
 		<code>MS</code>
 		<name>Montserrat</name>
 		<market></market>
+		<tld>ms</tld>
 	</country>
-	<country>
+	<country id="ma">
 		<code>MA</code>
 		<name>Morocco</name>
 		<market></market>
+		<tld>co.ma</tld>
 	</country>
-	<country>
+	<country id="mz">
 		<code>MZ</code>
 		<name>Mozambique</name>
 		<market></market>
+		<tld>co.mz</tld>
 	</country>
-	<country>
+	<country id="mm">
 		<code>MM</code>
 		<name>Myanmar</name>
 		<market></market>
+		<tld>com.mm</tld>
 	</country>
-	<country>
+	<country id="na">
 		<code>NA</code>
 		<name>Namibia</name>
 		<market></market>
+		<tld>com.na</tld>
 	</country>
-	<country>
+	<country id="nr">
 		<code>NR</code>
 		<name>Nauru</name>
 		<market></market>
+		<tld>nr</tld>
 	</country>
-	<country>
+	<country id="np">
 		<code>NP</code>
 		<name>Nepal</name>
 		<market></market>
+		<tld>com.np</tld>
 	</country>
-	<country>
+	<country id="nl">
 		<code>NL</code>
 		<name>Netherlands</name>
-		<market>nl-NL</market>
+		<market></market>
+		<tld>nl</tld>
 	</country>
-	<country>
+	<country id="nc">
 		<code>NC</code>
 		<name>New Caledonia</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="nz">
 		<code>NZ</code>
 		<name>New Zealand</name>
-		<market>en-NZ</market>
+		<market></market>
+		<tld>co.nz</tld>
 	</country>
-	<country>
+	<country id="ni">
 		<code>NI</code>
 		<name>Nicaragua</name>
 		<market></market>
+		<tld>com.ni</tld>
 	</country>
-	<country>
+	<country id="ne">
 		<code>NE</code>
 		<name>Niger</name>
 		<market></market>
+		<tld>ne</tld>
 	</country>
-	<country>
+	<country id="ng">
 		<code>NG</code>
 		<name>Nigeria</name>
 		<market></market>
+		<tld>com.ng</tld>
 	</country>
-	<country>
+	<country id="nu">
 		<code>NU</code>
 		<name>Niue</name>
 		<market></market>
+		<tld>nu</tld>
 	</country>
-	<country>
+	<country id="nf">
 		<code>NF</code>
 		<name>Norfolk Island</name>
 		<market></market>
+		<tld>com.nf</tld>
 	</country>
-	<country>
+	<country id="mp">
 		<code>MP</code>
 		<name>Northern Mariana Islands</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="no">
 		<code>NO</code>
 		<name>Norway</name>
-		<market>nb-NO</market>
+		<market></market>
+		<tld>no</tld>
 	</country>
-	<country>
+	<country id="om">
 		<code>OM</code>
 		<name>Oman</name>
 		<market></market>
+		<tld>com.om</tld>
 	</country>
-	<country>
+	<country id="pk">
 		<code>PK</code>
 		<name>Pakistan</name>
 		<market></market>
+		<tld>com.pk</tld>
 	</country>
-	<country>
+	<country id="pw">
 		<code>PW</code>
 		<name>Palau</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="ps">
 		<code>PS</code>
 		<name>Palestine, State of</name>
 		<market></market>
+		<tld>ps</tld>
 	</country>
-	<country>
+	<country id="pa">
 		<code>PA</code>
 		<name>Panama</name>
 		<market></market>
+		<tld>com.pa</tld>
 	</country>
-	<country>
+	<country id="pg">
 		<code>PG</code>
 		<name>Papua New Guinea</name>
 		<market></market>
+		<tld>com.pg</tld>
 	</country>
-	<country>
+	<country id="py">
 		<code>PY</code>
 		<name>Paraguay</name>
 		<market></market>
+		<tld>com.py</tld>
 	</country>
-	<country>
+	<country id="pe">
 		<code>PE</code>
 		<name>Peru</name>
 		<market></market>
+		<tld>com.pe</tld>
 	</country>
-	<country>
+	<country id="ph">
 		<code>PH</code>
 		<name>Philippines</name>
-		<market>en-PH</market>
+		<market></market>
+		<tld>com.ph</tld>
 	</country>
-	<country>
+	<country id="pn">
 		<code>PN</code>
 		<name>Pitcairn</name>
 		<market></market>
+		<tld>com.pn</tld>
 	</country>
-	<country>
+	<country id="pl">
 		<code>PL</code>
 		<name>Poland</name>
-		<market>pl-PL</market>
+		<market></market>
+		<tld>pl</tld>
 	</country>
-	<country>
+	<country id="pt">
 		<code>PT</code>
 		<name>Portugal</name>
-		<market>pt-PT</market>
+		<market></market>
+		<tld>pt</tld>
 	</country>
-	<country>
+	<country id="pr">
 		<code>PR</code>
 		<name>Puerto Rico</name>
 		<market></market>
+		<tld>com.pr</tld>
 	</country>
-	<country>
+	<country id="qa">
 		<code>QA</code>
 		<name>Qatar</name>
 		<market></market>
+		<tld>com.qa</tld>
 	</country>
-	<country>
+	<country id="re">
 		<code>RE</code>
 		<name>Réunion</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="ro">
 		<code>RO</code>
 		<name>Romania</name>
-		<market>ro-RO</market>
+		<market></market>
+		<tld>ro</tld>
 	</country>
-	<country>
+	<country id="ru">
 		<code>RU</code>
 		<name>Russian Federation</name>
-		<market>ru-Ru</market>
+		<market></market>
+		<tld>ru</tld>
 	</country>
-	<country>
+	<country id="rw">
 		<code>RW</code>
 		<name>Rwanda</name>
 		<market></market>
+		<tld>rw</tld>
 	</country>
-	<country>
+	<country id="bl">
 		<code>BL</code>
 		<name>Saint Barthélemy</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="sh">
 		<code>SH</code>
 		<name>Saint Helena, Ascension and Tristan da Cunha</name>
 		<market></market>
+		<tld>sh</tld>
 	</country>
-	<country>
+	<country id="kn">
 		<code>KN</code>
 		<name>Saint Kitts and Nevis</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="lc">
 		<code>LC</code>
 		<name>Saint Lucia</name>
 		<market></market>
+		<tld>com.lc</tld>
 	</country>
-	<country>
+	<country id="mf">
 		<code>MF</code>
 		<name>Saint Martin (French part)</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="pm">
 		<code>PM</code>
 		<name>Saint Pierre and Miquelon</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="vc">
 		<code>VC</code>
 		<name>Saint Vincent and the Grenadines</name>
 		<market></market>
+		<tld>com.vc</tld>
 	</country>
-	<country>
+	<country id="ws">
 		<code>WS</code>
 		<name>Samoa</name>
 		<market></market>
+		<tld>ws</tld>
 	</country>
-	<country>
+	<country id="sm">
 		<code>SM</code>
 		<name>San Marino</name>
 		<market></market>
+		<tld>sm</tld>
 	</country>
-	<country>
+	<country id="st">
 		<code>ST</code>
 		<name>Sao Tome and Principe</name>
 		<market></market>
+		<tld>st</tld>
 	</country>
-	<country>
+	<country id="sa">
 		<code>SA</code>
 		<name>Saudi Arabia</name>
-		<market>en-XA</market>
+		<market></market>
+		<tld>com.sa</tld>
 	</country>
-	<country>
+	<country id="sn">
 		<code>SN</code>
 		<name>Senegal</name>
 		<market></market>
+		<tld>sn</tld>
 	</country>
-	<country>
+	<country id="rs">
 		<code>RS</code>
 		<name>Serbia</name>
 		<market></market>
+		<tld>rs</tld>
 	</country>
-	<country>
+	<country id="sc">
 		<code>SC</code>
 		<name>Seychelles</name>
 		<market></market>
+		<tld>sc</tld>
 	</country>
-	<country>
+	<country id="sl">
 		<code>SL</code>
 		<name>Sierra Leone</name>
 		<market></market>
+		<tld>com.sl</tld>
 	</country>
-	<country>
+	<country id="sg">
 		<code>SG</code>
 		<name>Singapore</name>
-		<market>en-SG</market>
+		<market></market>
+		<tld>com.sg</tld>
 	</country>
-	<country>
+	<country id="sx">
 		<code>SX</code>
 		<name>Sint Maarten (Dutch part)</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="sk">
 		<code>SK</code>
 		<name>Slovakia</name>
-		<market>sk-SK</market>
+		<market></market>
+		<tld>sk</tld>
 	</country>
-	<country>
+	<country id="si">
 		<code>SI</code>
 		<name>Slovenia</name>
-		<market>sl-SL</market>
+		<market></market>
+		<tld>si</tld>
 	</country>
-	<country>
+	<country id="sb">
 		<code>SB</code>
 		<name>Solomon Islands</name>
 		<market></market>
+		<tld>com.sb</tld>
 	</country>
-	<country>
+	<country id="so">
 		<code>SO</code>
 		<name>Somalia</name>
 		<market></market>
+		<tld>so</tld>
 	</country>
-	<country>
+	<country id="za">
 		<code>ZA</code>
 		<name>South Africa</name>
-		<market>en-ZA</market>
+		<market></market>
+		<tld>co.za</tld>
 	</country>
-	<country>
+	<country id="gs">
 		<code>GS</code>
 		<name>South Georgia and the South Sandwich Islands</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="ss">
 		<code>SS</code>
 		<name>South Sudan</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="es">
 		<code>ES</code>
 		<name>Spain</name>
-		<market>es-ES</market>
+		<market></market>
+		<tld>es</tld>
 	</country>
-	<country>
+	<country id="lk">
 		<code>LK</code>
 		<name>Sri Lanka</name>
 		<market></market>
+		<tld>lk</tld>
 	</country>
-	<country>
+	<country id="sd">
 		<code>SD</code>
 		<name>Sudan</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="sr">
 		<code>SR</code>
 		<name>Suriname</name>
 		<market></market>
+		<tld>sr</tld>
 	</country>
-	<country>
+	<country id="sj">
 		<code>SJ</code>
 		<name>Svalbard and Jan Mayen</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="sz">
 		<code>SZ</code>
 		<name>Swaziland</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="se">
 		<code>SE</code>
 		<name>Sweden</name>
-		<market>sv-SE</market>
+		<market></market>
+		<tld>se</tld>
 	</country>
-	<country>
+	<country id="ch">
 		<code>CH</code>
 		<name>Switzerland</name>
-		<market>de-CH</market>
+		<market></market>
+		<tld>ch</tld>
 	</country>
-	<country>
+	<country id="sy">
 		<code>SY</code>
 		<name>Syrian Arab Republic</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="tw">
 		<code>TW</code>
 		<name>Taiwan, Province of China</name>
-		<market>zh-TW</market>
+		<market></market>
+		<tld>com.tw</tld>
 	</country>
-	<country>
+	<country id="tj">
 		<code>TJ</code>
 		<name>Tajikistan</name>
 		<market></market>
+		<tld>com.tj</tld>
 	</country>
-	<country>
+	<country id="tz">
 		<code>TZ</code>
 		<name>Tanzania, United Republic of</name>
 		<market></market>
+		<tld>co.tz</tld>
 	</country>
-	<country>
+	<country id="th">
 		<code>TH</code>
 		<name>Thailand</name>
-		<market>th-TH</market>
+		<market></market>
+		<tld>co.th</tld>
 	</country>
-	<country>
+	<country id="tl">
 		<code>TL</code>
 		<name>Timor-Leste</name>
 		<market></market>
+		<tld>tl</tld>
 	</country>
-	<country>
+	<country id="tg">
 		<code>TG</code>
 		<name>Togo</name>
 		<market></market>
+		<tld>tg</tld>
 	</country>
-	<country>
+	<country id="tk">
 		<code>TK</code>
 		<name>Tokelau</name>
 		<market></market>
+		<tld>tk</tld>
 	</country>
-	<country>
+	<country id="to">
 		<code>TO</code>
 		<name>Tonga</name>
 		<market></market>
+		<tld>to</tld>
 	</country>
-	<country>
+	<country id="tt">
 		<code>TT</code>
 		<name>Trinidad and Tobago</name>
 		<market></market>
+		<tld>tt</tld>
 	</country>
-	<country>
+	<country id="tn">
 		<code>TN</code>
 		<name>Tunisia</name>
 		<market></market>
+		<tld>tn</tld>
 	</country>
-	<country>
+	<country id="tr">
 		<code>TR</code>
 		<name>Turkey</name>
-		<market>tr-TR</market>
+		<market></market>
+		<tld>com.tr</tld>
 	</country>
-	<country>
+	<country id="tm">
 		<code>TM</code>
 		<name>Turkmenistan</name>
 		<market></market>
+		<tld>tm</tld>
 	</country>
-	<country>
+	<country id="tc">
 		<code>TC</code>
 		<name>Turks and Caicos Islands</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="tv">
 		<code>TV</code>
 		<name>Tuvalu</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="ug">
 		<code>UG</code>
 		<name>Uganda</name>
 		<market></market>
+		<tld>co.ug</tld>
 	</country>
-	<country>
+	<country id="ua">
 		<code>UA</code>
 		<name>Ukraine</name>
-		<market>uk-UA</market>
+		<market></market>
+		<tld>com.ua</tld>
 	</country>
-	<country>
+	<country id="ae">
 		<code>AE</code>
 		<name>United Arab Emirates</name>
 		<market></market>
+		<tld>ae</tld>
 	</country>
-	<country>
+	<country id="gb">
 		<code>GB</code>
 		<name>United Kingdom</name>
-		<market>en-GB</market>
+		<market></market>
+		<tld>co.uk</tld>
 	</country>
-	<country>
+	<country id="us">
 		<code>US</code>
 		<name>United States</name>
-		<market>en-US</market>
+		<market></market>
+		<tld>com</tld>
 	</country>
-	<country>
+	<country id="um">
 		<code>UM</code>
 		<name>United States Minor Outlying Islands</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="uy">
 		<code>UY</code>
 		<name>Uruguay</name>
 		<market></market>
+		<tld>com.uy</tld>
 	</country>
-	<country>
+	<country id="uz">
 		<code>UZ</code>
 		<name>Uzbekistan</name>
 		<market></market>
+		<tld>co.uz</tld>
 	</country>
-	<country>
+	<country id="vu">
 		<code>VU</code>
 		<name>Vanuatu</name>
 		<market></market>
+		<tld>vu</tld>
 	</country>
-	<country>
+	<country id="ve">
 		<code>VE</code>
 		<name>Venezuela, Bolivarian Republic of</name>
 		<market></market>
+		<tld>co.ve</tld>
 	</country>
-	<country>
+	<country id="vn">
 		<code>VN</code>
 		<name>Viet Nam</name>
 		<market></market>
+		<tld>com.vm</tld>
 	</country>
-	<country>
+	<country id="vg">
 		<code>VG</code>
 		<name>Virgin Islands, British</name>
 		<market></market>
+		<tld>vg</tld>
 	</country>
-	<country>
+	<country id="vi">
 		<code>VI</code>
 		<name>Virgin Islands, U.S.</name>
 		<market></market>
+		<tld>co.vi</tld>
 	</country>
-	<country>
+	<country id="wf">
 		<code>WF</code>
 		<name>Wallis and Futuna</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="eh">
 		<code>EH</code>
 		<name>Western Sahara</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="ye">
 		<code>YE</code>
 		<name>Yemen</name>
 		<market></market>
+		<tld></tld>
 	</country>
-	<country>
+	<country id="zm">
 		<code>ZM</code>
 		<name>Zambia</name>
 		<market></market>
+		<tld>co.zm</tld>
 	</country>
-	<country>
+	<country id="zw">
 		<code>ZW</code>
 		<name>Zimbabwe</name>
 		<market></market>
+		<tld>co.zw</tld>
 	</country>
