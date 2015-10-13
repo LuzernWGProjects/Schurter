@@ -2,137 +2,82 @@
 <basicMetaTag>
 	<metaTag>
 		<name>keywords</name>
-		<description></description>
-		<example></example>
+		<description>The keywords are the most important words you use on your page.</description>
+		<example>SCHURTER, SCHURTER Gruppe, SCHURTER Holding AG, schruter, shurter, shruter</example>
 	</metaTag>
 	<metaTag>
 		<name>description</name>
-		<description></description>
-		<example></example>
+		<description>A description of your website in 3 of 4 sentences</description>
+		<example>SCHURTER is a leading innovator, manufacturer and distributor of fuses, connectors, circuit breakers, input systems and EMC products.</example>
 	</metaTag>
 	<metaTag>
 		<name>subject</name>
-		<description></description>
-		<example></example>
+		<description>The subject of your website</description>
+		<example>electronic parts, switches, keypads</example>
 	</metaTag>
 	<metaTag>
 		<name>copyright</name>
-		<description></description>
-		<example></example>
+		<description>Name of the owner</description>
+		<example>Schurter</example>
 	</metaTag>
 	<metaTag>
 		<name>language</name>
-		<description></description>
-		<example></example>
+		<description>Explains in which language your website is in</description>
+		<example>eng-GB</example>
 	</metaTag>
 	<metaTag>
 		<name>robots</name>
-		<description></description>
-		<example></example>
+		<description>How far do you allow robots to spider through your website</description>
+		<example>index,follow</example>
 	</metaTag>
 	<metaTag>
 		<name>revised</name>
-		<description></description>
-		<example></example>
+		<description>Tells search engine bots the last modified date and time of your webpage</description>
+		<example>Sunday, April 21, 2013, 2:59 am</example>
 	</metaTag>
 	<metaTag>
 		<name>abstract</name>
-		<description></description>
-		<example></example>
+		<description>A very short description of the website</description>
+		<example>SCHURTER is a leading innovator of electronic parts</example>
 	</metaTag>
 	<metaTag>
-		<name>topic</name>
-		<description></description>
-		<example></example>
-	</metaTag>
-	<metaTag>
-		<name>summary</name>
-		<description></description>
-		<example></example>
-	</metaTag>
-	<metaTag>
-		<name>Classification</name>
-		<description></description>
-		<example></example>
+		<name>classification</name>
+		<description>Tells you what the website is about</description>
+		<example>Schurter</example>
 	</metaTag>
 	<metaTag>
 		<name>author</name>
-		<description></description>
-		<example></example>
+		<description>The author of the website</description>
+		<example>Schurter</example>
 	</metaTag>
 	<metaTag>
 		<name>designer</name>
-		<description></description>
-		<example></example>
-	</metaTag>
-	<metaTag>
-		<name>copyright</name>
-		<description></description>
-		<example></example>
+		<description>The meta tag is used to declare the designer of the website</description>
+		<example>Web design shop</example>
 	</metaTag>
 	<metaTag>
 		<name>reply-to</name>
-		<description></description>
-		<example></example>
-	</metaTag>
-	<metaTag>
-		<name>owner</name>
-		<description></description>
-		<example></example>
+		<description>Contact adress</description>
+		<example>info@schurterinc.com</example>
 	</metaTag>
 	<metaTag>
 		<name>url</name>
-		<description></description>
-		<example></example>
-	</metaTag>
-	<metaTag>
-		<name>identifier-URL</name>
-		<description></description>
-		<example></example>
-	</metaTag>
-	<metaTag>
-		<name>directory</name>
-		<description></description>
-		<example></example>
-	</metaTag>
-	<metaTag>
-		<name>category</name>
-		<description></description>
-		<example></example>
+		<description>URL</description>
+		<example>www.schurterinc.com</example>
 	</metaTag>
 	<metaTag>
 		<name>coverage</name>
-		<description></description>
-		<example></example>
-	</metaTag>
-	<metaTag>
-		<name>distribution</name>
-		<description></description>
-		<example></example>
-	</metaTag>
-	<metaTag>
-		<name>rating</name>
-		<description></description>
-		<example></example>
+		<description>For which part in the world this website was build</description>
+		<example>World</example>
 	</metaTag>
 	<metaTag>
 		<name>revisit-after</name>
-		<description></description>
-		<example></example>
+		<description>How often a robot or spider should index your website</description>
+		<example>7 days</example>
 	</metaTag>
 	<metaTag>
-		<name>Expires</name>
-		<description></description>
-		<example></example>
-	</metaTag>
-	<metaTag>
-		<name>Pragma</name>
-		<description></description>
-		<example></example>
-	</metaTag>
-	<metaTag>
-		<name>Cache-Control</name>
-		<description></description>
-		<example></example>
+		<name>expires</name>
+		<description>he expires meta tag defines the expiration date and time of the document being indexed</description>
+		<example>19-10-2027</example>
 	</metaTag>
 </basicMetaTag>
