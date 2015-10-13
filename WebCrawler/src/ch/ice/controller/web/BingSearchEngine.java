@@ -28,14 +28,19 @@ import ch.ice.utils.JSONStandardizedKeys;
 import ch.ice.utils.JSONUtil;
 
 
-/**
- * @author Oliver
- *
- */
 public class BingSearchEngine implements SearchEngine {
 
-	public JSONArray search(String requestedQuery, int limitSearchResults) throws IOException, NoUrlFoundException {
-	
+	/**
+	 * Search for an URL on Bing with certain params
+	 * 
+	 * @param String - The requested Query for lookup
+	 * @param int - Limit the retrieved search results
+	 * @param String - Limit Search for a country e.g bing.ch, bing.co.uk and so on
+	 * @return JSONArray with all searchresults on Bing
+	 */
+	@Override
+	public JSONArray search(String requestedQuery, int limitSearchResults, String countryCode)  throws IOException, NoUrlFoundException {
+
     	String accountKey = "";
     	String bingUrlPattern = "";
     	PropertiesConfiguration config;
@@ -121,6 +126,15 @@ public class BingSearchEngine implements SearchEngine {
 			
 			return bingResults;
         }
+	}
+	
+	/**
+	 * Search for with all Bing results and countryCode = "us"
+	 * 
+	 * @return JSONArray 
+	 */
+	public JSONArray search(String requestedQuery, int limitSearchResults) throws IOException, NoUrlFoundException {
+		return search(requestedQuery, limitSearchResults, "us");
     }
 	
 	/**

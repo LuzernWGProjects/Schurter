@@ -24,28 +24,30 @@ import ch.ice.controller.interf.SearchEngine;
 import ch.ice.exceptions.NoUrlFoundException;
 import ch.ice.utils.JSONStandardizedKeys;
 import ch.ice.utils.JSONUtil;
+import ch.ice.utils.XMLParser;
 
 public class GoogleSearchEngine implements SearchEngine {
 
 	private static final Logger logger = LogManager.getLogger(GoogleSearchEngine.class.getName());
+	private static Map<String, String> country2tld = XMLParser.getTLDOfCountry();
 
-	public JSONArray search(String requestedQuery, int limitSearchResult) throws NoUrlFoundException {
+	public JSONArray search(String requestedQuery, int limitSearchResult, String countryCode) throws NoUrlFoundException {
 		try {
-			
+
 			String accountKey = "";
 			String config_cx = "";
-			
-	    	PropertiesConfiguration config;
-	    	
-	    	/*
+
+			PropertiesConfiguration config;
+
+			/*
 			 * Load Configuration File
 			 */
 			try {
 				config = new PropertiesConfiguration("conf/app.properties");
-				
+
 				accountKey = config.getString("searchEngine.google.accountKey");
 				config_cx = config.getString("searchEngine.google.cx");
-				
+
 			} catch (ConfigurationException e) {
 				System.out.println(e.getLocalizedMessage());
 				e.printStackTrace();
@@ -55,14 +57,21 @@ public class GoogleSearchEngine implements SearchEngine {
 
 			final String apiKey = URLEncoder.encode(accountKey, charset);
 			final String cx =  URLEncoder.encode(config_cx, charset);
+			
+			// country code and google host mapping
+			if(country2tld.get(countryCode.toLowerCase()).isEmpty() || country2tld.get(countryCode.toLowerCase()) == null){
+				countryCode = "com";
+			} else {
+				countryCode = country2tld.get(countryCode.toLowerCase());
+			}
 
 			/*
 			 * for field options check:
 			 * https://developers.google.com/apis-explorer/?hl=de#p/customsearch/v1/search.cse.list
 			 */
 			final String fields =  URLEncoder.encode("items(link,title),searchInformation/searchTime", charset);
-			final String googleHost =  URLEncoder.encode("google.com", charset);
-			
+			final String googleHost =  URLEncoder.encode("google."+countryCode, charset);
+
 			requestedQuery = URLEncoder.encode(requestedQuery, charset);
 
 			// google only ever returns max 10 results
@@ -71,7 +80,7 @@ public class GoogleSearchEngine implements SearchEngine {
 			} else if(limitSearchResult >= 10){
 				limitSearchResult = 10;
 			}
-			
+
 			String googleSearchUrl = "https://www.googleapis.com/customsearch/v1?q="+ requestedQuery +"&key="+ apiKey +"&cx="+ cx +"&googlehost="+ googleHost +"&fields="+ fields+"&num="+limitSearchResult;
 			logger.info("Lookup Google with request URL: "+googleSearchUrl);
 
@@ -103,8 +112,8 @@ public class GoogleSearchEngine implements SearchEngine {
 							"link",
 							"title"
 							)
-			);
-			
+					);
+
 			JSONUtil.urlLabel = "link";
 
 			googleSarchResults = JSONUtil.cleanUp(googleSarchResults);
@@ -125,6 +134,10 @@ public class GoogleSearchEngine implements SearchEngine {
 		}
 
 		return null;
+	}
+
+	public JSONArray search(String requestedQuery, int limitSearchResult) throws NoUrlFoundException {
+		return search(requestedQuery, limitSearchResult, "us");
 	}
 
 	/**
