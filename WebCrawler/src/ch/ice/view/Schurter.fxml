@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.effect.*?>
 <?import java.lang.*?>
 <?import java.net.*?>
@@ -9,24 +10,38 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<VBox id="mainWindow" prefHeight="400.0" prefWidth="640.0" stylesheets="@WebCrawler.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ice.view.GUIController">
+<VBox id="mainWindow" prefHeight="500.0" prefWidth="640.0" stylesheets="@WebCrawler.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ice.view.GUIController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
-            <MenuItem fx:id="MetaTags" mnemonicParsing="false" text="Meta Tags" />
-                  <MenuItem fx:id="accessKeyMenu" mnemonicParsing="false" text="Access Key" />
+            <MenuItem fx:id="MetaTags" mnemonicParsing="false" text="Settings" />
                   <MenuItem fx:id="quitMenuItem" mnemonicParsing="false" text="Quit" />
           </items>
         </Menu>
       </menus>
     </MenuBar>
-    <AnchorPane id="mainMenuBar" maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <AnchorPane id="mainMenuBar" maxHeight="-1.0" maxWidth="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <children>
             <TextField id="fileTextField" fx:id="fileTextField" editable="false" layoutX="52.0" layoutY="27.0" prefHeight="26.0" prefWidth="436.0" promptText="Please Select File" />
             <Button id="selectFileButton" fx:id="selectFileButton" layoutX="508.0" layoutY="27.0" mnemonicParsing="false" text="Select File" textFill="WHITE" />
-            <Button id="startSearchButton" fx:id="startSearchButton" layoutX="256.0" layoutY="282.0" mnemonicParsing="false" text="Start Search" textFill="WHITE">
+            <Label layoutX="52.0" layoutY="70.0" text="Selected Metatags:">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font></Label>
+            <Label fx:id="metaTagsList" layoutX="52.0" layoutY="98.0" text="Label" />
+            <TextField id="fileTextField" fx:id="pathTextField" editable="false" layoutX="52.0" layoutY="220.0" prefHeight="26.0" prefWidth="436.0" promptText="Please define your processed File will be saved" />
+            <Button id="selectFileButton" fx:id="changeDirectory" layoutX="508.0" layoutY="220.0" mnemonicParsing="false" text="Change" textFill="WHITE" />
+            <Label layoutX="52.0" layoutY="193.0" text="Your File will be saved to:">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font></Label>
+      </children>
+    </AnchorPane>
+      <AnchorPane fx:id="anchorLow" prefHeight="200.0">
+         <children>
+            <Button id="startSearchButton" fx:id="startSearchButton" layoutX="243.0" layoutY="112.0" mnemonicParsing="false" text="Start Search" textFill="WHITE">
                <effect>
                   <Reflection fraction="0.53" topOpacity="0.75" />
                </effect>
@@ -34,14 +49,14 @@
                   <Font size="18.0" />
                </font>
             </Button>
-            <Label layoutX="52.0" layoutY="70.0" text="Selected Metatags:" />
-            <Label fx:id="metaTagsList" layoutX="52.0" layoutY="98.0" text="Label" />
-            <TextField id="fileTextField" fx:id="pathTextField" editable="false" layoutX="52.0" layoutY="220.0" prefHeight="26.0" prefWidth="436.0" promptText="Please define your processed File will be saved" />
-            <Button id="selectFileButton" fx:id="changeDirectory" layoutX="508.0" layoutY="220.0" mnemonicParsing="false" text="Change" textFill="WHITE" />
-            <Label layoutX="52.0" layoutY="193.0" text="Your File will be saved to:" />
-            <Label fx:id="internetLabel" layoutX="52.0" layoutY="326.0" text="Internet:" />
-            <Label fx:id="bingLabel" layoutX="52.0" layoutY="349.0" text="Bing:" />
-      </children>
-    </AnchorPane>
+            <Label fx:id="internetLabel" layoutX="60.0" layoutY="163.0" text="Internet:" visible="false" />
+            <Label fx:id="bingLabel" layoutX="60.0" layoutY="188.0" text="Bing:" visible="false" />
+            <Label layoutX="54.0" layoutY="45.0" text="Your file will be Saved as:">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font></Label>
+            <ImageView fx:id="searchImage" fitHeight="40.0" fitWidth="100.0" layoutX="511.0" layoutY="143.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </AnchorPane>
   </children>
 </VBox>

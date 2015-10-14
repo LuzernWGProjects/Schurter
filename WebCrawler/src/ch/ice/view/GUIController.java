@@ -22,6 +22,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
@@ -50,8 +53,6 @@ public class GUIController extends VBox implements Initializable {
 	@FXML
 	private MenuItem quitMenuItem;
 	@FXML
-	private MenuItem accessKeyMenu;
-	@FXML
 	private Button cancelMetaButton;
 	@FXML
 	private Button okMetaButton;
@@ -65,6 +66,12 @@ public class GUIController extends VBox implements Initializable {
 	private Label internetLabel;
 	@FXML
 	private Label bingLabel;
+	@FXML
+	private AnchorPane anchorLow;
+	@FXML
+	private ImageView searchImage;
+
+	SwitchButton switchToggle;
 
 	public static ObservableValue<? extends String> test;
 
@@ -75,6 +82,11 @@ public class GUIController extends VBox implements Initializable {
 	public static String path;
 
 	public static String searchGlobal;
+
+	public static Image googleImage = new Image(
+			MetaController.class.getResourceAsStream("/Google.png"));
+	public static Image bingImage = new Image(
+			MetaController.class.getResourceAsStream("/Bing.png"));
 
 	public static void getProperties(Label label) {
 		try {
@@ -134,6 +146,42 @@ public class GUIController extends VBox implements Initializable {
 
 	}
 
+	public static void setSearchEngineImage(ImageView imageView) {
+		try {
+			config = new PropertiesConfiguration("conf/app.properties");
+			searchGlobal = config.getString(("searchEngine.global"));
+			if (searchGlobal.equals("GOOGLE")) {
+				imageView.setImage(googleImage);
+			}
+			if (searchGlobal.equals("BING")) {
+				imageView.setImage(bingImage);
+			}
+
+		} catch (ConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+	}
+
+	public static void getWriterFactoryProperties() {
+		try {
+			config = new PropertiesConfiguration("conf/app.properties");
+			String tester = config.getString(("writer.factory"));
+			if (tester.equals("FileWriterFactory.EXCEL")) {
+				MainController.fileWriterFactory = "FileWriterFactory.EXCEL";
+			}
+			if (tester.equals("FileWriterFactory.CSV")) {
+				MainController.fileWriterFactory = "FileWriterFactory.CSV";
+			}
+
+		} catch (ConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -142,6 +190,8 @@ public class GUIController extends VBox implements Initializable {
 		metaTagsList.setMaxHeight(80);
 
 		getSearchEngine();
+		setSearchEngineImage(searchImage);
+		getWriterFactoryProperties();
 
 		// Task task = new Task<Void>() {
 		// @Override
@@ -182,6 +232,7 @@ public class GUIController extends VBox implements Initializable {
 		if (GUIMain.internetCheck == true) {
 			internetLabel.setText("Internet Connection Established");
 			internetLabel.setTextFill(Color.GREEN);
+			internetLabel.setVisible(false);
 
 		} else {
 			internetLabel.setText("No Internet Connection");
@@ -193,6 +244,7 @@ public class GUIController extends VBox implements Initializable {
 		if (GUIMain.bingCheck == true) {
 			bingLabel.setText("Bing is reachable");
 			bingLabel.setTextFill(Color.GREEN);
+			bingLabel.setVisible(false);
 
 		} else {
 			bingLabel.setText("Bing is unreachable");
@@ -320,6 +372,8 @@ public class GUIController extends VBox implements Initializable {
 
 					// Update Selected Meta Tags
 					getProperties(metaTagsList);
+					// Update SearchEngine Image
+					setSearchEngineImage(searchImage);
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -339,31 +393,13 @@ public class GUIController extends VBox implements Initializable {
 			}
 		});
 
-		accessKeyMenu.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent event) {
-
-				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
-						"AccessKey.fxml"));
-				Parent root1;
-				try {
-					root1 = (Parent) fxmlLoader.load();
-
-					Stage stage = new Stage();
-					stage.setTitle("Enter AccessKey");
-					stage.setScene(new Scene(root1));
-					stage.initStyle(StageStyle.UNDECORATED);
-					AccessKeyController.haha();
-					stage.showAndWait();
-
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-		});
+		switchToggle = new SwitchButton();
+		// switchToggle.setId("switchToggle");
+		anchorLow.getChildren().add(switchToggle);
+		// anchorLow.setRightAnchor(switchToggle, 60.0);
+		// anchorLow.setTopAnchor(switchToggle, 30.0);
+		switchToggle.setLayoutX(250.0);
+		switchToggle.setLayoutY(45.0);
 
 	}
 }

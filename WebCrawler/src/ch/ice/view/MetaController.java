@@ -78,6 +78,12 @@ public class MetaController implements Initializable {
 	private Hyperlink selectAll;
 	@FXML
 	private ListView<String> blackListView;
+	@FXML
+	private Label searchEngineLabel;
+	@FXML
+	private Label metaOptionsLabel;
+	@FXML
+	private Label blackListLabel;
 
 	private ContextMenu editMenu = new ContextMenu();
 	private MenuItem deleteOption = new MenuItem("Delete");
@@ -87,8 +93,6 @@ public class MetaController implements Initializable {
 			MetaController.class.getResourceAsStream("/Google.png"));
 	Image bingImage = new Image(
 			MetaController.class.getResourceAsStream("/Bing.png"));
-	ImageView googleView = new ImageView(googleImage);
-	ImageView bingView = new ImageView(bingImage);
 
 	ArrayList<CheckBox> checkList;
 
@@ -127,13 +131,20 @@ public class MetaController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 		metaTagsLabel.setWrapText(true);
-		metaTagsLabel.setMaxWidth(600);
-		metaTagsLabel.setMaxHeight(80);
+		metaTagsLabel.setMaxWidth(500);
+		metaTagsLabel.setMaxHeight(150);
 		keyTextField.setPrefWidth(400);
 		keyTextField.setMaxWidth(500);
 		othersTextField.setPrefWidth(400);
 		othersTextField.setMaxWidth(500);
-
+		searchEngineLabel.setTooltip(new Tooltip(
+				"Select the Search Engine you would like to use"));
+		metaOptionsLabel
+				.setTooltip(new Tooltip(
+						"Select the Meta Tags you would like to include in the Lookup"));
+		blackListLabel
+				.setTooltip(new Tooltip(
+						"Select the URL you would like to avoid being considered as results"));
 		editMenu.getItems().add(deleteOption);
 		editMenu.getItems().add(addNew);
 
@@ -332,7 +343,7 @@ public class MetaController implements Initializable {
 
 			});
 
-			flowPane.setPrefWrapLength(800);
+			flowPane.setPrefWrapLength(620);
 			flowPane.getChildren().add(cb);
 		}
 

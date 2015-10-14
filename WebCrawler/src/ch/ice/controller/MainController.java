@@ -32,7 +32,6 @@ import ch.ice.exceptions.FileParserNotAvailableException;
 import ch.ice.exceptions.IllegalFileExtensionException;
 import ch.ice.exceptions.InternalFormatException;
 import ch.ice.exceptions.MissingCustomerRowsException;
-import ch.ice.exceptions.SearchEngineNotAvailableException;
 import ch.ice.model.Customer;
 import ch.ice.utils.JSONStandardizedKeys;
 import ch.ice.view.SaveWindowController;
@@ -53,6 +52,7 @@ public class MainController {
 	private static Integer limitSearchResults;
 	public static URL defaultUrl;
 	public static boolean isSearchAvail;
+	public static String fileWriterFactory;
 
 	public static List<String> metaTagElements;
 	public static List<Customer> firstArray;
@@ -99,7 +99,8 @@ public class MainController {
 		}
 
 		// request new SearchEngine
-		MainController.searchEngine = SearchEngineFactory.requestSearchEngine(MainController.searchEngineIdentifier);
+		MainController.searchEngine = SearchEngineFactory
+				.requestSearchEngine(MainController.searchEngineIdentifier);
 		logger.info("Starting " + searchEngine.getClass().getName());
 
 		stopwatch = new StopWatch();
@@ -374,18 +375,26 @@ public class MainController {
 		// if excel->excelWriter; csv->csvWriter
 
 		try {
-			fileWriter = FileWriterFactory.requestFileWriter(FileWriterFactory.CSV);
+			if (fileWriterFactory.equals("FileWriterFactory.EXCEL")) {
+				fileWriter = FileWriterFactory
+						.requestFileWriter(FileWriterFactory.EXCEL);
+			}
+			if (fileWriterFactory.equals("FileWriterFactory.CSV")) {
+				fileWriter = FileWriterFactory
+						.requestFileWriter(FileWriterFactory.CSV);
+			}
 		} catch (FileParserNotAvailableException e) {
 			e.printStackTrace();
 		}
 
 		try {
-			
-			fileWriter.writeFile(enhancedCustomerList, MainController.fileParser);
+
+			fileWriter.writeFile(enhancedCustomerList,
+					MainController.fileParser);
 		} catch (IOException e) {
 			// TODO Throw this to gui!!!!!!!!!!!!!!!!!!!!!!!!!
 			e.printStackTrace();
-			
+
 		}
 	}
 }

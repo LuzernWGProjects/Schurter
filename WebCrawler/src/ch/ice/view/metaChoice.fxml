@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
@@ -7,30 +8,74 @@
 
 <VBox fx:id="vBox" minHeight="-Infinity" minWidth="-Infinity" spacing="15.0" stylesheets="@WebCrawler.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ice.view.MetaController">
    <children>
-      <AnchorPane minHeight="180.0">
+      <AnchorPane minHeight="180.0" VBox.vgrow="ALWAYS">
          <children>
-            <Label layoutX="2.0" text="Choose your Search Engine:" />
-            <ComboBox fx:id="selectEngine" layoutX="2.0" layoutY="30.0" prefWidth="150.0" />
-            <Label fx:id="keyLabel" layoutX="216.0" layoutY="8.0" text="AccessKey:" />
-            <Label fx:id="othersLabel" layoutX="216.0" layoutY="67.0" text="Others:" />
-            <TextField fx:id="keyTextField" layoutX="216.0" layoutY="30.0" />
-            <TextField fx:id="othersTextField" layoutX="216.0" layoutY="96.0" />
-            <Hyperlink fx:id="unselectAll" layoutY="154.0" text="Unselect All" />
-            <Hyperlink fx:id="selectAll" layoutX="90.0" layoutY="154.0" text="Select All" />
+            <Label fx:id="searchEngineLabel" layoutX="2.0" text="Search Engine:">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font></Label>
+            <ComboBox fx:id="selectEngine" layoutX="2.0" layoutY="33.0" prefWidth="150.0" />
+            <Label fx:id="keyLabel" layoutX="216.0" layoutY="30.0" text="AccessKey:" />
+            <Label fx:id="othersLabel" layoutX="216.0" layoutY="98.0" text="Others:" />
+            <TextField fx:id="keyTextField" layoutX="216.0" layoutY="56.0" />
+            <TextField fx:id="othersTextField" layoutX="216.0" layoutY="120.0" />
          </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
       </AnchorPane>
-      <FlowPane fx:id="flowPane" hgap="2.0" vgap="2.0" VBox.vgrow="ALWAYS">
+      <Separator prefWidth="200.0" />
+      <VBox spacing="10.0" VBox.vgrow="ALWAYS">
+         <children>
+            <HBox>
+               <children>
+                  <Label fx:id="metaOptionsLabel" alignment="TOP_LEFT" text="Meta Tags:" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="TOP_RIGHT" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Hyperlink fx:id="selectAll" alignment="TOP_RIGHT" contentDisplay="RIGHT" text="Select All" />
+                        <Hyperlink fx:id="unselectAll" alignment="TOP_RIGHT" contentDisplay="RIGHT" text="Unselect All" />
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <FlowPane fx:id="flowPane" hgap="2.0" vgap="2.0" VBox.vgrow="ALWAYS">
+               <padding>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </padding>
+            </FlowPane>
+            <AnchorPane>
+               <children>
+                  <Label alignment="TOP_LEFT" text="Chosen Meta Tags: ">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="metaTagsLabel" layoutY="30.0" />
+               </children>
+            </AnchorPane>
+         </children>
          <padding>
-            <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-         </padding></FlowPane>
-      <Label text="Chosen Meta Tags: " />
-      <Label fx:id="metaTagsLabel" VBox.vgrow="ALWAYS" />
-      <AnchorPane prefHeight="200.0">
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </VBox>
+      <Separator prefWidth="200.0" />
+      <VBox spacing="10.0">
          <children>
-            <Label layoutY="14.0" text="On Blacklist:" />
-            <ListView fx:id="blackListView" prefHeight="100.0" prefWidth="400.0" />
+            <Label fx:id="blackListLabel" text="Blacklist:">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <ListView fx:id="blackListView" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="NEVER" />
          </children>
-      </AnchorPane>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </VBox>
       <HBox alignment="BOTTOM_RIGHT" prefHeight="40.0" prefWidth="200.0" spacing="15.0">
          <children>
             <Button id="cancelMetaButton" fx:id="cancelMetaButton" mnemonicParsing="false" text="Cancel" textFill="WHITE" />

@@ -20,9 +20,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import ch.ice.controller.MainController;
-import ch.ice.controller.file.ExcelWriter;
 import ch.ice.exceptions.InternalFormatException;
 import ch.ice.exceptions.MissingCustomerRowsException;
+import ch.ice.utils.FileOutputNameGenerator;
 
 public class SaveWindowController extends Thread implements Initializable {
 
@@ -193,9 +193,7 @@ public class SaveWindowController extends Thread implements Initializable {
 															.getDesktop();
 													try {
 														dt.open(new File(
-																GUIController.path
-																		+ "/"
-																		+ ExcelWriter.fileName));
+																FileOutputNameGenerator.fileName));
 													} catch (IOException e) {
 														// TODO
 														// Auto-generated
