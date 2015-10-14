@@ -25,7 +25,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -34,11 +33,13 @@ import javafx.stage.StageStyle;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import ch.ice.controller.MainController;
 import ch.ice.controller.web.SearchEngineFactory;
 
-public class GUIController extends VBox implements Initializable {
+public class GUIController implements Initializable {
 
 	@FXML
 	private Button selectFileButton;
@@ -88,6 +89,9 @@ public class GUIController extends VBox implements Initializable {
 	public static Image bingImage = new Image(
 			MetaController.class.getResourceAsStream("/Bing.png"));
 
+	public static final Logger logger = LogManager
+			.getLogger(GUIController.class.getName());
+
 	public static void getProperties(Label label) {
 		try {
 			config = new PropertiesConfiguration("conf/app.properties");
@@ -99,6 +103,7 @@ public class GUIController extends VBox implements Initializable {
 		} catch (ConfigurationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			logger.error(e1);
 		}
 
 	}
@@ -111,6 +116,7 @@ public class GUIController extends VBox implements Initializable {
 		} catch (ConfigurationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			logger.error(e1);
 		}
 		return path;
 
@@ -124,6 +130,7 @@ public class GUIController extends VBox implements Initializable {
 		} catch (ConfigurationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			logger.error(e1);
 		}
 
 	}
@@ -142,6 +149,7 @@ public class GUIController extends VBox implements Initializable {
 		} catch (ConfigurationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			logger.error(e1);
 		}
 
 	}

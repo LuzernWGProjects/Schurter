@@ -20,10 +20,15 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class GUIMain extends Application {
 
 	public static boolean internetCheck = false;
 	public static boolean bingCheck = false;
+	public static final Logger logger = LogManager.getLogger(GUIMain.class
+			.getName());
 
 	public static boolean netIsAvailable(String urlString) {
 
@@ -122,7 +127,7 @@ public class GUIMain extends Application {
 	public void loadMain() {
 
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
-				"Schurter.fxml"));
+				"/ch/ice/view/Schurter.fxml"));
 		Parent root1;
 		try {
 			root1 = (Parent) fxmlLoader.load();
@@ -138,6 +143,7 @@ public class GUIMain extends Application {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error(e);
 
 		}
 	}
