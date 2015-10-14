@@ -98,6 +98,10 @@ public class MainController {
 			logger.error("Faild to load config file");
 		}
 
+		// for test without gui
+		if (searchEngineIdentifier == null) {
+			searchEngineIdentifier = "BING";
+		}
 		// request new SearchEngine
 		MainController.searchEngine = SearchEngineFactory
 				.requestSearchEngine(MainController.searchEngineIdentifier);
@@ -350,6 +354,7 @@ public class MainController {
 
 			// logic to pick the first record ; here should be the search logic!
 			JSONObject aResult = ResultAnalyzer.analyse(results, params);
+			c.getWebsite().setUnsure(aResult.getBoolean("Unsure"));
 
 			// return only the URL form first object
 			return new URL((String) aResult.get(JSONStandardizedKeys.URL));
@@ -383,6 +388,7 @@ public class MainController {
 				fileWriter = FileWriterFactory
 						.requestFileWriter(FileWriterFactory.CSV);
 			}
+
 		} catch (FileParserNotAvailableException e) {
 			e.printStackTrace();
 		}
