@@ -7,10 +7,11 @@ import java.util.Map;
 import org.json.JSONArray;
 
 import ch.ice.exceptions.NoUrlFoundException;
+import ch.ice.exceptions.SearchEngineRequestLimitReachedException;
 
 public interface SearchEngine {
-	public JSONArray search(String requestedQuery, int limitSearchResult) throws IOException, NoUrlFoundException;
-	public JSONArray search(String requestedQuery, int limitSearchResult, String countryCode) throws IOException, NoUrlFoundException;
+	public JSONArray search(String requestedQuery, int limitSearchResult) throws IOException, NoUrlFoundException, SearchEngineRequestLimitReachedException;
+	public JSONArray search(String requestedQuery, int limitSearchResult, String countryCode) throws IOException, NoUrlFoundException, SearchEngineRequestLimitReachedException;
 
 	public String buildQuery(List<String> params);
 	
