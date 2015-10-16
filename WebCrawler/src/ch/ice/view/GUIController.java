@@ -472,8 +472,7 @@ public class GUIController implements Initializable {
 					getMaxGoogleSearches();
 					if (retrievedCustomer == true) {
 						startSearchButton.setDisable(true);
-					} else
-						startSearchButton.setDisable(false);
+					}
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

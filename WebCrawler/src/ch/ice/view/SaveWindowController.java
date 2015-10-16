@@ -121,6 +121,17 @@ public class SaveWindowController extends Thread implements Initializable {
 					Node source = (Node) event.getSource();
 					Stage stage = (Stage) source.getScene().getWindow();
 					stage.close();
+					try {
+						th.join();
+
+						t1.join();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					main = null;
+					MainController.processEnded = false;
 					// // Node source = (Node) event.getSource();
 					// // Stage stage = (Stage) source.getScene().getWindow();
 					// // stage.close();
@@ -213,13 +224,21 @@ public class SaveWindowController extends Thread implements Initializable {
 								d = (double) MainController.customersEnhanced
 										/ (double) MainController.customerList
 												.size();
+								progressBar.setStyle("-fx-accent: #336699");
 								progressBar.setProgress(d);
+								if (d > 0.4) {
+									progressBar.setStyle("-fx-accent: #5186BA");
+								}
+								if (d > 0.7) {
+									progressBar.setStyle("-fx-accent: #85AED7");
+								}
 								progressLabel
 										.setText(MainController.progressText);
 								System.out.println(d);
 
 								if (myBooWriting == true) {
 									progressLabel.setText("Writing File");
+									progressBar.setStyle("-fx-accent: orange");
 								}
 
 								if (myBoo == true) {
@@ -229,11 +248,14 @@ public class SaveWindowController extends Thread implements Initializable {
 													+ GUIController.path);
 									progressLabel
 											.setText("Gathering Process ended.");
+									progressBar.setStyle("-fx-accent: green");
 
 									closeButton.setDisable(false);
 									openFileButton.setDisable(false);
 									// cancelButton.setDisable(true);
-
+									myBoo = false;
+									myBooChecking = false;
+									myBooWriting = false;
 									cancel(true);
 								}
 
