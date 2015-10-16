@@ -53,6 +53,7 @@ public class MainController {
 	public static URL defaultUrl;
 	public static boolean isSearchAvail;
 	public static boolean fileWriterFactory;
+	public static boolean processEnded = false;
 
 	public static List<String> metaTagElements;
 	public static List<Customer> firstArray;
@@ -285,6 +286,7 @@ public class MainController {
 
 		logger.info("end");
 		SaveWindowController.myBoo = true;
+		processEnded = true;
 	}
 
 	/**
@@ -325,6 +327,7 @@ public class MainController {
 		}
 
 		return new LinkedList<Customer>();
+
 	}
 
 	/**

@@ -77,47 +77,54 @@ public class SaveWindowController extends Thread implements Initializable {
 			@Override
 			public void handle(ActionEvent event) {
 				// myBooChecking = true;
-				task.cancel();
-				task1.cancel();
-				try {
-					main.stopThread("FIRST THREAD");
-					main.stopThread("SECOND THREAD");
-					main.stopThread("THIRD THREAD");
-					main.stopThread("FOURTH THREAD");
+				if (MainController.processEnded == false) {
 
-					th.join();
-					t1.join();
-					main = null;
+					task.cancel();
+					task1.cancel();
+					try {
+						main.stopThread("FIRST THREAD");
+						main.stopThread("SECOND THREAD");
+						main.stopThread("THIRD THREAD");
+						main.stopThread("FOURTH THREAD");
 
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+						th.join();
+						t1.join();
+						main = null;
 
-				Alert alert = new Alert(AlertType.CONFIRMATION);
-				alert.setTitle("Information Dialog");
-				alert.setHeaderText("Your Canceling the Process");
-				alert.setContentText("No file will be saved");
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 
-				Optional<ButtonType> result = alert.showAndWait();
-				if (result.get() == ButtonType.OK) {
-					// ... user chose OK
-					// System.exit(0);
+					Alert alert = new Alert(AlertType.WARNING);
+					alert.setTitle("Information Dialog");
+					alert.setHeaderText("Your Canceling the Process");
+					alert.setContentText("No file will be saved");
+
+					Optional<ButtonType> result = alert.showAndWait();
+					if (result.get() == ButtonType.OK) {
+						// ... user chose OK
+						// System.exit(0);
+
+						Node source = (Node) event.getSource();
+						Stage stage = (Stage) source.getScene().getWindow();
+						stage.close();
+						// ... user chose CANCEL or closed the dialog
+						// resumeThread();
+						// Node source = (Node) event.getSource();
+						// Stage stage = (Stage) source.getScene().getWindow();
+						// stage.show();
+
+					}
+				} else {
 
 					Node source = (Node) event.getSource();
 					Stage stage = (Stage) source.getScene().getWindow();
 					stage.close();
-				} else {
-					// ... user chose CANCEL or closed the dialog
-					// resumeThread();
-					// Node source = (Node) event.getSource();
-					// Stage stage = (Stage) source.getScene().getWindow();
-					// stage.show();
-
+					// // Node source = (Node) event.getSource();
+					// // Stage stage = (Stage) source.getScene().getWindow();
+					// // stage.close();
 				}
-				// Node source = (Node) event.getSource();
-				// Stage stage = (Stage) source.getScene().getWindow();
-				// stage.close();
 			}
 
 		});
@@ -225,7 +232,7 @@ public class SaveWindowController extends Thread implements Initializable {
 
 									closeButton.setDisable(false);
 									openFileButton.setDisable(false);
-									cancelButton.setDisable(true);
+									// cancelButton.setDisable(true);
 
 									cancel(true);
 								}

@@ -15,6 +15,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -28,6 +29,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -71,11 +73,19 @@ public class GUIController implements Initializable {
 	@FXML
 	private Label bingLabel;
 	@FXML
+	private Label infoLabel;
+	@FXML
 	private AnchorPane anchorLow;
 	@FXML
 	private ImageView searchImage;
 
 	SwitchButton switchToggle;
+
+	public String statusOk = "Status OK";
+	public String googleExceeds = "The file exceeds the allowed Google searches of "
+			+ maxGoogle;
+
+	public static int maxGoogle;
 
 	public static boolean retrievedCustomer = false;
 
@@ -206,9 +216,24 @@ public class GUIController implements Initializable {
 
 	}
 
+	public static void getMaxGoogleSearches() {
+		try {
+			config = new PropertiesConfiguration("conf/app.properties");
+			maxGoogle = Integer.parseInt(config
+					.getString(("searchEngine.maxGoogleSearches")));
+
+		} catch (ConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
+		infoLabel.setText("No file selected");
+		infoLabel.setTextFill(Color.ORANGE);
 		metaTagsList.setWrapText(true);
 		metaTagsList.setMaxWidth(550);
 		metaTagsList.setMaxHeight(80);
@@ -249,6 +274,7 @@ public class GUIController implements Initializable {
 		FileChooser filechooser = new FileChooser();
 		DirectoryChooser directoryChooser = new DirectoryChooser();
 		getSaveProperties(startSearchButton);
+		getMaxGoogleSearches();
 		pathTextField.setText(path);
 		fileTextField.setText(chosenPath);
 
@@ -282,7 +308,9 @@ public class GUIController implements Initializable {
 			@Override
 			public void handle(ActionEvent event) {
 
-				Stage stage = new Stage();
+				// Stage stage = new Stage();
+				Node source = (Node) event.getSource();
+				Stage stage = (Stage) source.getScene().getWindow();
 				try {
 					filechooser.getExtensionFilters().addAll(
 							new FileChooser.ExtensionFilter(
@@ -309,14 +337,19 @@ public class GUIController implements Initializable {
 												MainController.uploadedFileContainingCustomers
 														.getName(), ""));
 						config.save();
+						getSaveProperties(startSearchButton);
 						List<Customer> testList = MainController
 								.retrieveCustomerFromFile(MainController.uploadedFileContainingCustomers);
-						if (testList.size() > 40
+						if (testList.size() > maxGoogle
 								&& searchGlobal.equals("GOOGLE")) {
 							retrievedCustomer = true;
 							startSearchButton.setDisable(true);
+							infoLabel.setText(googleExceeds);
+							infoLabel.setTextFill(Color.RED);
 						} else
 							startSearchButton.setDisable(false);
+						infoLabel.setText(statusOk);
+						infoLabel.setTextFill(Color.GREEN);
 					}
 				} catch (NullPointerException | InternalFormatException
 						| MissingCustomerRowsException | ConfigurationException e) {
@@ -336,7 +369,9 @@ public class GUIController implements Initializable {
 			@Override
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
-				Stage stage = new Stage();
+				// Stage stage = new Stage();
+				Node source = (Node) event.getSource();
+				Stage stage = (Stage) source.getScene().getWindow();
 				try {
 					if (!path.isEmpty()) {
 						File initial = new File(path);
@@ -395,6 +430,7 @@ public class GUIController implements Initializable {
 					stage.setTitle("File processed");
 					stage.setScene(new Scene(root1));
 					stage.initStyle(StageStyle.UNDECORATED);
+					stage.initModality(Modality.APPLICATION_MODAL);
 					stage.showAndWait();
 
 				} catch (IOException | NullPointerException e) {
@@ -426,12 +462,14 @@ public class GUIController implements Initializable {
 					stage.setTitle("Choose your Meta Tags");
 					stage.setScene(new Scene(root1));
 					stage.initStyle(StageStyle.UNDECORATED);
+					stage.initModality(Modality.APPLICATION_MODAL);
 					stage.showAndWait();
 
 					// Update Selected Meta Tags
 					getProperties(metaTagsList);
 					// Update SearchEngine Image
 					setSearchEngineImage(searchImage);
+					getMaxGoogleSearches();
 					if (retrievedCustomer == true) {
 						startSearchButton.setDisable(true);
 					} else

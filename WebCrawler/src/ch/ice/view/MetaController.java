@@ -84,6 +84,8 @@ public class MetaController implements Initializable {
 	private Label metaOptionsLabel;
 	@FXML
 	private Label blackListLabel;
+	@FXML
+	private Label checkAccountLabel;
 
 	private ContextMenu editMenu = new ContextMenu();
 	private MenuItem deleteOption = new MenuItem("Delete");
@@ -129,7 +131,9 @@ public class MetaController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
+		checkAccountLabel
+				.setText("Please check Account of selected search Engine for remaining search requests.");
+		checkAccountLabel.setTextFill(Color.ORANGE);
 		metaTagsLabel.setWrapText(true);
 		metaTagsLabel.setMaxWidth(500);
 		metaTagsLabel.setMaxHeight(150);

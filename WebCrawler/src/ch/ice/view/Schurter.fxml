@@ -16,7 +16,7 @@
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
-            <MenuItem fx:id="MetaTags" mnemonicParsing="false" text="Settings" />
+            <MenuItem fx:id="MetaTags" mnemonicParsing="false" text="Properties" />
                   <MenuItem fx:id="quitMenuItem" mnemonicParsing="false" text="Quit" />
           </items>
         </Menu>
@@ -24,13 +24,18 @@
     </MenuBar>
     <AnchorPane id="mainMenuBar" maxHeight="-1.0" maxWidth="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <children>
-            <TextField id="fileTextField" fx:id="fileTextField" editable="false" layoutX="52.0" layoutY="27.0" prefHeight="26.0" prefWidth="436.0" promptText="Please Select File" />
-            <Button id="selectFileButton" fx:id="selectFileButton" layoutX="508.0" layoutY="27.0" mnemonicParsing="false" text="Select File" textFill="WHITE" />
-            <Label layoutX="52.0" layoutY="70.0" text="Selected Metatags:">
+            <Label layoutX="52.0" layoutY="14.0" text="Please select File:">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <TextField id="fileTextField" fx:id="fileTextField" editable="false" layoutX="52.0" layoutY="40.0" prefHeight="26.0" prefWidth="436.0" promptText="Please Select File" />
+            <Button id="selectFileButton" fx:id="selectFileButton" layoutX="508.0" layoutY="40.0" mnemonicParsing="false" text="Select File" textFill="WHITE" />
+            <Label layoutX="52.0" layoutY="88.0" text="Selected Metatags:">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font></Label>
-            <Label fx:id="metaTagsList" layoutX="52.0" layoutY="98.0" text="Label" />
+            <Label fx:id="metaTagsList" layoutX="52.0" layoutY="110.0" text="Label" />
             <TextField id="fileTextField" fx:id="pathTextField" editable="false" layoutX="52.0" layoutY="220.0" prefHeight="26.0" prefWidth="436.0" promptText="Please define your processed File will be saved" />
             <Button id="selectFileButton" fx:id="changeDirectory" layoutX="508.0" layoutY="220.0" mnemonicParsing="false" text="Change" textFill="WHITE" />
             <Label layoutX="52.0" layoutY="193.0" text="Your File will be saved to:">
@@ -49,6 +54,7 @@
                   <Font size="18.0" />
                </font>
             </Button>
+            <Label fx:id="infoLabel" layoutX="14.0" layoutY="175.0" text="Info:" />
             <Label fx:id="internetLabel" layoutX="60.0" layoutY="163.0" text="Internet:" visible="false" />
             <Label fx:id="bingLabel" layoutX="60.0" layoutY="188.0" text="Bing:" visible="false" />
             <Label layoutX="54.0" layoutY="45.0" text="Your file will be Saved as:">

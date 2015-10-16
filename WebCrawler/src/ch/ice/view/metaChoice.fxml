@@ -19,6 +19,7 @@
             <Label fx:id="othersLabel" layoutX="216.0" layoutY="98.0" text="Others:" />
             <TextField fx:id="keyTextField" layoutX="216.0" layoutY="56.0" />
             <TextField fx:id="othersTextField" layoutX="216.0" layoutY="120.0" />
+            <Label fx:id="checkAccountLabel" layoutX="2.0" layoutY="166.0" text="CheckLabel: " />
          </children>
          <opaqueInsets>
             <Insets />
