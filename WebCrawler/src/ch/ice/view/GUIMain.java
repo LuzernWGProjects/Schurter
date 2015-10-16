@@ -107,7 +107,7 @@ public class GUIMain extends Application {
 		primaryStage.show();
 		Timeline timeline = new Timeline();
 		timeline.getKeyFrames().add(
-				new KeyFrame(Duration.seconds(1),
+				new KeyFrame(Duration.seconds(5),
 						new EventHandler<ActionEvent>() {
 
 							@Override

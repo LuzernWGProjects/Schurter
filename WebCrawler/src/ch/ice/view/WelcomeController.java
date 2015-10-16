@@ -8,15 +8,24 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class WelcomeController implements Initializable {
 
 	@FXML
 	private Label javaVersion;
+	@FXML
+	private ImageView logoView;
+
+	public static Image welcomeLogo = new Image(
+			WelcomeController.class.getResourceAsStream("/Schurter300only.png"));
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
+
+		logoView.setImage(welcomeLogo);
 
 		javaVersion.setText(System.getProperty("java.version"));
 

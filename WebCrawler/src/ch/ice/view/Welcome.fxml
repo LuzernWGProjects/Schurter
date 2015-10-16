@@ -1,30 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" stylesheets="@WebCrawler.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ice.view.WelcomeController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" stylesheets="@WebCrawler.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ice.view.WelcomeController">
    <children>
-      <Label alignment="CENTER" contentDisplay="CENTER" text="Hello">
+      <ImageView fx:id="logoView" fitHeight="36.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
+         <VBox.margin>
+            <Insets bottom="30.0" top="30.0" />
+         </VBox.margin></ImageView>
+      <Label text="Schurter POS-Data-Enhancement System (SPOSDES)  " textFill="#052a80bf">
          <font>
-            <Font size="44.0" />
+            <Font name="Kefa Regular" size="22.0" />
          </font>
-         <StackPane.margin>
-            <Insets />
-         </StackPane.margin>
+         <effect>
+            <Reflection bottomOpacity="0.12" fraction="1.0" topOpacity="0.29" />
+         </effect>
+         <VBox.margin>
+            <Insets bottom="30.0" />
+         </VBox.margin>
       </Label>
-      <Label text="Java Version:">
-         <StackPane.margin>
-            <Insets top="70.0" />
-         </StackPane.margin>
-      </Label>
-      <Label fx:id="javaVersion" alignment="CENTER" contentDisplay="CENTER" text="Java Version">
-         <StackPane.margin>
-            <Insets top="110.0" />
-         </StackPane.margin>
-      </Label>
+      <HBox>
+         <children>
+            <Label alignment="CENTER" text="Java Version:" />
+            <Label fx:id="javaVersion" alignment="CENTER" contentDisplay="CENTER" text="Java Version">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Label>
+            <HBox alignment="TOP_RIGHT" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="© Engel, Faust, Gruetter, Neuhaus" />
+               </children>
+            </HBox>
+         </children>
+         <VBox.margin>
+            <Insets top="30.0" />
+         </VBox.margin>
+      </HBox>
    </children>
-</StackPane>
+   <padding>
+      <Insets bottom="10.0" left="30.0" right="30.0" top="30.0" />
+   </padding>
+</VBox>

@@ -8,6 +8,7 @@ import ch.ice.controller.MainController;
 import ch.ice.controller.web.WebCrawler;
 import ch.ice.exceptions.HttpStatusException;
 import ch.ice.model.Customer;
+import ch.ice.view.SaveWindowController;
 
 public class SearchThread extends Thread {
 
@@ -39,70 +40,78 @@ public class SearchThread extends Thread {
 
 	@Override
 	public void run() {
-		System.out.println("Were in!");
+		while (!Thread.currentThread().isInterrupted()) {
+			MainController.customersEnhanced = 0;
+			SaveWindowController.d = 0.0;
 
-		WebCrawler wc = new WebCrawler();
-		MainController mc = new MainController();
-		if (checkNumber == 1) {
-			System.out.println("Thread 1 running");
+			System.out.println("Were in!");
 
-		}
-		if (checkNumber == 2) {
-			System.out.println("Thread 2 running");
-		}
-		if (checkNumber == 3) {
-			System.out.println("Thread 3 running");
-		}
-		if (checkNumber == 4) {
-			System.out.println("Thread 4 running");
-		}
+			WebCrawler wc = new WebCrawler();
+			MainController mc = new MainController();
+			if (checkNumber == 1) {
+				System.out.println("Thread 1 running");
 
-		for (Customer customer : searchList) {
-			MainController.customersEnhanced++;
-			System.out.println("In Customer Loop");
+			}
+			if (checkNumber == 2) {
+				System.out.println("Thread 2 running");
+			}
+			if (checkNumber == 3) {
+				System.out.println("Thread 3 running");
+			}
+			if (checkNumber == 4) {
+				System.out.println("Thread 4 running");
+			}
 
-			// only search via SearchEngine if search is enabled. Disable search
-			// for testing purpose
-			if (MainController.isSearchAvail) {
-				// Add url for customer
+			for (Customer customer : searchList) {
+				MainController.customersEnhanced++;
+				System.out.println("In Customer Loop");
+
+				// only search via SearchEngine if search is enabled. Disable
+				// search
+				// for testing purpose
+				if (MainController.isSearchAvail) {
+					// Add url for customer
+					try {
+						URL retrivedUrl = mc.searchForUrl(customer);
+						customer.getWebsite().setUrl(retrivedUrl);
+
+						MainController.progressText = "Gathering data at: "
+								+ retrivedUrl.toString();
+					} catch (Exception e) {
+						e.printStackTrace();
+						MainController.logger.error(e.getMessage());
+					}
+
+				} else {
+					customer.getWebsite().setUrl(MainController.defaultUrl);
+				}
+
+				// add metadata
 				try {
-					URL retrivedUrl = mc.searchForUrl(customer);
-					customer.getWebsite().setUrl(retrivedUrl);
+					wc.connnect(customer.getWebsite().getUrl().toString());
+					customer.getWebsite().setMetaTags(
+							wc.getMetaTags(MainController.metaTagElements));
+					MainController.logger
+							.info(customer.getWebsite().toString());
+				} catch (IOException e) {
+					e.printStackTrace();
+					MainController.logger.error(e.getMessage());
 
-					MainController.progressText = "Gathering data at: "
-							+ retrivedUrl.toString();
+				} catch (HttpStatusException e) {
+					e.printStackTrace();
+					MainController.logger.error(e.getMessage());
+
 				} catch (Exception e) {
 					e.printStackTrace();
 					MainController.logger.error(e.getMessage());
+
 				}
 
-			} else {
-				customer.getWebsite().setUrl(MainController.defaultUrl);
 			}
 
-			// add metadata
-			try {
-				wc.connnect(customer.getWebsite().getUrl().toString());
-				customer.getWebsite().setMetaTags(
-						wc.getMetaTags(MainController.metaTagElements));
-				MainController.logger.info(customer.getWebsite().toString());
-			} catch (IOException e) {
-				e.printStackTrace();
-				MainController.logger.error(e.getMessage());
-
-			} catch (HttpStatusException e) {
-				e.printStackTrace();
-				MainController.logger.error(e.getMessage());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				MainController.logger.error(e.getMessage());
-
-			}
-
+			System.out.println("Ended");
+			return;
 		}
-
-		System.out.println("Ended");
-
+		return;
 	}
 }

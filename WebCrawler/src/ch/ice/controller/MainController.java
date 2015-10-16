@@ -52,7 +52,7 @@ public class MainController {
 	private static Integer limitSearchResults;
 	public static URL defaultUrl;
 	public static boolean isSearchAvail;
-	public static String fileWriterFactory;
+	public static boolean fileWriterFactory;
 
 	public static List<String> metaTagElements;
 	public static List<Customer> firstArray;
@@ -297,7 +297,7 @@ public class MainController {
 	 * @throws InternalFormatException
 	 *             , MissingCustomerRowsException
 	 */
-	public List<Customer> retrieveCustomerFromFile(File file)
+	public static List<Customer> retrieveCustomerFromFile(File file)
 			throws InternalFormatException, MissingCustomerRowsException {
 		String uploadedFileExtension = FilenameUtils.getExtension(file
 				.getName());
@@ -380,11 +380,11 @@ public class MainController {
 		// if excel->excelWriter; csv->csvWriter
 
 		try {
-			if (fileWriterFactory.equals("FileWriterFactory.EXCEL")) {
+			if (fileWriterFactory == true) {
 				fileWriter = FileWriterFactory
 						.requestFileWriter(FileWriterFactory.EXCEL);
 			}
-			if (fileWriterFactory.equals("FileWriterFactory.CSV")) {
+			if (fileWriterFactory == false) {
 				fileWriter = FileWriterFactory
 						.requestFileWriter(FileWriterFactory.CSV);
 			}
@@ -401,6 +401,18 @@ public class MainController {
 			// TODO Throw this to gui!!!!!!!!!!!!!!!!!!!!!!!!!
 			e.printStackTrace();
 
+		}
+	}
+
+	public void stopThread(String threadName) throws InterruptedException {
+		ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
+		Thread[] threads = new Thread[threadGroup.activeCount()];
+		threadGroup.enumerate(threads);
+		for (int nIndex = 0; nIndex < threads.length; nIndex++) {
+			if (threads[nIndex] != null
+					&& threads[nIndex].getName().equals(threadName)) {
+				threads[nIndex].stop();
+			}
 		}
 	}
 }

@@ -39,7 +39,7 @@ public class SwitchButton extends Label {
 			public void changed(ObservableValue<? extends Boolean> ov,
 					Boolean t, Boolean t1) {
 				if (t1) {
-					MainController.fileWriterFactory = "FileWriterFactory.EXCEL";
+					MainController.fileWriterFactory = true;
 					saveFactoryGlobal("FileWriterFactory.EXCEL");
 					setPadding(new javafx.geometry.Insets(0, 0, 0, 5));
 					setText("Excel");
@@ -49,7 +49,7 @@ public class SwitchButton extends Label {
 					setMinWidth(77.0);
 				} else {
 					// setMinWidth(77.0);
-					MainController.fileWriterFactory = "FileWriterFactory.CSV";
+					MainController.fileWriterFactory = true;
 					saveFactoryGlobal("FileWriterFactory.CSV");
 					setPadding(new javafx.geometry.Insets(0, 5, 0, 0));
 					setText("CSV");
@@ -62,10 +62,10 @@ public class SwitchButton extends Label {
 		});
 
 		// switchedOn.set(false);
-		if (MainController.fileWriterFactory.equals("FileWriterFactory.EXCEL")) {
+		if (MainController.fileWriterFactory == false) {
 			switchedOn.set(false);
 		}
-		if (MainController.fileWriterFactory.equals("FileWriterFactory.CSV")) {
+		if (MainController.fileWriterFactory == true) {
 			switchedOn.set(true);
 		}
 	}

@@ -13,12 +13,14 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.stage.Stage;
 import ch.ice.controller.MainController;
 import ch.ice.exceptions.InternalFormatException;
 import ch.ice.exceptions.MissingCustomerRowsException;
@@ -41,6 +43,7 @@ public class SaveWindowController extends Thread implements Initializable {
 	@FXML
 	public static Button hobbyButton;
 
+	public static double d;
 	public static boolean myBoo = false;
 	public static boolean myBooWriting = false;
 	public static boolean myBooChecking = false;
@@ -51,6 +54,7 @@ public class SaveWindowController extends Thread implements Initializable {
 	Task task;
 	Task task1;
 	private static Boolean pauseFlag = false;
+	MainController main = new MainController();
 
 	// public static void resumeThread() {
 	// pauseFlag = false;
@@ -63,6 +67,7 @@ public class SaveWindowController extends Thread implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+
 		closeButton.setDisable(true);
 		openFileButton.setDisable(true);
 		cancelButton.setDisable(false);
@@ -71,7 +76,23 @@ public class SaveWindowController extends Thread implements Initializable {
 
 			@Override
 			public void handle(ActionEvent event) {
-				myBooChecking = true;
+				// myBooChecking = true;
+				task.cancel();
+				task1.cancel();
+				try {
+					main.stopThread("FIRST THREAD");
+					main.stopThread("SECOND THREAD");
+					main.stopThread("THIRD THREAD");
+					main.stopThread("FOURTH THREAD");
+
+					th.join();
+					t1.join();
+					main = null;
+
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setTitle("Information Dialog");
@@ -81,7 +102,11 @@ public class SaveWindowController extends Thread implements Initializable {
 				Optional<ButtonType> result = alert.showAndWait();
 				if (result.get() == ButtonType.OK) {
 					// ... user chose OK
-					System.exit(0);
+					// System.exit(0);
+
+					Node source = (Node) event.getSource();
+					Stage stage = (Stage) source.getScene().getWindow();
+					stage.close();
 				} else {
 					// ... user chose CANCEL or closed the dialog
 					// resumeThread();
@@ -97,12 +122,40 @@ public class SaveWindowController extends Thread implements Initializable {
 
 		});
 
+		closeButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+
+				System.exit(0);
+
+			}
+		});
+		openFileButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				Desktop dt = Desktop.getDesktop();
+				try {
+
+					dt.open(new File(FileOutputNameGenerator.fileName));
+				} catch (IOException e) {
+					// TODO
+					// Auto-generated
+					// catch block
+					e.printStackTrace();
+				}
+
+			}
+		});
+
 		task = new Task<Void>() {
 			@Override
 			public Void call() throws Exception {
 
 				int i = 0;
 				while (myBooChecking == false) {
+					System.out.println("Again!");
 
 					final int finalI = i;
 					if (i == 4) {
@@ -127,6 +180,8 @@ public class SaveWindowController extends Thread implements Initializable {
 						public void run() {
 
 							// if (myBooChecking == true) {
+							// return;
+							// }
 							// synchronized (pauseFlag) {
 							// try {
 							// pauseFlag.wait();
@@ -148,7 +203,7 @@ public class SaveWindowController extends Thread implements Initializable {
 										+ " : "
 										+ MainController.customersEnhanced);
 
-								double d = (double) MainController.customersEnhanced
+								d = (double) MainController.customersEnhanced
 										/ (double) MainController.customerList
 												.size();
 								progressBar.setProgress(d);
@@ -172,38 +227,6 @@ public class SaveWindowController extends Thread implements Initializable {
 									openFileButton.setDisable(false);
 									cancelButton.setDisable(true);
 
-									closeButton
-											.setOnAction(new EventHandler<ActionEvent>() {
-
-												@Override
-												public void handle(
-														ActionEvent event) {
-
-													System.exit(0);
-
-												}
-											});
-									openFileButton
-											.setOnAction(new EventHandler<ActionEvent>() {
-
-												@Override
-												public void handle(
-														ActionEvent event) {
-													Desktop dt = Desktop
-															.getDesktop();
-													try {
-														dt.open(new File(
-																FileOutputNameGenerator.fileName));
-													} catch (IOException e) {
-														// TODO
-														// Auto-generated
-														// catch block
-														e.printStackTrace();
-													}
-
-												}
-											});
-
 									cancel(true);
 								}
 
@@ -216,6 +239,7 @@ public class SaveWindowController extends Thread implements Initializable {
 
 				}
 				return null;
+
 			}
 		};
 
@@ -228,13 +252,12 @@ public class SaveWindowController extends Thread implements Initializable {
 			@Override
 			public Void call() throws Exception {
 
-				MainController main = new MainController();
-
 				// if (myBooChecking == true) {
 				// synchronized (pauseFlag) {
 				// pauseFlag.wait();
 				// }
 				// }
+				System.out.println("Again 2!");
 				try {
 					main.startMainController();
 
@@ -242,6 +265,7 @@ public class SaveWindowController extends Thread implements Initializable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				System.out.println("in cancel mode");
 
 				cancel(true);
 				return null;

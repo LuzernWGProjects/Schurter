@@ -38,6 +38,9 @@ import org.apache.logging.log4j.Logger;
 
 import ch.ice.controller.MainController;
 import ch.ice.controller.web.SearchEngineFactory;
+import ch.ice.exceptions.InternalFormatException;
+import ch.ice.exceptions.MissingCustomerRowsException;
+import ch.ice.model.Customer;
 
 public class GUIController implements Initializable {
 
@@ -74,6 +77,8 @@ public class GUIController implements Initializable {
 
 	SwitchButton switchToggle;
 
+	public static boolean retrievedCustomer = false;
+
 	public static ObservableValue<? extends String> test;
 
 	public static PropertiesConfiguration config;
@@ -81,13 +86,14 @@ public class GUIController implements Initializable {
 	public static List<String> metaTagElements;
 
 	public static String path;
+	public static String chosenPath;
 
 	public static String searchGlobal;
 
 	public static Image googleImage = new Image(
-			MetaController.class.getResourceAsStream("/Google.png"));
+			GUIController.class.getResourceAsStream("/Google.png"));
 	public static Image bingImage = new Image(
-			MetaController.class.getResourceAsStream("/Bing.png"));
+			GUIController.class.getResourceAsStream("/Bing.png"));
 
 	public static final Logger logger = LogManager
 			.getLogger(GUIController.class.getName());
@@ -108,10 +114,16 @@ public class GUIController implements Initializable {
 
 	}
 
-	public static String getSaveProperties() {
+	public static String getSaveProperties(Button startButton) {
 		try {
 			config = new PropertiesConfiguration("conf/app.properties");
 			path = config.getString(("writer.file.path"));
+			chosenPath = config.getString(("writer.file.chosenPath"));
+			if (MainController.uploadedFileContainingCustomers == null) {
+				startButton.setDisable(true);
+
+			} else
+				startButton.setDisable(false);
 
 		} catch (ConfigurationException e1) {
 			// TODO Auto-generated catch block
@@ -122,10 +134,11 @@ public class GUIController implements Initializable {
 
 	}
 
-	public static void setSaveProperties(String chosenPath) {
+	public static void setSaveProperties(String path, String chosenPath) {
 		try {
 			config = new PropertiesConfiguration("conf/app.properties");
-			config.setProperty("writer.file.path", chosenPath);
+			config.setProperty("writer.file.path", path);
+			config.setProperty("writer.file.chosenPath", chosenPath);
 
 		} catch (ConfigurationException e1) {
 			// TODO Auto-generated catch block
@@ -160,9 +173,12 @@ public class GUIController implements Initializable {
 			searchGlobal = config.getString(("searchEngine.global"));
 			if (searchGlobal.equals("GOOGLE")) {
 				imageView.setImage(googleImage);
+				retrievedCustomer = true;
+
 			}
 			if (searchGlobal.equals("BING")) {
 				imageView.setImage(bingImage);
+				retrievedCustomer = false;
 			}
 
 		} catch (ConfigurationException e1) {
@@ -176,11 +192,11 @@ public class GUIController implements Initializable {
 		try {
 			config = new PropertiesConfiguration("conf/app.properties");
 			String tester = config.getString(("writer.factory"));
-			if (tester.equals("FileWriterFactory.EXCEL")) {
-				MainController.fileWriterFactory = "FileWriterFactory.EXCEL";
+			if (tester.equals("EXCEL")) {
+				MainController.fileWriterFactory = true;
 			}
-			if (tester.equals("FileWriterFactory.CSV")) {
-				MainController.fileWriterFactory = "FileWriterFactory.CSV";
+			if (tester.equals("CSV")) {
+				MainController.fileWriterFactory = false;
 			}
 
 		} catch (ConfigurationException e1) {
@@ -232,8 +248,9 @@ public class GUIController implements Initializable {
 		getProperties(metaTagsList);
 		FileChooser filechooser = new FileChooser();
 		DirectoryChooser directoryChooser = new DirectoryChooser();
-		getSaveProperties();
+		getSaveProperties(startSearchButton);
 		pathTextField.setText(path);
+		fileTextField.setText(chosenPath);
 
 		GUIMain.externalNetCheck();
 
@@ -274,17 +291,41 @@ public class GUIController implements Initializable {
 									"Excel-File (*.xls)", "*.xls"),
 							new FileChooser.ExtensionFilter("CSV-File (*.csv)",
 									"*.csv"));
+					if (!chosenPath.isEmpty()) {
+						File initial = new File(chosenPath);
+						filechooser.setInitialDirectory(initial);
+					}
 					MainController.uploadedFileContainingCustomers = filechooser
 							.showOpenDialog(stage);
 					if (MainController.uploadedFileContainingCustomers != null) {
 						fileTextField
 								.setText(MainController.uploadedFileContainingCustomers
 										.getAbsolutePath());
+						setSaveProperties(
+								path,
+								MainController.uploadedFileContainingCustomers
+										.getAbsolutePath()
+										.replaceAll(
+												MainController.uploadedFileContainingCustomers
+														.getName(), ""));
+						config.save();
+						List<Customer> testList = MainController
+								.retrieveCustomerFromFile(MainController.uploadedFileContainingCustomers);
+						if (testList.size() > 40
+								&& searchGlobal.equals("GOOGLE")) {
+							retrievedCustomer = true;
+							startSearchButton.setDisable(true);
+						} else
+							startSearchButton.setDisable(false);
 					}
-				} catch (NullPointerException e) {
+				} catch (NullPointerException | InternalFormatException
+						| MissingCustomerRowsException | ConfigurationException e) {
+					e.printStackTrace();
 
 					System.out.println("No File selected");
-					fileTextField.setText("");
+					fileTextField.setText("No File selected");
+					fileTextField.setStyle("-fx-text-inner-color: red;");
+					startSearchButton.setDisable(true);
 				}
 
 			}
@@ -297,19 +338,25 @@ public class GUIController implements Initializable {
 				// TODO Auto-generated method stub
 				Stage stage = new Stage();
 				try {
-
+					if (!path.isEmpty()) {
+						File initial = new File(path);
+						directoryChooser.setInitialDirectory(initial);
+					}
 					File pathFile = directoryChooser.showDialog(stage);
 					if (pathFile != null) {
-						setSaveProperties(pathFile.getAbsolutePath());
+						setSaveProperties(pathFile.getAbsolutePath(),
+								chosenPath);
 						config.save();
-						getSaveProperties();
+						getSaveProperties(startSearchButton);
 						pathTextField.setText(path);
 
 					}
 				} catch (NullPointerException | ConfigurationException e) {
-
+					startSearchButton.setDisable(false);
 					System.out.println("No Path selected");
-					pathTextField.setText("");
+					pathTextField.setText("No Directory Selected");
+					pathTextField.setStyle("-fx-text-inner-color: red;");
+
 				}
 			}
 
@@ -319,6 +366,9 @@ public class GUIController implements Initializable {
 
 			@Override
 			public void handle(ActionEvent event) {
+				if (path.equals("") || chosenPath.equals("")) {
+					return;
+				}
 
 				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
 						"SaveFile.fxml"));
@@ -382,6 +432,10 @@ public class GUIController implements Initializable {
 					getProperties(metaTagsList);
 					// Update SearchEngine Image
 					setSearchEngineImage(searchImage);
+					if (retrievedCustomer == true) {
+						startSearchButton.setDisable(true);
+					} else
+						startSearchButton.setDisable(false);
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
