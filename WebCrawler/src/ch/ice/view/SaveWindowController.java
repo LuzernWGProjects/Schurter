@@ -252,7 +252,7 @@ public class SaveWindowController extends Thread implements Initializable {
 
 									closeButton.setDisable(false);
 									openFileButton.setDisable(false);
-									// cancelButton.setDisable(true);
+									cancelButton.setText("Main Menu");
 									myBoo = false;
 									myBooChecking = false;
 									myBooWriting = false;
