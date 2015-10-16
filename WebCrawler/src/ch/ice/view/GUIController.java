@@ -84,8 +84,11 @@ public class GUIController implements Initializable {
 	public String statusOk = "Status OK";
 	public String googleExceeds = "The file exceeds the allowed Google searches of "
 			+ maxGoogle;
+	public String bingExceeds = "The file exceeds the allowed Bing searches of "
+			+ maxBing;
 
 	public static int maxGoogle;
+	public static int maxBing;
 
 	public static boolean retrievedCustomer = false;
 
@@ -221,6 +224,8 @@ public class GUIController implements Initializable {
 			config = new PropertiesConfiguration("conf/app.properties");
 			maxGoogle = Integer.parseInt(config
 					.getString(("searchEngine.maxGoogleSearches")));
+			maxBing = Integer.parseInt(config
+					.getString(("searchEngine.maxBingSearches")));
 
 		} catch (ConfigurationException e1) {
 			// TODO Auto-generated catch block
@@ -346,10 +351,18 @@ public class GUIController implements Initializable {
 							startSearchButton.setDisable(true);
 							infoLabel.setText(googleExceeds);
 							infoLabel.setTextFill(Color.RED);
-						} else
+						} else if (testList.size() > maxBing
+								&& searchGlobal.equals("BING")) {
+							System.out.println(testList.size());
+							retrievedCustomer = true;
+							startSearchButton.setDisable(true);
+							infoLabel.setText(bingExceeds);
+							infoLabel.setTextFill(Color.RED);
+						} else {
 							startSearchButton.setDisable(false);
-						infoLabel.setText(statusOk);
-						infoLabel.setTextFill(Color.GREEN);
+							infoLabel.setText(statusOk);
+							infoLabel.setTextFill(Color.GREEN);
+						}
 					}
 				} catch (NullPointerException | InternalFormatException
 						| MissingCustomerRowsException | ConfigurationException e) {
