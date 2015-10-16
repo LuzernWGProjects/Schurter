@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import ch.ice.controller.interf.SearchEngine;
 import ch.ice.exceptions.NoUrlFoundException;
+import ch.ice.exceptions.SearchEngineRequestLimitReachedException;
 import ch.ice.utils.JSONStandardizedKeys;
 import ch.ice.utils.JSONUtil;
 import ch.ice.utils.XMLParser;
@@ -31,7 +32,7 @@ public class GoogleSearchEngine implements SearchEngine {
 	private static final Logger logger = LogManager.getLogger(GoogleSearchEngine.class.getName());
 	private static Map<String, String> country2tld = XMLParser.getTLDOfCountry();
 
-	public JSONArray search(String requestedQuery, int limitSearchResult, String countryCode) throws NoUrlFoundException {
+	public JSONArray search(String requestedQuery, int limitSearchResult, String countryCode) throws NoUrlFoundException, SearchEngineRequestLimitReachedException {
 		try {
 
 			String accountKey = "";
@@ -87,7 +88,15 @@ public class GoogleSearchEngine implements SearchEngine {
 			URL url = new URL(googleSearchUrl);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-			final BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			
+			BufferedReader in = null;
+			try {
+				in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			} catch (IOException httpResponseError) {
+				throw new SearchEngineRequestLimitReachedException("The Google searchengine has reached its limit. Please only search for 100 customers per day.");
+			}
+			
+			
 
 			String inputLine;
 			final StringBuilder response = new StringBuilder();
@@ -136,7 +145,7 @@ public class GoogleSearchEngine implements SearchEngine {
 		return null;
 	}
 
-	public JSONArray search(String requestedQuery, int limitSearchResult) throws NoUrlFoundException {
+	public JSONArray search(String requestedQuery, int limitSearchResult) throws NoUrlFoundException, SearchEngineRequestLimitReachedException {
 		return search(requestedQuery, limitSearchResult, "us");
 	}
 
