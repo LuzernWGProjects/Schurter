@@ -48,9 +48,7 @@ public class GoogleSearchEngine implements SearchEngine {
 
 			accountKey = config.getString("searchEngine.google.accountKey");
 			config_cx = config.getString("searchEngine.google.cx");
-
-
-
+			
 			String charset = Charset.defaultCharset().name();
 
 			final String apiKey = URLEncoder.encode(accountKey, charset);
@@ -69,7 +67,10 @@ public class GoogleSearchEngine implements SearchEngine {
 			 */
 			final String fields =  URLEncoder.encode("items(link,title),searchInformation/searchTime", charset);
 			final String googleHost =  URLEncoder.encode("google."+countryCode, charset);
-
+			
+			if(requestedQuery.isEmpty() | requestedQuery == "")
+				return new JSONArray();
+			
 			requestedQuery = URLEncoder.encode(requestedQuery, charset);
 
 			// google only ever returns max 10 results
@@ -81,7 +82,7 @@ public class GoogleSearchEngine implements SearchEngine {
 
 			String googleSearchUrl = "https://www.googleapis.com/customsearch/v1?q="+ requestedQuery +"&key="+ apiKey +"&cx="+ cx +"&googlehost="+ googleHost +"&fields="+ fields+"&num="+limitSearchResult;
 			logger.info("Lookup Google with request URL: "+googleSearchUrl);
-
+			
 			URL url = new URL(googleSearchUrl);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -90,10 +91,8 @@ public class GoogleSearchEngine implements SearchEngine {
 			try {
 				in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			} catch (IOException httpResponseError) {
-				throw new SearchEngineRequestLimitReachedException("The Google searchengine has reached its limit. Please only search for 100 customers per day.");
+				throw new SearchEngineRequestLimitReachedException("There has been a problem. Either the Google searchengine has reached its request limit or you dont have a connection to the internet.");
 			}
-
-
 
 			String inputLine;
 			final StringBuilder response = new StringBuilder();

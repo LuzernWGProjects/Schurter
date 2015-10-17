@@ -20,6 +20,7 @@ import org.json.JSONObject;
 
 import ch.ice.controller.interf.SearchEngine;
 import ch.ice.exceptions.NoUrlFoundException;
+import ch.ice.exceptions.SearchEngineRequestLimitReachedException;
 import ch.ice.utils.Config;
 import ch.ice.utils.JSONStandardizedKeys;
 import ch.ice.utils.JSONUtil;
@@ -31,7 +32,7 @@ public class BingSearchEngine implements SearchEngine {
 	private static Map<String, String> country2Market = XMLParser.getMarket();
 
 	@Override
-	public JSONArray search(String requestedQuery, int limitSearchResults, String countryCode)  throws IOException, NoUrlFoundException {
+	public JSONArray search(String requestedQuery, int limitSearchResults, String countryCode)  throws IOException, NoUrlFoundException, SearchEngineRequestLimitReachedException {
 
 		String accountKey = "";
 		String bingUrlPattern = "";
@@ -48,13 +49,15 @@ public class BingSearchEngine implements SearchEngine {
 		accountKey = config.getString("searchEngine.bing.accountKey");
 		bingUrlPattern = config.getString("searchEngine.bing.pattern");
 
-		String MarketCode= null;;
+		String MarketCode= null;
 
 		// country code and google host mapping
 
 		String quotes = "'";
 		String quotesEnc = URLEncoder.encode(quotes, Charset.defaultCharset().name());
-
+		
+		if(requestedQuery.isEmpty() | requestedQuery == "")
+			return new JSONArray();
 
 		String reqQueryEnc = "'"+requestedQuery+"'";
 		String query = URLEncoder.encode(reqQueryEnc, Charset.defaultCharset().name());
@@ -80,15 +83,6 @@ public class BingSearchEngine implements SearchEngine {
 
 		String accountKeyEnc = Base64.getEncoder().encodeToString((accountKey + ":" + accountKey).getBytes());
 		// Bing Constants
-
-//		String query = URLEncoder.encode(requestedQuery, Charset.defaultCharset().name());
-//
-//		// if search results limit is smaller then 1, set to 1
-//		if(limitSearchResults < 1) limitSearchResults = 1;
-//
-//		String bingUrl = String.format(bingUrlPattern+"&$top="+limitSearchResults, query);
-//
-//		String accountKeyEnc = Base64.getEncoder().encodeToString((accountKey + ":" + accountKey).getBytes());
 
 		final URL url = new URL(bingUrl);
 		final URLConnection connection = url.openConnection();
@@ -145,11 +139,13 @@ public class BingSearchEngine implements SearchEngine {
 			System.out.println("STD resulsts length: "+bingResults.length());
 
 			return bingResults;
+		} catch(IOException e){
+			throw new SearchEngineRequestLimitReachedException("There has been a problem. Either the Bing searchengine has reached its request limit or you dont have a connection to the internet.");
 		}
 	}
 
 	@Override
-	public JSONArray search(String requestedQuery, int limitSearchResults) throws IOException, NoUrlFoundException {
+	public JSONArray search(String requestedQuery, int limitSearchResults) throws IOException, NoUrlFoundException, SearchEngineRequestLimitReachedException {
 		return search(requestedQuery, limitSearchResults, "us");
 	}
 

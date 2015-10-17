@@ -31,6 +31,8 @@ import ch.ice.exceptions.FileParserNotAvailableException;
 import ch.ice.exceptions.IllegalFileExtensionException;
 import ch.ice.exceptions.InternalFormatException;
 import ch.ice.exceptions.MissingCustomerRowsException;
+import ch.ice.exceptions.NoUrlFoundException;
+import ch.ice.exceptions.SearchEngineRequestLimitReachedException;
 import ch.ice.model.Customer;
 import ch.ice.utils.Config;
 import ch.ice.utils.JSONStandardizedKeys;
@@ -334,9 +336,8 @@ public class MainController {
 			// return only the URL form first object
 			return new URL((String) aResult.get(JSONStandardizedKeys.URL));
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("FEHLER!!!!!!!");
+		} catch (IOException | NoUrlFoundException | SearchEngineRequestLimitReachedException e) {
+			logger.error(e.getMessage());
 		}
 
 		return defaultUrl;

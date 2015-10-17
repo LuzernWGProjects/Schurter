@@ -144,7 +144,7 @@ public class ExcelParser implements Parser {
 
 					// country Code
 				case 1:
-					if(this.checkForCellType(cell).isEmpty() || this.checkForCellType(cell) == ""){
+					if(this.checkForCellType(cell) == null || this.checkForCellType(cell).isEmpty() | this.checkForCellType(cell) == ""){
 						this.customerCountryCode = "US";
 					} else {
 						this.customerCountryCode = this.checkForCellType(cell);
@@ -232,11 +232,10 @@ public class ExcelParser implements Parser {
 		if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
 			return cell.getStringCellValue().toString();
 		}
-
 		else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
 			return Double.toString(cell.getNumericCellValue());
 		}
-		return null;
+		return "";
 	}
 	
 	@Override
