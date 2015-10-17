@@ -350,7 +350,7 @@ public class MainController {
 		try {
 			// Start Search
 			JSONArray results = MainController.searchEngine.search(lookupQuery,
-					MainController.limitSearchResults);
+					MainController.limitSearchResults, c.getCountryCode().toLowerCase());
 
 			// logic to pick the first record ; here should be the search logic!
 			JSONObject aResult = ResultAnalyzer.analyse(results, params);

@@ -66,5 +66,49 @@ public class XMLParser {
 		
 		return country2tld;
 	}
+	
+	public static Map<String, String> getMarket(){
+
+		Map<String, String> country2Market = new HashMap<String, String>();
+
+		File xmlFile = new File(country2xmlFile);
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder;
+
+		try {
+			dBuilder = dbFactory.newDocumentBuilder();
+
+			Document doc = dBuilder.parse(xmlFile);
+			doc.getDocumentElement().normalize();
+
+			NodeList nList = doc.getElementsByTagName("country");
+
+			for (int temp = 0; temp < nList.getLength(); temp++) {
+
+				Node nNode = nList.item(temp);
+
+				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+
+					Element eElement = (Element) nNode;
+					
+					
+					String countryCode = eElement.getElementsByTagName("code").item(0).getTextContent().toLowerCase();
+					String market = eElement.getElementsByTagName("market").item(0).getTextContent();
+					
+					if(market.isEmpty())
+						continue;
+					
+					country2Market.put(countryCode, market);
+
+				}
+			}
+
+
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			e.printStackTrace();
+		}
+		
+		return country2Market;
+	}
 
 }

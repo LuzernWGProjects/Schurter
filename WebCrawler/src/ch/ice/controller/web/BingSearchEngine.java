@@ -26,10 +26,12 @@ import ch.ice.controller.interf.SearchEngine;
 import ch.ice.exceptions.NoUrlFoundException;
 import ch.ice.utils.JSONStandardizedKeys;
 import ch.ice.utils.JSONUtil;
+import ch.ice.utils.XMLParser;
 
 
 public class BingSearchEngine implements SearchEngine {
-
+	
+	private static Map<String, String> country2Market = XMLParser.getMarket();
 	/**
 	 * Search for an URL on Bing with certain params
 	 * 
@@ -58,16 +60,37 @@ public class BingSearchEngine implements SearchEngine {
 			System.out.println(e.getLocalizedMessage());
 			e.printStackTrace();
 		}
-    	
-    	// Bing Constants
 
-        String query = URLEncoder.encode(requestedQuery, Charset.defaultCharset().name());
-        
+		String MarketCode= null;;
+		
+		// country code and google host mapping
+	
+		String quotes = "'";
+		String quotesEnc = URLEncoder.encode(quotes, Charset.defaultCharset().name());
+
+		
+		String reqQueryEnc = "'"+requestedQuery+"'";
+        String query = URLEncoder.encode(reqQueryEnc, Charset.defaultCharset().name());
+		
+		String MarketURL ="";
+		//	if(country2Market.get(countryCode.toLowerCase()).isEmpty() || country2Market.get(countryCode.toLowerCase()) == null){
+		if(country2Market.get(countryCode.toLowerCase()) == null ){
+			MarketCode = "";
+		} else {
+			
+			MarketCode = URLEncoder.encode(country2Market.get(countryCode),Charset.defaultCharset().name());
+			MarketURL = "&Market="+quotesEnc+MarketCode+quotesEnc;
+
+		}
+    	
+		
+    	// Bing Constants
+       
         // if search results limit is smaller then 1, set to 1
         if(limitSearchResults < 1) limitSearchResults = 1;
-        
-        String bingUrl = String.format(bingUrlPattern+"&$top="+limitSearchResults, query);
-
+  
+        String bingUrl = bingUrlPattern+query+"&$format=JSON&$top="+limitSearchResults+MarketURL;
+    
         String accountKeyEnc = Base64.getEncoder().encodeToString((accountKey + ":" + accountKey).getBytes());
 
         final URL url = new URL(bingUrl);

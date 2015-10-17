@@ -1,3 +1,4 @@
+
 /**
  * 
  */
@@ -44,12 +45,14 @@ public class ResultAnalyzer {
 	public static JSONObject analyse(JSONArray results, List<String> parameters) {
 		double[] candidatesArray;
 		System.out.println("Laenge: " + results.length() + ";");
-
+		logger.debug("RA: new  analysis ##############################");
+		
 		// initlayze candiatesArray for decision making
 		candidatesArray = new double[results.length()];
 		for (int y = 0; y < candidatesArray.length; y++) {
 			candidatesArray[y] = 0;
 		}
+		candidatesArray[0]=2;
 
 		// Go thru each received result of the search request
 		for (int i = 0; i < results.length(); i++) {
@@ -83,6 +86,10 @@ public class ResultAnalyzer {
 			char[] fullCompanyNameCharSequence = parameters.get(0)
 					.toCharArray();
 
+			String companyNameNoWhitespace = (String) parameters.get(0).replaceAll("\\s+", "");
+			logger.debug("RA: firma:: "+companyName);
+			logger.debug("RA: host:: "+host);
+			
 			// spilt single words of the name
 			String[] singleWords = companyName.split("\\s+");
 			for (int j = 0; j < singleWords.length; j++) {
@@ -92,6 +99,7 @@ public class ResultAnalyzer {
 			// split url in single words
 			String strippedURL = host.replace("-", " ").replaceAll("[^\\w]",
 					" ");
+			String strippedURLNoWhitespace = host.replace("-", "").replaceAll("[^\\w]",	"");
 			String[] singleURLWords = strippedURL.split("\\s+");
 
 			// create acronym of company name
@@ -107,10 +115,25 @@ public class ResultAnalyzer {
 			if (host.contains(companyName)) {
 				System.out.println("----------- NAMEN in URL!" + url
 						+ "diese url enthaelt den namen: " + parameters.get(0));
-				logger.info("ResultAnalyzer: Contains full name");
+				
+				logger.debug("RA: Contains FULLNAME");
 				return singleResult;
 			}
-
+			if(strippedURLNoWhitespace.contains(companyNameNoWhitespace)){
+				System.out.println("----------- NAMEN ohne whitespaces in URL!!" + url
+						+ "diese url enthaelt den namen: " + parameters.get(0));
+				
+				logger.debug("RA: Contains FULLNAME");
+				return singleResult;
+			}
+			
+			if(host.contains(companyNameNoWhitespace)) {
+				System.out.println("----------- NAMEN ohne whitespaces in URL!" + url
+						+ "diese url enthaelt den namen: " + parameters.get(0));
+			
+				logger.debug("RA: Contains FULLNAME (without whitespace)");
+				return singleResult;
+			}
 			// if the url is not on the blacklist, do further checks; otherwise
 			// this result will have a 0.0 score
 			if (!isBlacklist(host)) {
@@ -125,14 +148,16 @@ public class ResultAnalyzer {
 				 */
 				// is first word in company name equal than first in url?
 				if (singleWords[0].equals(singleURLWords[0])) {
-					candidatesArray[i] = candidatesArray[i] + (1 * 0.5);
+					candidatesArray[i] = candidatesArray[i] + (5);
 					System.out.println(candidatesArray[i]);
+					logger.debug("RA: first Equals first in URL "+candidatesArray[i] );
 
 				}
 				// does the url contains the first word of the company name?
 				if (host.contains(singleWords[0])) {
-					candidatesArray[i] = candidatesArray[i] + (1 * 0.2);
+					candidatesArray[i] = candidatesArray[i] + (2);
 					System.out.println(candidatesArray[i]);
+					logger.debug("RA: first is contained in URL "+candidatesArray[i] );
 				}
 				// if the company name contains more than 1 word...
 				if (singleWords.length > 1) { // does the url any other word of
@@ -141,26 +166,28 @@ public class ResultAnalyzer {
 												// implemented!
 					for (int j = 0; j < singleWords.length - 1; j++) {
 						if (host.contains(singleWords[j])) {
-							candidatesArray[i] = candidatesArray[i] + (1 * 0.1);
+							candidatesArray[i] = candidatesArray[i] + (0.5);
 							System.out.println(candidatesArray[i]);
+							logger.debug("RA: some word is contained in url "+candidatesArray[i] );
 						}
 					}
 				}
 				// does the url contains the acronym of the company?
 				if (host.equals((CharSequence) acroOfCompanyName)) {
 
-					candidatesArray[i] = candidatesArray[i] + (1 * 0.5);
+					candidatesArray[i] = candidatesArray[i] + (5);
 					System.out
 							.println("-----------ABK in URL: Diese Url enthaelt die abk: "
 									+ acroOfCompanyName);
-					logger.info("ResultAnalyzer: Contains URL");
+				
+					logger.debug("RA: acro is equals url "+candidatesArray[i] );
 
 					System.out.println(candidatesArray[i]);
 				}
 
 				// check if unsure (the critical value is 0.5 since if is less
 				// than 0.5, the first word is not contained in the url)
-				if (candidatesArray[i] < 0.5) {
+				if (candidatesArray[i] <= 4.5) {
 					results.getJSONObject(i).put("Unsure", true);
 				}
 
@@ -168,8 +195,10 @@ public class ResultAnalyzer {
 				logger.info("ResultAnalyzer: Blacklisted");
 				System.out.println("blacklisted");
 				results.getJSONObject(i).put("Unsure", true);
+				logger.debug("RA: blacklisted "+candidatesArray[i] );
 			}
 			System.out.println(url + " Score: " + candidatesArray[i]);
+			logger.debug("RA: Totalscore: "+candidatesArray[i] );
 		}// ************END OF FOR
 
 		// determine the best result
@@ -184,6 +213,7 @@ public class ResultAnalyzer {
 		for (int l = 0; l < candidatesArray.length; l++) {
 			if (candidatesArray[l] == max) {
 				System.out.println("highest Score:" + candidatesArray[l]);
+				logger.debug("RA: highest Score "+candidatesArray[l] );
 				return results.getJSONObject(l);
 			}
 		}
