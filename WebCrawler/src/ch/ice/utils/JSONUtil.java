@@ -4,7 +4,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -15,10 +14,23 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Helperclass for JSONArray handling.
+ * It provides some functionalities to improve
+ * the handling with the reutrned JSONarray
+ * results from the SearchEngine.
+ * 
+ * @author mneuhaus
+ *
+ */
 public final class JSONUtil {
 	private static final Logger logger = LogManager.getLogger(JSONUtil.class.getName());
 
-	// init key search field
+	/**
+	 * All defined labels here will be kept in the JSONArray.<br />
+	 * The standardized keys will be set as the default but can be
+	 * easly overwritten in the actual implementation.
+	 */
 	public static List<String> keepLablesInJSONArray = new ArrayList<String>(
 			// default ones for bing
 			Arrays.asList(
@@ -28,14 +40,18 @@ public final class JSONUtil {
 			)
 	);
 
-	// set the standard URL label
+	/**
+	 * Set the standard URL label for the trimming function.<br />
+	 * {@see JSONUtil#trimUrls(JSONArray, String)}
+	 */
 	public static String urlLabel = JSONStandardizedKeys.URL;
 
 	/**
-	 * Starter Function for our analysis methods.
+	 * Clean up all JSONArray elements. <br />
+	 * This function will call {@link JSONUtil#removeUnusedElements(JSONArray, List)} and {@link JSONUtil#trimUrls(JSONArray, String)}
 	 * 
 	 * @param results
-	 * @return 
+	 * @return JSONArray
 	 */
 	public static JSONArray cleanUp(JSONArray results) {
 		logger.info("Started JSON Clean Up");
@@ -46,10 +62,12 @@ public final class JSONUtil {
 	}
 
 	/**
-	 * Trim Urls so only the base uri is available
+	 * Trim Urls so only the base uri is available<br />
+	 * E.g. http://www.schurter.net/team/ceo will bechome<br />
+	 * http://www.schurter.net/
 	 * 
 	 * @param results
-	 * @return
+	 * @return JSONArray JSONArray containing the trimmed URLs.
 	 */
 	public static JSONArray trimUrls(JSONArray results, String urlLabel) {
 		JSONArray trimedUrls = new JSONArray();
@@ -94,7 +112,8 @@ public final class JSONUtil {
 	}
 
 	/**
-	 * Remove all unwanted tags and JSON Nodes
+	 * Remove all unwanted tags and JSON Nodes.<br />
+	 * Fewer data means faster iteration over an array.
 	 * 
 	 * @param results
 	 * @param keyNodes
@@ -125,13 +144,17 @@ public final class JSONUtil {
 	}
 
 	/**
-	 * Can be used for JSON Standardization
-	 * 
-	 * oldKey -> newKey
-	 * e.g. "Url" -> "url"
+	 * This will map the old JSONArray node Name to<br />
+	 * a new JSONArray node Name. Can be usefulle <br />
+	 * if something needs to be standardized.
+	 * <br />
+	 * Key: "URL" -> new Key: "url"<br />
+	 * <br />
+	 * Remove the oldkey name and replace it with the <br />
+	 * new key name. All values will be in the same place.
 	 * 
 	 * @param results
-	 * @param renameLabelMap
+	 * @param renameLabelMap	A Map containing old Keys and the new key value
 	 * @return JSONArray
 	 */
 	public static JSONArray keyNodeMapper(JSONArray results, Map<String,String> renameLabelMap) {
