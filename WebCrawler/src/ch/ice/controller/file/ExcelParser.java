@@ -144,7 +144,13 @@ public class ExcelParser implements Parser {
 
 					// country Code
 				case 1:
-					this.customerCountryCode = this.checkForCellType(cell);
+					if(this.checkForCellType(cell).isEmpty() || this.checkForCellType(cell) == ""){
+						this.customerCountryCode = "US";
+					} else {
+						this.customerCountryCode = this.checkForCellType(cell);
+					}
+					
+					break;
 
 					// country Name
 				case 2:
@@ -161,7 +167,7 @@ public class ExcelParser implements Parser {
 					this.custonerShortName = this.checkForCellType(cell);
 					break;
 
-					// empty cell
+					// skipp empty cell
 				case 5:
 					continue;
 
@@ -191,7 +197,7 @@ public class ExcelParser implements Parser {
 	 * 
 	 * @return customer model with empty Website.
 	 */
-	public Customer createCustomer() {
+	private Customer createCustomer() {
 
 		Customer customer = new Customer();
 

@@ -78,13 +78,8 @@ public class CSVParser implements Parser{
 		
 		return customerList;
 	}
-
-	/**
-	 * Return all collected Headercells from File. Will be used for creating new
-	 * file with the correct Headers
-	 * 
-	 * @return Value in header cells
-	 */
+	
+	@Override
 	public List<String> getCellHeaders() {
 		return this.headerInfos;
 	}
