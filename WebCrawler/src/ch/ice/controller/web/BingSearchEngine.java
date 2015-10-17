@@ -49,13 +49,15 @@ public class BingSearchEngine implements SearchEngine {
 		accountKey = config.getString("searchEngine.bing.accountKey");
 		bingUrlPattern = config.getString("searchEngine.bing.pattern");
 
-		String MarketCode= null;;
+		String MarketCode= null;
 
 		// country code and google host mapping
 
 		String quotes = "'";
 		String quotesEnc = URLEncoder.encode(quotes, Charset.defaultCharset().name());
-
+		
+		if(requestedQuery.isEmpty() | requestedQuery == "")
+			return new JSONArray();
 
 		String reqQueryEnc = "'"+requestedQuery+"'";
 		String query = URLEncoder.encode(reqQueryEnc, Charset.defaultCharset().name());
