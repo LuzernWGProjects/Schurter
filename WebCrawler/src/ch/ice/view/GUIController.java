@@ -23,7 +23,9 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -81,6 +83,11 @@ public class GUIController implements Initializable {
 	private Button closeWindowButton;
 	@FXML
 	private Button lowerWindowButton;
+	@FXML
+	private VBox vBox;
+
+	private double xOffset = 0;
+	private double yOffset = 0;
 
 	/**
 	 * SwitchButton for CSV or EXCEL selection
@@ -273,15 +280,17 @@ public class GUIController implements Initializable {
 		try {
 			if (getSaveProperties(startSearchButton) == true
 					&& getCheckStatus(startSearchButton, infoLabel) == true
-					&& pathFile.exists() == true && pathFile.canWrite() == true) {
+					&& pathFile.exists() == true) {
 
 				startSearchButton.setDisable(false);
 				return true;
 			} else {
 				startSearchButton.setDisable(true);
+
 				return false;
 			}
 		} catch (NullPointerException e) {
+			e.printStackTrace();
 			System.out.println("Save Path not set yet or wrong Directory");
 			logger.info("Save Path not set yet or wrong Directory");
 		}
@@ -310,6 +319,7 @@ public class GUIController implements Initializable {
 		getSaveProperties(startSearchButton);
 		getMaxGoogleSearches();
 		getCheckStatus(startSearchButton, infoLabel);
+		pathFile = new File(path);
 		checkAll();
 		pathTextField.setText(path);
 		fileTextField.setText(chosenPath);
@@ -564,6 +574,26 @@ public class GUIController implements Initializable {
 				Stage stage = (Stage) source.getScene().getWindow();
 				stage.setIconified(true);
 
+			}
+		});
+
+		/**
+		 * Make Window Moveable
+		 */
+		vBox.setOnMousePressed(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				xOffset = event.getSceneX();
+				yOffset = event.getSceneY();
+			}
+		});
+		vBox.setOnMouseDragged(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				Node source = (Node) event.getSource();
+				Stage stage = (Stage) source.getScene().getWindow();
+				stage.setX(event.getScreenX() - xOffset);
+				stage.setY(event.getScreenY() - yOffset);
 			}
 		});
 

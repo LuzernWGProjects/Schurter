@@ -46,9 +46,12 @@ import javafx.util.Callback;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import ch.ice.controller.MainController;
 import ch.ice.controller.web.SearchEngineFactory;
+import ch.ice.utils.Config;
 
 public class MetaController implements Initializable {
 
@@ -87,39 +90,66 @@ public class MetaController implements Initializable {
 	@FXML
 	private Label checkAccountLabel;
 
+	/**
+	 * Menu for editing Blacklist
+	 */
 	private ContextMenu editMenu = new ContextMenu();
 	private MenuItem deleteOption = new MenuItem("Delete");
 	private MenuItem addNew = new MenuItem("Add new");
 
-	Image googleImage = new Image(
+	/**
+	 * Constants for moving the Window
+	 */
+	private double xOffset = 0;
+	private double yOffset = 0;
+
+	private Image googleImage = new Image(
 			MetaController.class.getResourceAsStream("/Google.png"));
-	Image bingImage = new Image(
+	private Image bingImage = new Image(
 			MetaController.class.getResourceAsStream("/Bing.png"));
+	/**
+	 * ArrayList for CheckBox Objects
+	 */
+	private ArrayList<CheckBox> checkList;
 
-	ArrayList<CheckBox> checkList;
+	public static PropertiesConfiguration config = Config.PROPERTIES;
 
+	public static final Logger logger = LogManager
+			.getLogger(MetaController.class.getName());
+
+	/**
+	 * set global Search constant in config
+	 * 
+	 * @param searchEngine
+	 */
 	public void saveSearchGlobal(String searchEngine) {
 
-		GUIController.config.setProperty("searchEngine.global", searchEngine);
+		config.setProperty("searchEngine.global", searchEngine);
 
 		try {
-			GUIController.config.save();
+			config.save();
 		} catch (ConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error(e);
 		}
+
 	}
 
+	/**
+	 * Get Bing Parameters for GUI
+	 */
 	public void setBingParams() {
 		keyLabel.setText("Bing Access Key:");
 		othersLabel.setText("Bing 2nd Parameter:");
-		keyTextField.setText(GUIController.config
-				.getString("searchEngine.bing.accountKey"));
-		othersTextField.setText(GUIController.config
-				.getString("searchEngine.bing.pattern"));
+		keyTextField.setText(config.getString("searchEngine.bing.accountKey"));
+		othersTextField.setText(config.getString("searchEngine.bing.pattern"));
 
 	}
 
+	/**
+	 * Get Google Parameters for GUI
+	 */
 	public void setGoogleParams() {
 		keyLabel.setText("Google API Key:");
 		othersLabel.setText("Google 2nd Parameter:");
@@ -131,6 +161,9 @@ public class MetaController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		/**
+		 * make settings
+		 */
 		checkAccountLabel
 				.setText("Please check Account of selected search Engine for remaining search requests.");
 		checkAccountLabel.setTextFill(Color.ORANGE);
@@ -141,6 +174,7 @@ public class MetaController implements Initializable {
 		keyTextField.setMaxWidth(500);
 		othersTextField.setPrefWidth(400);
 		othersTextField.setMaxWidth(500);
+
 		searchEngineLabel.setTooltip(new Tooltip(
 				"Select the Search Engine you would like to use"));
 		metaOptionsLabel
@@ -149,11 +183,18 @@ public class MetaController implements Initializable {
 		blackListLabel
 				.setTooltip(new Tooltip(
 						"Select the URL you would like to avoid being considered as results"));
+
+		/**
+		 * Add Items for BlackList Menu
+		 */
 		editMenu.getItems().add(deleteOption);
 		editMenu.getItems().add(addNew);
 
 		GUIController.getProperties(metaTagsLabel);
 
+		/**
+		 * Search Engine Drop Down
+		 */
 		ObservableList<Image> options = FXCollections.observableArrayList(
 				googleImage, bingImage
 
@@ -191,6 +232,9 @@ public class MetaController implements Initializable {
 
 		};
 
+		/**
+		 * get Selected Value
+		 */
 		selectEngine.setItems(options);
 		if (MainController.searchEngineIdentifier == SearchEngineFactory.BING) {
 			selectEngine.getSelectionModel().select(bingImage);
@@ -234,6 +278,9 @@ public class MetaController implements Initializable {
 			}
 		});
 
+		/**
+		 * Save everything and check if at least one meta tag is selected
+		 */
 		okMetaButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -250,34 +297,31 @@ public class MetaController implements Initializable {
 
 					alert.showAndWait();
 				} else {
-					GUIController.config.setProperty(
+					config.setProperty(
 							"crawler.searchForMetaTags",
 							GUIController.metaTagElements.toString()
 									.replace("[", "").replace("]", ""));
 
 					if (MainController.searchEngineIdentifier == SearchEngineFactory.GOOGLE) {
-						GUIController.config.setProperty(
-								"searchEngine.google.accountKey",
+						config.setProperty("searchEngine.google.accountKey",
 								keyTextField.getText());
-						GUIController.config.setProperty(
-								"searchEngine.google.cx",
+						config.setProperty("searchEngine.google.cx",
 								othersTextField.getText());
 					}
 
 					if (MainController.searchEngineIdentifier == SearchEngineFactory.BING) {
-						GUIController.config.setProperty(
-								"searchEngine.bing.accountKey",
+						config.setProperty("searchEngine.bing.accountKey",
 								keyTextField.getText());
-						GUIController.config.setProperty(
-								"searchEngine.bing.pattern",
+						config.setProperty("searchEngine.bing.pattern",
 								othersTextField.getText());
 					}
 
 					try {
-						GUIController.config.save();
+						config.save();
 					} catch (ConfigurationException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						logger.error(e);
 					}
 					Node source = (Node) event.getSource();
 					Stage stage = (Stage) source.getScene().getWindow();
@@ -286,6 +330,9 @@ public class MetaController implements Initializable {
 			}
 		});
 
+		/**
+		 * Load CheckBoxes
+		 */
 		ArrayList<MetaTag> endList = MetaTag.getMetaList();
 		checkList = new ArrayList<CheckBox>();
 
@@ -351,6 +398,9 @@ public class MetaController implements Initializable {
 			flowPane.getChildren().add(cb);
 		}
 
+		/**
+		 * Unselect all Meta tags
+		 */
 		unselectAll.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -369,6 +419,9 @@ public class MetaController implements Initializable {
 			}
 		});
 
+		/**
+		 * Select all Meta tags
+		 */
 		selectAll.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -384,156 +437,163 @@ public class MetaController implements Initializable {
 			}
 		});
 
-		try {
-			GUIController.config = new PropertiesConfiguration(
-					"conf/app.properties");
+		List<String> blackArray = new CopyOnWriteArrayList<String>(
+				Arrays.asList(GUIController.config
+						.getStringArray("searchEngine.bing.blacklist")));
+		ObservableList<String> blackArray2 = FXCollections
+				.observableArrayList(blackArray);
+		blackListView.setItems(blackArray2);
+		blackListView.setEditable(true);
 
-			List<String> blackArray = new CopyOnWriteArrayList<String>(
-					Arrays.asList(GUIController.config
-							.getStringArray("searchEngine.bing.blacklist")));
-			ObservableList<String> blackArray2 = FXCollections
-					.observableArrayList(blackArray);
-			blackListView.setItems(blackArray2);
-			blackListView.setEditable(true);
+		blackListView.setCellFactory(TextFieldListCell.forListView());
 
-			blackListView.setCellFactory(TextFieldListCell.forListView());
+		blackListView
+				.setOnEditStart(new EventHandler<ListView.EditEvent<String>>() {
+					@Override
+					public void handle(ListView.EditEvent<String> t) {
+						editMenu.hide();
 
-			blackListView
-					.setOnEditStart(new EventHandler<ListView.EditEvent<String>>() {
-						@Override
-						public void handle(ListView.EditEvent<String> t) {
-							editMenu.hide();
-
-						}
-
-					});
-
-			blackListView
-					.setOnEditCommit(new EventHandler<ListView.EditEvent<String>>() {
-						@Override
-						public void handle(ListView.EditEvent<String> t) {
-							blackListView.getItems().set(t.getIndex(),
-									t.getNewValue());
-							System.out.println("setOnEditCommit");
-							editMenu.hide();
-
-						}
-
-					});
-
-			blackListView
-					.setOnEditCancel(new EventHandler<ListView.EditEvent<String>>() {
-						@Override
-						public void handle(ListView.EditEvent<String> t) {
-							System.out.println("setOnEditCancel");
-							editMenu.hide();
-						}
-					});
-
-			blackListView.addEventHandler(MouseEvent.MOUSE_CLICKED,
-					new EventHandler<MouseEvent>() {
-
-						@Override
-						public void handle(MouseEvent event) {
-							if (event.getButton().equals(MouseButton.SECONDARY)) {
-								editMenu.show(blackListView,
-										event.getScreenX(), event.getScreenY());
-							} else if (event.getButton().equals(
-									MouseButton.PRIMARY)) {
-								editMenu.hide();
-							}
-
-						}
-
-					});
-
-			deleteOption.setOnAction(new EventHandler<ActionEvent>() {
-
-				@Override
-				public void handle(ActionEvent event) {
-					blackArray2.remove(blackListView.getSelectionModel()
-							.getSelectedItem());
-					GUIController.config.setProperty(
-							"searchEngine.bing.blacklist",
-							blackArray2.toString().replace("[", "")
-									.replace("]", ""));
-					try {
-						GUIController.config.save();
-					} catch (ConfigurationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
 					}
 
-				}
-			});
+				});
 
-			addNew.setOnAction(new EventHandler<ActionEvent>() {
+		blackListView
+				.setOnEditCommit(new EventHandler<ListView.EditEvent<String>>() {
+					@Override
+					public void handle(ListView.EditEvent<String> t) {
+						blackListView.getItems().set(t.getIndex(),
+								t.getNewValue());
+						System.out.println("setOnEditCommit");
+						editMenu.hide();
 
-				@Override
-				public void handle(ActionEvent event) {
-					FlowPane pane = new FlowPane(10, 0);
-					pane.setId("flowPaneBlackList");
-					pane.setPrefWidth(300);
-					pane.setPadding(new Insets(5, 5, 5, 5));
-					Stage newWindow = new Stage();
-					newWindow.initStyle(StageStyle.UNDECORATED);
-					newWindow.initModality(Modality.APPLICATION_MODAL);
-					TextField editNew = new TextField();
-					editNew.setEditable(true);
-					Button cancel = new Button("Cancel");
-					cancel.setTextFill(Color.WHITE);
-					Button save = new Button("Save");
-					save.setTextFill(Color.WHITE);
-					pane.getChildren().addAll(editNew, cancel, save);
-					Scene scene = new Scene(pane);
-					scene.getStylesheets().add("ch/ice/view/WebCrawler.css");
-					newWindow.setScene(scene);
-					save.setOnAction(new EventHandler<ActionEvent>() {
+					}
 
-						@Override
-						public void handle(ActionEvent event) {
+				});
 
-							if (editNew.getText().isEmpty() == false) {
-								blackArray2.add(editNew.getText());
-								GUIController.config.setProperty(
-										"searchEngine.bing.blacklist",
-										blackArray2.toString().replace("[", "")
-												.replace("]", ""));
-								try {
-									GUIController.config.save();
-								} catch (ConfigurationException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
+		blackListView
+				.setOnEditCancel(new EventHandler<ListView.EditEvent<String>>() {
+					@Override
+					public void handle(ListView.EditEvent<String> t) {
+						System.out.println("setOnEditCancel");
+						editMenu.hide();
+					}
+				});
 
-								newWindow.close();
-							}
-							if (editNew.getText().equals("")) {
-								Alert alert = new Alert(AlertType.ERROR);
-								alert.setTitle("Empty Field");
-								alert.setHeaderText("Empty Field");
-								alert.setContentText("Please enter Blacklist name");
-								alert.show();
-							}
+		blackListView.addEventHandler(MouseEvent.MOUSE_CLICKED,
+				new EventHandler<MouseEvent>() {
+
+					@Override
+					public void handle(MouseEvent event) {
+						if (event.getButton().equals(MouseButton.SECONDARY)) {
+							editMenu.show(blackListView, event.getScreenX(),
+									event.getScreenY());
+						} else if (event.getButton()
+								.equals(MouseButton.PRIMARY)) {
+							editMenu.hide();
 						}
-					});
-					cancel.setOnAction(new EventHandler<ActionEvent>() {
 
-						@Override
-						public void handle(ActionEvent event) {
+					}
+
+				});
+
+		deleteOption.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				blackArray2.remove(blackListView.getSelectionModel()
+						.getSelectedItem());
+				config.setProperty("searchEngine.bing.blacklist", blackArray2
+						.toString().replace("[", "").replace("]", ""));
+				try {
+					config.save();
+				} catch (ConfigurationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					logger.error(e);
+				}
+
+			}
+		});
+
+		addNew.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				FlowPane pane = new FlowPane(10, 0);
+				pane.setId("flowPaneBlackList");
+				pane.setPrefWidth(300);
+				pane.setPadding(new Insets(5, 5, 5, 5));
+				Stage newWindow = new Stage();
+				newWindow.initStyle(StageStyle.UNDECORATED);
+				newWindow.initModality(Modality.APPLICATION_MODAL);
+				TextField editNew = new TextField();
+				editNew.setEditable(true);
+				Button cancel = new Button("Cancel");
+				cancel.setTextFill(Color.WHITE);
+				Button save = new Button("Save");
+				save.setTextFill(Color.WHITE);
+				pane.getChildren().addAll(editNew, cancel, save);
+				Scene scene = new Scene(pane);
+				scene.getStylesheets().add("ch/ice/view/WebCrawler.css");
+				newWindow.setScene(scene);
+				save.setOnAction(new EventHandler<ActionEvent>() {
+
+					@Override
+					public void handle(ActionEvent event) {
+
+						if (editNew.getText().isEmpty() == false) {
+							blackArray2.add(editNew.getText());
+							config.setProperty("searchEngine.bing.blacklist",
+									blackArray2.toString().replace("[", "")
+											.replace("]", ""));
+							try {
+								GUIController.config.save();
+							} catch (ConfigurationException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+								logger.error(e);
+							}
+
 							newWindow.close();
-
 						}
-					});
+						if (editNew.getText().equals("")) {
+							Alert alert = new Alert(AlertType.ERROR);
+							alert.setTitle("Empty Field");
+							alert.setHeaderText("Empty Field");
+							alert.setContentText("Please enter Blacklist name");
+							alert.show();
+						}
+					}
+				});
+				cancel.setOnAction(new EventHandler<ActionEvent>() {
 
-					newWindow.show();
+					@Override
+					public void handle(ActionEvent event) {
+						newWindow.close();
 
-				}
-			});
+					}
+				});
 
-		} catch (ConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+				newWindow.show();
+
+			}
+		});
+
+		vBox.setOnMousePressed(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				xOffset = event.getSceneX();
+				yOffset = event.getSceneY();
+			}
+		});
+		vBox.setOnMouseDragged(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				Node source = (Node) event.getSource();
+				Stage stage = (Stage) source.getScene().getWindow();
+				stage.setX(event.getScreenX() - xOffset);
+				stage.setY(event.getScreenY() - yOffset);
+			}
+		});
 	}
 }

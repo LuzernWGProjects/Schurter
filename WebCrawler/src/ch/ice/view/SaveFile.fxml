@@ -7,8 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<VBox alignment="CENTER" spacing="10.0" stylesheets="@WebCrawler.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ice.view.SaveWindowController">
+<VBox fx:id="vBox" alignment="CENTER" spacing="10.0" stylesheets="@WebCrawler.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ice.view.SaveWindowController">
    <children>
       <Label fx:id="endMessageLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="150.0" prefWidth="600.0" wrapText="true" VBox.vgrow="ALWAYS">
          <font>

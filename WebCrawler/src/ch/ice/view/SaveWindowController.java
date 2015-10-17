@@ -20,6 +20,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import ch.ice.controller.MainController;
 import ch.ice.exceptions.InternalFormatException;
@@ -40,8 +42,12 @@ public class SaveWindowController extends Thread implements Initializable {
 	private Button openFileButton;
 	@FXML
 	private Button cancelButton;
+
 	@FXML
-	public static Button hobbyButton;
+	public static VBox vBox;
+
+	private double xOffset = 0;
+	private double yOffset = 0;
 
 	public static double d;
 	public static boolean myBoo = false;
@@ -307,5 +313,21 @@ public class SaveWindowController extends Thread implements Initializable {
 		t1.setName("THREAD MainController");
 		t1.start();
 
+		vBox.setOnMousePressed(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				xOffset = event.getSceneX();
+				yOffset = event.getSceneY();
+			}
+		});
+		vBox.setOnMouseDragged(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				Node source = (Node) event.getSource();
+				Stage stage = (Stage) source.getScene().getWindow();
+				stage.setX(event.getScreenX() - xOffset);
+				stage.setY(event.getScreenY() - yOffset);
+			}
+		});
 	}
 }
