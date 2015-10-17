@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.time.StopWatch;
@@ -33,28 +32,51 @@ import ch.ice.exceptions.IllegalFileExtensionException;
 import ch.ice.exceptions.InternalFormatException;
 import ch.ice.exceptions.MissingCustomerRowsException;
 import ch.ice.model.Customer;
+import ch.ice.utils.Config;
 import ch.ice.utils.JSONStandardizedKeys;
 import ch.ice.view.SaveWindowController;
 
 public class MainController {
-	public static final Logger logger = LogManager
-			.getLogger(MainController.class.getName());
+	public static final Logger logger = LogManager.getLogger(MainController.class.getName());
 
 	public static File uploadedFileContainingCustomers;
+	
+	/**
+	 * List containing all rendered Customers
+	 */
 	public static List<Customer> customerList;
 	public static int customersEnhanced;
 	public static String progressText;
 	private static StopWatch stopwatch;
 
-	// search engine
+	/**
+	 * Searchengine to be used.<br >
+	 * See: {@see SearchEngineFactory}
+	 */
 	public static String searchEngineIdentifier;
+	/**
+	 * Requested Searchengine.
+	 */
 	private static SearchEngine searchEngine;
+	/**
+	 * Limit searchresult that will be returned from the SearchEngine
+	 */
 	private static Integer limitSearchResults;
+	/**
+	 * Fallback url if search is not available
+	 */
 	public static URL defaultUrl;
 	public static boolean isSearchAvail;
+	/**
+	 * Searchengine to be used.<br >
+	 * See: {@see SearchEngineFactory} - Available SearchEngines: Google or Bing
+	 */
 	public static boolean fileWriterFactory;
 	public static boolean processEnded = false;
 
+	/**
+	 * All available Metatags
+	 */
 	public static List<String> metaTagElements;
 	public static List<Customer> firstArray;
 	public static List<Customer> secondArray;
@@ -79,15 +101,14 @@ public class MainController {
 		isSearchAvail = false;
 		defaultUrl = null;
 
-		PropertiesConfiguration config;
+		PropertiesConfiguration config = Config.PROPERTIES;
 		metaTagElements = new ArrayList<String>();
 
 		/*
 		 * Load Configuration File
 		 */
 		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-
+			
 			isSearchAvail = config.getBoolean("core.search.isEnabled");
 			defaultUrl = new URL(config.getString("core.search.defaultUrl"));
 			MainController.limitSearchResults = config.getInteger(
@@ -95,7 +116,7 @@ public class MainController {
 
 			metaTagElements = Arrays.asList(config
 					.getStringArray("crawler.searchForMetaTags"));
-		} catch (ConfigurationException | MalformedURLException e) {
+		} catch (MalformedURLException e) {
 			logger.error("Faild to load config file");
 		}
 
@@ -219,55 +240,6 @@ public class MainController {
 			customerList.addAll(s3.getSearchList());
 			customerList.addAll(s4.getSearchList());
 		}
-		// customerList.addAll(s2.getSearchList());
-		// customerList.addAll(s3.getSearchList());
-		// customerList.addAll(s4.getSearchList());
-
-		/*
-		 * Start the webcrawler service to gather all meta tags and additional
-		 * information from a customers website.
-		 */
-		// WebCrawler wc = new WebCrawler();
-		//
-		// for (Customer customer : MainController.customerList) {
-		// customersEnhanced++;
-		//
-		// // only search via SearchEngine if search is enabled. Disable search
-		// for testing purpose
-		// if (isSearchAvail) {
-		// // Add url for customer
-		// try {
-		// URL retrivedUrl = searchForUrl(customer);
-		// customer.getWebsite().setUrl(retrivedUrl);
-		// progressText = "Gathering data at: "+ retrivedUrl.toString();
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// logger.error(e.getMessage());
-		// }
-		//
-		// } else {
-		// customer.getWebsite().setUrl(defaultUrl);
-		// }
-		//
-		// // add metadata
-		// try {
-		// wc.connnect(customer.getWebsite().getUrl().toString());
-		// customer.getWebsite().setMetaTags(wc.getMetaTags(metaTagElements));
-		// logger.info(customer.getWebsite().toString());
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// logger.error(e.getMessage());
-		//
-		// } catch (HttpStatusException e) {
-		// e.printStackTrace();
-		// logger.error(e.getMessage());
-		//
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// logger.error(e.getMessage());
-		//
-		// }
-		// }
 
 		stopwatch.split();
 		logger.info("Spilt: " + stopwatch.toSplitString() + " total: "
@@ -353,7 +325,7 @@ public class MainController {
 		try {
 			// Start Search
 			JSONArray results = MainController.searchEngine.search(lookupQuery,
-					MainController.limitSearchResults);
+					MainController.limitSearchResults, c.getCountryCode().toLowerCase());
 
 			// logic to pick the first record ; here should be the search logic!
 			JSONObject aResult = ResultAnalyzer.analyse(results, params);
@@ -379,9 +351,6 @@ public class MainController {
 	public void startWriter(List<Customer> enhancedCustomerList) {
 		logger.info("Start writing customers to File");
 
-		// TODO: implement CVS Writer if user chooses to do so. Basically just
-		// if excel->excelWriter; csv->csvWriter
-
 		try {
 			if (fileWriterFactory == true) {
 				fileWriter = FileWriterFactory
@@ -402,7 +371,6 @@ public class MainController {
 		} catch (IOException e) {
 			// TODO Throw this to gui!!!!!!!!!!!!!!!!!!!!!!!!!
 			e.printStackTrace();
-
 		}
 	}
 

@@ -25,12 +25,6 @@ import ch.ice.exceptions.MissingCustomerRowsException;
 import ch.ice.model.Customer;
 import ch.ice.model.Website;
 
-/**
- * 
- * @author mneuhaus
- *
- */
-
 public class ExcelParser implements Parser {
 	private static final Logger logger = LogManager.getLogger(ExcelParser.class.getName());
 
@@ -150,7 +144,13 @@ public class ExcelParser implements Parser {
 
 					// country Code
 				case 1:
-					this.customerCountryCode = this.checkForCellType(cell);
+					if(this.checkForCellType(cell).isEmpty() || this.checkForCellType(cell) == ""){
+						this.customerCountryCode = "US";
+					} else {
+						this.customerCountryCode = this.checkForCellType(cell);
+					}
+					
+					break;
 
 					// country Name
 				case 2:
@@ -167,7 +167,7 @@ public class ExcelParser implements Parser {
 					this.custonerShortName = this.checkForCellType(cell);
 					break;
 
-					// empty cell
+					// skipp empty cell
 				case 5:
 					continue;
 
@@ -197,7 +197,7 @@ public class ExcelParser implements Parser {
 	 * 
 	 * @return customer model with empty Website.
 	 */
-	public Customer createCustomer() {
+	private Customer createCustomer() {
 
 		Customer customer = new Customer();
 
@@ -220,6 +220,7 @@ public class ExcelParser implements Parser {
 	 * 
 	 * @return Value in header cells
 	 */
+	@Override
 	public List<String> getCellHeaders() {
 		return this.headerInfos;
 	}
@@ -237,24 +238,24 @@ public class ExcelParser implements Parser {
 		}
 		return null;
 	}
-
-	// progress bar and statistic stuff
+	
+	@Override
 	public void setTotalDataSets(int totalRows) {
 		this.physicalRowCount = totalRows;
 	}
-
+	@Override
 	public int getTotalDataSets() {
 		return this.physicalRowCount;
 	}
-
+	@Override
 	public void setCurrentRow(int currentRowNumber) {
 		this.currentRowCount = currentRowNumber;
 	}
-
+	@Override
 	public int getCurrentRow() {
 		return this.currentRowCount;
 	}
-
+	@Override
 	public Workbook getWorkbook() {
 		return this.wb;
 	}

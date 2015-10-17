@@ -43,6 +43,7 @@ import ch.ice.controller.web.SearchEngineFactory;
 import ch.ice.exceptions.InternalFormatException;
 import ch.ice.exceptions.MissingCustomerRowsException;
 import ch.ice.model.Customer;
+import ch.ice.utils.Config;
 
 public class GUIController implements Initializable {
 
@@ -98,7 +99,7 @@ public class GUIController implements Initializable {
 
 	public static ObservableValue<? extends String> test;
 
-	public static PropertiesConfiguration config;
+	public static PropertiesConfiguration config = Config.PROPERTIES;
 
 	public static List<String> metaTagElements;
 
@@ -116,18 +117,11 @@ public class GUIController implements Initializable {
 			.getLogger(GUIController.class.getName());
 
 	public static void getProperties(Label label) {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-			metaTagElements = new CopyOnWriteArrayList<String>(
-					Arrays.asList(config
-							.getStringArray("crawler.searchForMetaTags")));
-			label.setText(metaTagElements.toString().replace("[", "")
-					.replace("]", ""));
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			logger.error(e1);
-		}
+		metaTagElements = new CopyOnWriteArrayList<String>(
+				Arrays.asList(config
+						.getStringArray("crawler.searchForMetaTags")));
+		label.setText(metaTagElements.toString().replace("[", "")
+				.replace("]", ""));
 
 	}
 
@@ -375,15 +369,15 @@ public class GUIController implements Initializable {
 							.showOpenDialog(stage);
 					if (MainController.uploadedFileContainingCustomers != null) {
 						fileTextField
-								.setText(MainController.uploadedFileContainingCustomers
-										.getAbsolutePath());
+						.setText(MainController.uploadedFileContainingCustomers
+								.getAbsolutePath());
 						setSaveProperties(
 								path,
 								MainController.uploadedFileContainingCustomers
-										.getAbsolutePath()
-										.replaceAll(
-												MainController.uploadedFileContainingCustomers
-														.getName(), ""));
+								.getAbsolutePath()
+								.replaceAll(
+										MainController.uploadedFileContainingCustomers
+										.getName(), ""));
 						config.save();
 						getSaveProperties(startSearchButton);
 						List<Customer> testList = MainController

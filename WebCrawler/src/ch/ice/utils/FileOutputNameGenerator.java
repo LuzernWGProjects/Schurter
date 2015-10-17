@@ -12,17 +12,10 @@ import ch.ice.controller.file.CSVWriter;
 import ch.ice.controller.file.ExcelWriter;
 
 public class FileOutputNameGenerator {
-	private static Configuration config;
+	private static Configuration config = Config.PROPERTIES;
 	public static String fileName;
 
 	public static String createName() {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-		} catch (ConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		String fileType;
 
 		if (MainController.fileWriter instanceof CSVWriter) {

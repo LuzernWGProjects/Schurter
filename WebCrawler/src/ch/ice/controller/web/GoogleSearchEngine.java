@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,6 +22,7 @@ import org.json.JSONObject;
 import ch.ice.controller.interf.SearchEngine;
 import ch.ice.exceptions.NoUrlFoundException;
 import ch.ice.exceptions.SearchEngineRequestLimitReachedException;
+import ch.ice.utils.Config;
 import ch.ice.utils.JSONStandardizedKeys;
 import ch.ice.utils.JSONUtil;
 import ch.ice.utils.XMLParser;
@@ -32,6 +32,7 @@ public class GoogleSearchEngine implements SearchEngine {
 	private static final Logger logger = LogManager.getLogger(GoogleSearchEngine.class.getName());
 	private static Map<String, String> country2tld = XMLParser.getTLDOfCountry();
 
+	@Override
 	public JSONArray search(String requestedQuery, int limitSearchResult, String countryCode) throws NoUrlFoundException, SearchEngineRequestLimitReachedException {
 		try {
 
@@ -43,22 +44,18 @@ public class GoogleSearchEngine implements SearchEngine {
 			/*
 			 * Load Configuration File
 			 */
-			try {
-				config = new PropertiesConfiguration("conf/app.properties");
+			config = Config.PROPERTIES;
 
-				accountKey = config.getString("searchEngine.google.accountKey");
-				config_cx = config.getString("searchEngine.google.cx");
+			accountKey = config.getString("searchEngine.google.accountKey");
+			config_cx = config.getString("searchEngine.google.cx");
 
-			} catch (ConfigurationException e) {
-				System.out.println(e.getLocalizedMessage());
-				e.printStackTrace();
-			}
+
 
 			String charset = Charset.defaultCharset().name();
 
 			final String apiKey = URLEncoder.encode(accountKey, charset);
 			final String cx =  URLEncoder.encode(config_cx, charset);
-			
+
 			// country code and google host mapping
 			if(country2tld.get(countryCode.toLowerCase()).isEmpty() || country2tld.get(countryCode.toLowerCase()) == null){
 				countryCode = "com";
@@ -88,15 +85,15 @@ public class GoogleSearchEngine implements SearchEngine {
 			URL url = new URL(googleSearchUrl);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-			
+
 			BufferedReader in = null;
 			try {
 				in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			} catch (IOException httpResponseError) {
 				throw new SearchEngineRequestLimitReachedException("The Google searchengine has reached its limit. Please only search for 100 customers per day.");
 			}
-			
-			
+
+
 
 			String inputLine;
 			final StringBuilder response = new StringBuilder();
@@ -149,12 +146,6 @@ public class GoogleSearchEngine implements SearchEngine {
 		return search(requestedQuery, limitSearchResult, "us");
 	}
 
-	/**
-	 * Build a query for the search engine use.
-	 * 
-	 * @param params
-	 * @return String query
-	 */
 	public String buildQuery(List<String> params){
 		String query = "";
 
@@ -165,11 +156,6 @@ public class GoogleSearchEngine implements SearchEngine {
 		return query;
 	}
 
-	/**
-	 * This method standardizes the json array so that the analyzer can make assumptions
-	 * 
-	 * @return standardized JSONArray. The keys of all elements are now the same and independend from Googles returns.
-	 */
 	@Override
 	public JSONArray standardizer(JSONArray results, Map<String, String> keyNodeMap) {
 		return JSONUtil.keyNodeMapper(results, keyNodeMap);
