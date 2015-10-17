@@ -41,6 +41,7 @@ import ch.ice.controller.web.SearchEngineFactory;
 import ch.ice.exceptions.InternalFormatException;
 import ch.ice.exceptions.MissingCustomerRowsException;
 import ch.ice.model.Customer;
+import ch.ice.utils.Config;
 
 public class GUIController implements Initializable {
 
@@ -81,7 +82,7 @@ public class GUIController implements Initializable {
 
 	public static ObservableValue<? extends String> test;
 
-	public static PropertiesConfiguration config;
+	public static PropertiesConfiguration config = Config.PROPERTIES;
 
 	public static List<String> metaTagElements;
 
@@ -99,116 +100,68 @@ public class GUIController implements Initializable {
 			.getLogger(GUIController.class.getName());
 
 	public static void getProperties(Label label) {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-			metaTagElements = new CopyOnWriteArrayList<String>(
-					Arrays.asList(config
-							.getStringArray("crawler.searchForMetaTags")));
-			label.setText(metaTagElements.toString().replace("[", "")
-					.replace("]", ""));
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			logger.error(e1);
-		}
-
+		metaTagElements = new CopyOnWriteArrayList<String>(
+				Arrays.asList(config
+						.getStringArray("crawler.searchForMetaTags")));
+		label.setText(metaTagElements.toString().replace("[", "")
+				.replace("]", ""));
 	}
 
 	public static String getSaveProperties(Button startButton) {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-			path = config.getString(("writer.file.path"));
-			chosenPath = config.getString(("writer.file.chosenPath"));
-			if (MainController.uploadedFileContainingCustomers == null) {
-				startButton.setDisable(true);
+		path = config.getString(("writer.file.path"));
+		chosenPath = config.getString(("writer.file.chosenPath"));
+		if (MainController.uploadedFileContainingCustomers == null) {
+			startButton.setDisable(true);
 
-			} else
-				startButton.setDisable(false);
+		} else
+			startButton.setDisable(false);
 
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			logger.error(e1);
-		}
 		return path;
-
 	}
 
 	public static void setSaveProperties(String path, String chosenPath) {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-			config.setProperty("writer.file.path", path);
-			config.setProperty("writer.file.chosenPath", chosenPath);
-
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			logger.error(e1);
-		}
-
+		config.setProperty("writer.file.path", path);
+		config.setProperty("writer.file.chosenPath", chosenPath);
 	}
 
 	public static void getSearchEngine() {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-			searchGlobal = config.getString(("searchEngine.global"));
-			if (searchGlobal.equals("GOOGLE")) {
-				MainController.searchEngineIdentifier = SearchEngineFactory.GOOGLE;
-			}
-			if (searchGlobal.equals("BING")) {
-				MainController.searchEngineIdentifier = SearchEngineFactory.BING;
-			}
-
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			logger.error(e1);
+		searchGlobal = config.getString(("searchEngine.global"));
+		if (searchGlobal.equals("GOOGLE")) {
+			MainController.searchEngineIdentifier = SearchEngineFactory.GOOGLE;
+		}
+		if (searchGlobal.equals("BING")) {
+			MainController.searchEngineIdentifier = SearchEngineFactory.BING;
 		}
 
 	}
 
 	public static void setSearchEngineImage(ImageView imageView) {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-			searchGlobal = config.getString(("searchEngine.global"));
-			if (searchGlobal.equals("GOOGLE")) {
-				imageView.setImage(googleImage);
-				retrievedCustomer = true;
+		searchGlobal = config.getString(("searchEngine.global"));
+		if (searchGlobal.equals("GOOGLE")) {
+			imageView.setImage(googleImage);
+			retrievedCustomer = true;
 
-			}
-			if (searchGlobal.equals("BING")) {
-				imageView.setImage(bingImage);
-				retrievedCustomer = false;
-			}
-
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		}
+		if (searchGlobal.equals("BING")) {
+			imageView.setImage(bingImage);
+			retrievedCustomer = false;
+		}
+
 
 	}
 
 	public static void getWriterFactoryProperties() {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-			String tester = config.getString(("writer.factory"));
-			if (tester.equals("EXCEL")) {
-				MainController.fileWriterFactory = true;
-			}
-			if (tester.equals("CSV")) {
-				MainController.fileWriterFactory = false;
-			}
-
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		String tester = config.getString(("writer.factory"));
+		if (tester.equals("EXCEL")) {
+			MainController.fileWriterFactory = true;
 		}
-
+		if (tester.equals("CSV")) {
+			MainController.fileWriterFactory = false;
+		}
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
 		metaTagsList.setWrapText(true);
 		metaTagsList.setMaxWidth(550);
 		metaTagsList.setMaxHeight(80);
@@ -299,15 +252,15 @@ public class GUIController implements Initializable {
 							.showOpenDialog(stage);
 					if (MainController.uploadedFileContainingCustomers != null) {
 						fileTextField
-								.setText(MainController.uploadedFileContainingCustomers
-										.getAbsolutePath());
+						.setText(MainController.uploadedFileContainingCustomers
+								.getAbsolutePath());
 						setSaveProperties(
 								path,
 								MainController.uploadedFileContainingCustomers
-										.getAbsolutePath()
-										.replaceAll(
-												MainController.uploadedFileContainingCustomers
-														.getName(), ""));
+								.getAbsolutePath()
+								.replaceAll(
+										MainController.uploadedFileContainingCustomers
+										.getName(), ""));
 						config.save();
 						List<Customer> testList = MainController
 								.retrieveCustomerFromFile(MainController.uploadedFileContainingCustomers);

@@ -25,12 +25,6 @@ import ch.ice.exceptions.MissingCustomerRowsException;
 import ch.ice.model.Customer;
 import ch.ice.model.Website;
 
-/**
- * 
- * @author mneuhaus
- *
- */
-
 public class ExcelParser implements Parser {
 	private static final Logger logger = LogManager.getLogger(ExcelParser.class.getName());
 
@@ -220,6 +214,7 @@ public class ExcelParser implements Parser {
 	 * 
 	 * @return Value in header cells
 	 */
+	@Override
 	public List<String> getCellHeaders() {
 		return this.headerInfos;
 	}
@@ -237,24 +232,24 @@ public class ExcelParser implements Parser {
 		}
 		return null;
 	}
-
-	// progress bar and statistic stuff
+	
+	@Override
 	public void setTotalDataSets(int totalRows) {
 		this.physicalRowCount = totalRows;
 	}
-
+	@Override
 	public int getTotalDataSets() {
 		return this.physicalRowCount;
 	}
-
+	@Override
 	public void setCurrentRow(int currentRowNumber) {
 		this.currentRowCount = currentRowNumber;
 	}
-
+	@Override
 	public int getCurrentRow() {
 		return this.currentRowCount;
 	}
-
+	@Override
 	public Workbook getWorkbook() {
 		return this.wb;
 	}

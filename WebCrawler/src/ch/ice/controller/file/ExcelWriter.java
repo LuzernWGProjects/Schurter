@@ -29,6 +29,7 @@ import org.joda.time.format.DateTimeFormatter;
 import ch.ice.controller.interf.Parser;
 import ch.ice.controller.interf.Writer;
 import ch.ice.model.Customer;
+import ch.ice.utils.Config;
 import ch.ice.utils.FileOutputNameGenerator;
 import ch.ice.view.SaveWindowController;
 
@@ -48,19 +49,10 @@ public class ExcelWriter implements Writer {
 	private int cellnum;
 	private int rownum;
 	private int mapCellNum;
-	private Configuration config;
+	private Configuration config = Config.PROPERTIES;
 	public static String fileName;
 	CellStyle style = null;
-
-	public ExcelWriter() {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-		} catch (ConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
+	
 	@Override
 	public void writeFile(List<Customer> customerList, Parser fileParserInstance) throws IOException {
 		// convert Parser to actual excelParser. We need getWorkbook() here.
