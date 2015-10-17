@@ -270,15 +270,23 @@ public class GUIController implements Initializable {
 	}
 
 	private boolean checkAll() {
-		if (getSaveProperties(startSearchButton) == true
-				&& getCheckStatus(startSearchButton, infoLabel) == true
-				&& pathFile.exists() == true) {
-			startSearchButton.setDisable(false);
-			return true;
-		} else {
-			startSearchButton.setDisable(true);
-			return false;
+		try {
+			if (getSaveProperties(startSearchButton) == true
+					&& getCheckStatus(startSearchButton, infoLabel) == true
+					&& pathFile.exists() == true && pathFile.canWrite() == true) {
+
+				startSearchButton.setDisable(false);
+				return true;
+			} else {
+				startSearchButton.setDisable(true);
+				return false;
+			}
+		} catch (NullPointerException e) {
+			System.out.println("Save Path not set yet or wrong Directory");
+			logger.info("Save Path not set yet or wrong Directory");
 		}
+		startSearchButton.setDisable(true);
+		return false;
 
 	}
 
