@@ -116,6 +116,8 @@ public class GUIController implements Initializable {
 	 */
 	public static String chosenPath;
 
+	private File pathFile;
+
 	/**
 	 * Check variable for selected Search Engine
 	 */
@@ -153,14 +155,15 @@ public class GUIController implements Initializable {
 	 * 
 	 * @param startButton
 	 */
-	private void getSaveProperties(Button startButton) {
+	private boolean getSaveProperties(Button startButton) {
 		path = config.getString(("writer.file.path"));
 		chosenPath = config.getString(("writer.file.chosenPath"));
 		if (MainController.uploadedFileContainingCustomers == null) {
-			startButton.setDisable(true);
+			return false;
 
 		} else
-			startButton.setDisable(false);
+
+			return true;
 
 	}
 
@@ -241,29 +244,41 @@ public class GUIController implements Initializable {
 	 * @param startSearchButton
 	 * @param infoLabel
 	 */
-	private void getCheckStatus(Button startSearchButton, Label infoLabel) {
+	private boolean getCheckStatus(Button startSearchButton, Label infoLabel) {
 
 		while (listSize > 0) {
 			if (listSize > maxGoogle && searchGlobal.equals("GOOGLE")) {
 				System.out.println(maxGoogle);
-				startSearchButton.setDisable(true);
 				infoLabel.setText(googleExceeds + maxGoogle);
 				infoLabel.setTextFill(Color.RED);
+				return false;
 			} else if (listSize > maxBing && searchGlobal.equals("BING")) {
 				System.out.println("Second");
 				System.out.println(listSize);
-				startSearchButton.setDisable(true);
 				infoLabel.setText(bingExceeds + maxBing);
 				infoLabel.setTextFill(Color.RED);
+				return false;
 			} else {
-				startSearchButton.setDisable(false);
 				infoLabel.setText(statusOk);
 				infoLabel.setTextFill(Color.GREEN);
+				return true;
 			}
-			return;
 
 		}
-		startSearchButton.setDisable(true);
+		return false;
+
+	}
+
+	private boolean checkAll() {
+		if (getSaveProperties(startSearchButton) == true
+				&& getCheckStatus(startSearchButton, infoLabel) == true
+				&& pathFile.exists() == true) {
+			startSearchButton.setDisable(false);
+			return true;
+		} else {
+			startSearchButton.setDisable(true);
+			return false;
+		}
 
 	}
 
@@ -287,6 +302,7 @@ public class GUIController implements Initializable {
 		getSaveProperties(startSearchButton);
 		getMaxGoogleSearches();
 		getCheckStatus(startSearchButton, infoLabel);
+		checkAll();
 		pathTextField.setText(path);
 		fileTextField.setText(chosenPath);
 
@@ -340,6 +356,7 @@ public class GUIController implements Initializable {
 								.retrieveCustomerFromFile(MainController.uploadedFileContainingCustomers);
 						listSize = testList.size();
 						getCheckStatus(startSearchButton, infoLabel);
+						checkAll();
 					}
 				} catch (NullPointerException | InternalFormatException
 						| MissingCustomerRowsException | ConfigurationException e) {
@@ -348,7 +365,7 @@ public class GUIController implements Initializable {
 					System.out.println("No File selected");
 					fileTextField.setText("Wrong File Format");
 					fileTextField.setStyle("-fx-text-inner-color: red;");
-					startSearchButton.setDisable(true);
+					checkAll();
 				}
 
 			}
@@ -370,7 +387,7 @@ public class GUIController implements Initializable {
 						File initial = new File(path);
 						directoryChooser.setInitialDirectory(initial);
 					}
-					File pathFile = directoryChooser.showDialog(stage);
+					pathFile = directoryChooser.showDialog(stage);
 					if (pathFile != null && pathFile.exists() == true) {
 						setSaveProperties(pathFile.getAbsolutePath(),
 								chosenPath);
@@ -379,18 +396,18 @@ public class GUIController implements Initializable {
 						pathTextField.setText(path);
 
 					} else {
-						startSearchButton.setDisable(true);
+						checkAll();
 						pathTextField.setText("Illegal Directory");
 						pathTextField.setStyle("-fx-text-inner-color: red;");
 					}
 					// if there is no path selected
 				} catch (NullPointerException | ConfigurationException e) {
 					logger.error(e);
-					startSearchButton.setDisable(true);
 					System.out.println("No Path selected");
 					pathTextField.setText("No Directory Selected");
 					pathTextField.setStyle("-fx-text-inner-color: red;");
 					setSaveProperties("", chosenPath);
+					checkAll();
 					try {
 						config.save();
 					} catch (ConfigurationException e1) {
@@ -399,6 +416,7 @@ public class GUIController implements Initializable {
 						logger.error(e1);
 					}
 					getSaveProperties(startSearchButton);
+					checkAll();
 
 					// if Directory is invalid
 				} catch (IllegalArgumentException e) {
@@ -406,7 +424,7 @@ public class GUIController implements Initializable {
 					pathTextField.setText("Illegal Directory");
 					pathTextField.setStyle("-fx-text-inner-color: red;");
 					setSaveProperties("", chosenPath);
-					startSearchButton.setDisable(true);
+					checkAll();
 					try {
 						config.save();
 					} catch (ConfigurationException e1) {
@@ -415,6 +433,7 @@ public class GUIController implements Initializable {
 						logger.error(e1);
 					}
 					getSaveProperties(startSearchButton);
+					checkAll();
 
 				}
 			}
@@ -482,6 +501,7 @@ public class GUIController implements Initializable {
 					setSearchEngineImage(searchImage);
 					getMaxGoogleSearches();
 					getCheckStatus(startSearchButton, infoLabel);
+					checkAll();
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
