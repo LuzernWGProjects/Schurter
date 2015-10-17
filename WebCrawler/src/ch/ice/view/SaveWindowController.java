@@ -42,9 +42,8 @@ public class SaveWindowController extends Thread implements Initializable {
 	private Button openFileButton;
 	@FXML
 	private Button cancelButton;
-
 	@FXML
-	public static VBox vBox;
+	private VBox vBox;
 
 	private double xOffset = 0;
 	private double yOffset = 0;
@@ -61,15 +60,6 @@ public class SaveWindowController extends Thread implements Initializable {
 	Task task1;
 	private static Boolean pauseFlag = false;
 	MainController main = new MainController();
-
-	// public static void resumeThread() {
-	// pauseFlag = false;
-	// myBooChecking = false;
-	// synchronized (pauseFlag) {
-	// pauseFlag.notifyAll();
-	//
-	// }
-	// }
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
