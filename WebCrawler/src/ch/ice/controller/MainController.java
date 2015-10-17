@@ -72,6 +72,7 @@ public class MainController {
 	 * See: {@see SearchEngineFactory} - Available SearchEngines: Google or Bing
 	 */
 	public static boolean fileWriterFactory;
+	public static boolean processEnded = false;
 
 	/**
 	 * All available Metatags
@@ -257,6 +258,7 @@ public class MainController {
 
 		logger.info("end");
 		SaveWindowController.myBoo = true;
+		processEnded = true;
 	}
 
 	/**
@@ -297,6 +299,7 @@ public class MainController {
 		}
 
 		return new LinkedList<Customer>();
+
 	}
 
 	/**

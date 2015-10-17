@@ -15,6 +15,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -28,6 +29,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -72,11 +74,22 @@ public class GUIController implements Initializable {
 	@FXML
 	private Label bingLabel;
 	@FXML
+	private Label infoLabel;
+	@FXML
 	private AnchorPane anchorLow;
 	@FXML
 	private ImageView searchImage;
 
 	SwitchButton switchToggle;
+
+	public String statusOk = "Status OK";
+	public String googleExceeds = "The file exceeds the allowed Google searches of "
+			+ maxGoogle;
+	public String bingExceeds = "The file exceeds the allowed Bing searches of "
+			+ maxBing;
+
+	public static int maxGoogle;
+	public static int maxBing;
 
 	public static boolean retrievedCustomer = false;
 
@@ -105,63 +118,121 @@ public class GUIController implements Initializable {
 						.getStringArray("crawler.searchForMetaTags")));
 		label.setText(metaTagElements.toString().replace("[", "")
 				.replace("]", ""));
+
 	}
 
 	public static String getSaveProperties(Button startButton) {
-		path = config.getString(("writer.file.path"));
-		chosenPath = config.getString(("writer.file.chosenPath"));
-		if (MainController.uploadedFileContainingCustomers == null) {
-			startButton.setDisable(true);
+		try {
+			config = new PropertiesConfiguration("conf/app.properties");
+			path = config.getString(("writer.file.path"));
+			chosenPath = config.getString(("writer.file.chosenPath"));
+			if (MainController.uploadedFileContainingCustomers == null) {
+				startButton.setDisable(true);
 
-		} else
-			startButton.setDisable(false);
+			} else
+				startButton.setDisable(false);
 
+		} catch (ConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error(e1);
+		}
 		return path;
+
 	}
 
 	public static void setSaveProperties(String path, String chosenPath) {
-		config.setProperty("writer.file.path", path);
-		config.setProperty("writer.file.chosenPath", chosenPath);
+		try {
+			config = new PropertiesConfiguration("conf/app.properties");
+			config.setProperty("writer.file.path", path);
+			config.setProperty("writer.file.chosenPath", chosenPath);
+
+		} catch (ConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error(e1);
+		}
+
 	}
 
 	public static void getSearchEngine() {
-		searchGlobal = config.getString(("searchEngine.global"));
-		if (searchGlobal.equals("GOOGLE")) {
-			MainController.searchEngineIdentifier = SearchEngineFactory.GOOGLE;
-		}
-		if (searchGlobal.equals("BING")) {
-			MainController.searchEngineIdentifier = SearchEngineFactory.BING;
+		try {
+			config = new PropertiesConfiguration("conf/app.properties");
+			searchGlobal = config.getString(("searchEngine.global"));
+			if (searchGlobal.equals("GOOGLE")) {
+				MainController.searchEngineIdentifier = SearchEngineFactory.GOOGLE;
+			}
+			if (searchGlobal.equals("BING")) {
+				MainController.searchEngineIdentifier = SearchEngineFactory.BING;
+			}
+
+		} catch (ConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error(e1);
 		}
 
 	}
 
 	public static void setSearchEngineImage(ImageView imageView) {
-		searchGlobal = config.getString(("searchEngine.global"));
-		if (searchGlobal.equals("GOOGLE")) {
-			imageView.setImage(googleImage);
-			retrievedCustomer = true;
+		try {
+			config = new PropertiesConfiguration("conf/app.properties");
+			searchGlobal = config.getString(("searchEngine.global"));
+			if (searchGlobal.equals("GOOGLE")) {
+				imageView.setImage(googleImage);
+				retrievedCustomer = true;
 
-		}
-		if (searchGlobal.equals("BING")) {
-			imageView.setImage(bingImage);
-			retrievedCustomer = false;
-		}
+			}
+			if (searchGlobal.equals("BING")) {
+				imageView.setImage(bingImage);
+				retrievedCustomer = false;
+			}
 
+		} catch (ConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 	}
 
 	public static void getWriterFactoryProperties() {
-		String tester = config.getString(("writer.factory"));
-		if (tester.equals("EXCEL")) {
-			MainController.fileWriterFactory = true;
+		try {
+			config = new PropertiesConfiguration("conf/app.properties");
+			String tester = config.getString(("writer.factory"));
+			if (tester.equals("EXCEL")) {
+				MainController.fileWriterFactory = true;
+			}
+			if (tester.equals("CSV")) {
+				MainController.fileWriterFactory = false;
+			}
+
+		} catch (ConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		if (tester.equals("CSV")) {
-			MainController.fileWriterFactory = false;
+
+	}
+
+	public static void getMaxGoogleSearches() {
+		try {
+			config = new PropertiesConfiguration("conf/app.properties");
+			maxGoogle = Integer.parseInt(config
+					.getString(("searchEngine.maxGoogleSearches")));
+			maxBing = Integer.parseInt(config
+					.getString(("searchEngine.maxBingSearches")));
+
+		} catch (ConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+
+		infoLabel.setText("No file selected");
+		infoLabel.setTextFill(Color.ORANGE);
 		metaTagsList.setWrapText(true);
 		metaTagsList.setMaxWidth(550);
 		metaTagsList.setMaxHeight(80);
@@ -202,6 +273,7 @@ public class GUIController implements Initializable {
 		FileChooser filechooser = new FileChooser();
 		DirectoryChooser directoryChooser = new DirectoryChooser();
 		getSaveProperties(startSearchButton);
+		getMaxGoogleSearches();
 		pathTextField.setText(path);
 		fileTextField.setText(chosenPath);
 
@@ -235,7 +307,9 @@ public class GUIController implements Initializable {
 			@Override
 			public void handle(ActionEvent event) {
 
-				Stage stage = new Stage();
+				// Stage stage = new Stage();
+				Node source = (Node) event.getSource();
+				Stage stage = (Stage) source.getScene().getWindow();
 				try {
 					filechooser.getExtensionFilters().addAll(
 							new FileChooser.ExtensionFilter(
@@ -262,14 +336,27 @@ public class GUIController implements Initializable {
 										MainController.uploadedFileContainingCustomers
 										.getName(), ""));
 						config.save();
+						getSaveProperties(startSearchButton);
 						List<Customer> testList = MainController
 								.retrieveCustomerFromFile(MainController.uploadedFileContainingCustomers);
-						if (testList.size() > 40
+						if (testList.size() > maxGoogle
 								&& searchGlobal.equals("GOOGLE")) {
 							retrievedCustomer = true;
 							startSearchButton.setDisable(true);
-						} else
+							infoLabel.setText(googleExceeds);
+							infoLabel.setTextFill(Color.RED);
+						} else if (testList.size() > maxBing
+								&& searchGlobal.equals("BING")) {
+							System.out.println(testList.size());
+							retrievedCustomer = true;
+							startSearchButton.setDisable(true);
+							infoLabel.setText(bingExceeds);
+							infoLabel.setTextFill(Color.RED);
+						} else {
 							startSearchButton.setDisable(false);
+							infoLabel.setText(statusOk);
+							infoLabel.setTextFill(Color.GREEN);
+						}
 					}
 				} catch (NullPointerException | InternalFormatException
 						| MissingCustomerRowsException | ConfigurationException e) {
@@ -289,7 +376,9 @@ public class GUIController implements Initializable {
 			@Override
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
-				Stage stage = new Stage();
+				// Stage stage = new Stage();
+				Node source = (Node) event.getSource();
+				Stage stage = (Stage) source.getScene().getWindow();
 				try {
 					if (!path.isEmpty()) {
 						File initial = new File(path);
@@ -348,6 +437,7 @@ public class GUIController implements Initializable {
 					stage.setTitle("File processed");
 					stage.setScene(new Scene(root1));
 					stage.initStyle(StageStyle.UNDECORATED);
+					stage.initModality(Modality.APPLICATION_MODAL);
 					stage.showAndWait();
 
 				} catch (IOException | NullPointerException e) {
@@ -379,16 +469,17 @@ public class GUIController implements Initializable {
 					stage.setTitle("Choose your Meta Tags");
 					stage.setScene(new Scene(root1));
 					stage.initStyle(StageStyle.UNDECORATED);
+					stage.initModality(Modality.APPLICATION_MODAL);
 					stage.showAndWait();
 
 					// Update Selected Meta Tags
 					getProperties(metaTagsList);
 					// Update SearchEngine Image
 					setSearchEngineImage(searchImage);
+					getMaxGoogleSearches();
 					if (retrievedCustomer == true) {
 						startSearchButton.setDisable(true);
-					} else
-						startSearchButton.setDisable(false);
+					}
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

@@ -77,47 +77,65 @@ public class SaveWindowController extends Thread implements Initializable {
 			@Override
 			public void handle(ActionEvent event) {
 				// myBooChecking = true;
-				task.cancel();
-				task1.cancel();
-				try {
-					main.stopThread("FIRST THREAD");
-					main.stopThread("SECOND THREAD");
-					main.stopThread("THIRD THREAD");
-					main.stopThread("FOURTH THREAD");
+				if (MainController.processEnded == false) {
 
-					th.join();
-					t1.join();
-					main = null;
+					task.cancel();
+					task1.cancel();
+					try {
+						main.stopThread("FIRST THREAD");
+						main.stopThread("SECOND THREAD");
+						main.stopThread("THIRD THREAD");
+						main.stopThread("FOURTH THREAD");
 
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+						th.join();
+						t1.join();
+						main = null;
 
-				Alert alert = new Alert(AlertType.CONFIRMATION);
-				alert.setTitle("Information Dialog");
-				alert.setHeaderText("Your Canceling the Process");
-				alert.setContentText("No file will be saved");
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 
-				Optional<ButtonType> result = alert.showAndWait();
-				if (result.get() == ButtonType.OK) {
-					// ... user chose OK
-					// System.exit(0);
+					Alert alert = new Alert(AlertType.WARNING);
+					alert.setTitle("Information Dialog");
+					alert.setHeaderText("Your Canceling the Process");
+					alert.setContentText("No file will be saved");
+
+					Optional<ButtonType> result = alert.showAndWait();
+					if (result.get() == ButtonType.OK) {
+						// ... user chose OK
+						// System.exit(0);
+
+						Node source = (Node) event.getSource();
+						Stage stage = (Stage) source.getScene().getWindow();
+						stage.close();
+						// ... user chose CANCEL or closed the dialog
+						// resumeThread();
+						// Node source = (Node) event.getSource();
+						// Stage stage = (Stage) source.getScene().getWindow();
+						// stage.show();
+
+					}
+				} else {
 
 					Node source = (Node) event.getSource();
 					Stage stage = (Stage) source.getScene().getWindow();
 					stage.close();
-				} else {
-					// ... user chose CANCEL or closed the dialog
-					// resumeThread();
-					// Node source = (Node) event.getSource();
-					// Stage stage = (Stage) source.getScene().getWindow();
-					// stage.show();
+					try {
+						th.join();
 
+						t1.join();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					main = null;
+					MainController.processEnded = false;
+					// // Node source = (Node) event.getSource();
+					// // Stage stage = (Stage) source.getScene().getWindow();
+					// // stage.close();
 				}
-				// Node source = (Node) event.getSource();
-				// Stage stage = (Stage) source.getScene().getWindow();
-				// stage.close();
 			}
 
 		});
@@ -206,13 +224,21 @@ public class SaveWindowController extends Thread implements Initializable {
 								d = (double) MainController.customersEnhanced
 										/ (double) MainController.customerList
 												.size();
+								progressBar.setStyle("-fx-accent: #336699");
 								progressBar.setProgress(d);
+								if (d > 0.4) {
+									progressBar.setStyle("-fx-accent: #5186BA");
+								}
+								if (d > 0.7) {
+									progressBar.setStyle("-fx-accent: #85AED7");
+								}
 								progressLabel
 										.setText(MainController.progressText);
 								System.out.println(d);
 
 								if (myBooWriting == true) {
 									progressLabel.setText("Writing File");
+									progressBar.setStyle("-fx-accent: orange");
 								}
 
 								if (myBoo == true) {
@@ -222,11 +248,14 @@ public class SaveWindowController extends Thread implements Initializable {
 													+ GUIController.path);
 									progressLabel
 											.setText("Gathering Process ended.");
+									progressBar.setStyle("-fx-accent: green");
 
 									closeButton.setDisable(false);
 									openFileButton.setDisable(false);
-									cancelButton.setDisable(true);
-
+									cancelButton.setText("Main Menu");
+									myBoo = false;
+									myBooChecking = false;
+									myBooWriting = false;
 									cancel(true);
 								}
 
