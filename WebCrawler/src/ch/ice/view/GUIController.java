@@ -371,13 +371,17 @@ public class GUIController implements Initializable {
 						directoryChooser.setInitialDirectory(initial);
 					}
 					File pathFile = directoryChooser.showDialog(stage);
-					if (pathFile != null) {
+					if (pathFile != null && pathFile.exists() == true) {
 						setSaveProperties(pathFile.getAbsolutePath(),
 								chosenPath);
 						config.save();
 						getSaveProperties(startSearchButton);
 						pathTextField.setText(path);
 
+					} else {
+						startSearchButton.setDisable(true);
+						pathTextField.setText("Illegal Directory");
+						pathTextField.setStyle("-fx-text-inner-color: red;");
 					}
 					// if there is no path selected
 				} catch (NullPointerException | ConfigurationException e) {
