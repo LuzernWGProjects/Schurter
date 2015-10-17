@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -84,170 +82,178 @@ public class GUIController implements Initializable {
 	@FXML
 	private Button lowerWindowButton;
 
-	SwitchButton switchToggle;
+	/**
+	 * SwitchButton for CSV or EXCEL selection
+	 */
+	private SwitchButton switchToggle;
 
-	public String statusOk = "Status OK";
-	public String googleExceeds = "The file exceeds the allowed Google searches of "
-			+ maxGoogle;
-	public String bingExceeds = "The file exceeds the allowed Bing searches of "
-			+ maxBing;
+	/**
+	 * Check variables for maximum search requests according to the selected
+	 * Search Engine
+	 */
+	private int maxGoogle;
+	private int maxBing;
+	private int listSize = 0;
 
-	public static int maxGoogle;
-	public static int maxBing;
+	/**
+	 * Text for InfoLabel including search exceeds errors and status report
+	 */
+	private String statusOk = "Status OK";
+	private String googleExceeds = "The file exceeds the allowed Google searches of ";
+	private String bingExceeds = "The file exceeds the allowed Bing searches of ";
 
-	public static boolean retrievedCustomer = false;
-
-	public static ObservableValue<? extends String> test;
-
-	public static PropertiesConfiguration config = Config.PROPERTIES;
-
+	/**
+	 * List for loaded Metatags out of XML. Is referenced by other Classes
+	 */
 	public static List<String> metaTagElements;
 
+	/**
+	 * path for storage of file
+	 */
 	public static String path;
+	/**
+	 * path for selected file
+	 */
 	public static String chosenPath;
 
-	public static String searchGlobal;
+	/**
+	 * Check variable for selected Search Engine
+	 */
+	private String searchGlobal;
 
-	public static Image googleImage = new Image(
+	/**
+	 * Images for Search Engine
+	 */
+	private Image googleImage = new Image(
 			GUIController.class.getResourceAsStream("/Google.png"));
-	public static Image bingImage = new Image(
+	private Image bingImage = new Image(
 			GUIController.class.getResourceAsStream("/Bing.png"));
+
+	public static PropertiesConfiguration config = Config.PROPERTIES;
 
 	public static final Logger logger = LogManager
 			.getLogger(GUIController.class.getName());
 
+	/**
+	 * Gets the Metatags out of the Properties and Updates the Label in the
+	 * Parameter. Is referenced by other Classes
+	 * 
+	 * @param label
+	 */
 	public static void getProperties(Label label) {
-		metaTagElements = new CopyOnWriteArrayList<String>(
-				Arrays.asList(config
-						.getStringArray("crawler.searchForMetaTags")));
+		metaTagElements = new CopyOnWriteArrayList<String>(Arrays.asList(config
+				.getStringArray("crawler.searchForMetaTags")));
 		label.setText(metaTagElements.toString().replace("[", "")
 				.replace("]", ""));
 
 	}
 
-	public static String getSaveProperties(Button startButton) {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-			path = config.getString(("writer.file.path"));
-			chosenPath = config.getString(("writer.file.chosenPath"));
-			if (MainController.uploadedFileContainingCustomers == null) {
-				startButton.setDisable(true);
+	/**
+	 * Gets the paths for the selected file and the saveFile directory
+	 * 
+	 * @param startButton
+	 */
+	private void getSaveProperties(Button startButton) {
+		path = config.getString(("writer.file.path"));
+		chosenPath = config.getString(("writer.file.chosenPath"));
+		if (MainController.uploadedFileContainingCustomers == null) {
+			startButton.setDisable(true);
 
-			} else
-				startButton.setDisable(false);
-
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			logger.error(e1);
-		}
-		return path;
+		} else
+			startButton.setDisable(false);
 
 	}
 
-	public static void setSaveProperties(String path, String chosenPath) {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-			config.setProperty("writer.file.path", path);
-			config.setProperty("writer.file.chosenPath", chosenPath);
-
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			logger.error(e1);
-		}
+	/**
+	 * sets the Properties of the file path and the saveFile path
+	 * 
+	 * @param path
+	 *            for the saveFile action
+	 * @param chosenPath
+	 *            for initial directory for the file selection
+	 */
+	private void setSaveProperties(String path, String chosenPath) {
+		config.setProperty("writer.file.path", path);
+		config.setProperty("writer.file.chosenPath", chosenPath);
 
 	}
 
-	public static void getSearchEngine() {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-			searchGlobal = config.getString(("searchEngine.global"));
-			if (searchGlobal.equals("GOOGLE")) {
-				MainController.searchEngineIdentifier = SearchEngineFactory.GOOGLE;
-			}
-			if (searchGlobal.equals("BING")) {
-				MainController.searchEngineIdentifier = SearchEngineFactory.BING;
-			}
-
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			logger.error(e1);
+	/**
+	 * Sets searchEngineIdentifier for MainController to use the selected search
+	 * engine
+	 */
+	private void getSearchEngine() {
+		searchGlobal = config.getString(("searchEngine.global"));
+		if (searchGlobal.equals("GOOGLE")) {
+			MainController.searchEngineIdentifier = SearchEngineFactory.GOOGLE;
+		}
+		if (searchGlobal.equals("BING")) {
+			MainController.searchEngineIdentifier = SearchEngineFactory.BING;
 		}
 
 	}
 
-	public static void setSearchEngineImage(ImageView imageView) {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-			searchGlobal = config.getString(("searchEngine.global"));
-			if (searchGlobal.equals("GOOGLE")) {
-				imageView.setImage(googleImage);
-				retrievedCustomer = true;
+	/**
+	 * Sets the Image of the selected search engine
+	 * 
+	 * @param imageView
+	 */
+	private void setSearchEngineImage(ImageView imageView) {
+		searchGlobal = config.getString(("searchEngine.global"));
+		if (searchGlobal.equals("GOOGLE")) {
+			imageView.setImage(googleImage);
 
-			}
-			if (searchGlobal.equals("BING")) {
-				imageView.setImage(bingImage);
-				retrievedCustomer = false;
-			}
-
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		}
+		if (searchGlobal.equals("BING")) {
+			imageView.setImage(bingImage);
 		}
 
 	}
 
-	public static void getWriterFactoryProperties() {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-			String tester = config.getString(("writer.factory"));
-			if (tester.equals("EXCEL")) {
-				MainController.fileWriterFactory = true;
-			} else if (tester.equals("CSV")) {
-				MainController.fileWriterFactory = false;
-			}
-
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+	/**
+	 * sets the selected Output File extension CSV or EXCEL
+	 */
+	private void getWriterFactoryProperties() {
+		String tester = config.getString(("writer.factory"));
+		if (tester.equals("EXCEL")) {
+			MainController.fileWriterFactory = true;
+		} else if (tester.equals("CSV")) {
+			MainController.fileWriterFactory = false;
 		}
 
 	}
 
-	public static void getMaxGoogleSearches() {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-			maxGoogle = Integer.parseInt(config
-					.getString(("searchEngine.maxGoogleSearches")));
-			maxBing = Integer.parseInt(config
-					.getString(("searchEngine.maxBingSearches")));
-
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+	/**
+	 * sets the maximum amount of search requests according to the config file
+	 */
+	private void getMaxGoogleSearches() {
+		maxGoogle = Integer.parseInt(config
+				.getString(("searchEngine.maxGoogleSearches")));
+		maxBing = Integer.parseInt(config
+				.getString(("searchEngine.maxBingSearches")));
 
 	}
 
-	public void getCheckStatus(Button startSearchButton, Label infoLabel) {
-		try {
-			List<Customer> testList = MainController
-					.retrieveCustomerFromFile(MainController.uploadedFileContainingCustomers);
+	/**
+	 * Checks the size of the file and disables the search Button. Further it
+	 * shows an accurate message
+	 * 
+	 * @param startSearchButton
+	 * @param infoLabel
+	 */
+	private void getCheckStatus(Button startSearchButton, Label infoLabel) {
 
-			if (testList.size() > maxGoogle && searchGlobal.equals("GOOGLE")) {
-				System.out.println("First");
-				retrievedCustomer = true;
+		while (listSize > 0) {
+			if (listSize > maxGoogle && searchGlobal.equals("GOOGLE")) {
+				System.out.println(maxGoogle);
 				startSearchButton.setDisable(true);
-				infoLabel.setText(googleExceeds);
+				infoLabel.setText(googleExceeds + maxGoogle);
 				infoLabel.setTextFill(Color.RED);
-			} else if (testList.size() > maxBing && searchGlobal.equals("BING")) {
+			} else if (listSize > maxBing && searchGlobal.equals("BING")) {
 				System.out.println("Second");
-				System.out.println(testList.size());
-				retrievedCustomer = true;
+				System.out.println(listSize);
 				startSearchButton.setDisable(true);
-				infoLabel.setText(bingExceeds);
+				infoLabel.setText(bingExceeds + maxBing);
 				infoLabel.setTextFill(Color.RED);
 			} else {
 				startSearchButton.setDisable(false);
@@ -256,95 +262,39 @@ public class GUIController implements Initializable {
 			}
 			return;
 
-		} catch (InternalFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MissingCustomerRowsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-
-		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+		startSearchButton.setDisable(true);
 
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
+		// Set Initials
 		infoLabel.setText("No file selected");
 		infoLabel.setTextFill(Color.ORANGE);
 		metaTagsList.setWrapText(true);
 		metaTagsList.setMaxWidth(550);
 		metaTagsList.setMaxHeight(80);
+		FileChooser filechooser = new FileChooser();
+		DirectoryChooser directoryChooser = new DirectoryChooser();
 
+		// Get and set Properties
 		getSearchEngine();
 		setSearchEngineImage(searchImage);
 		getWriterFactoryProperties();
-
-		// Task task = new Task<Void>() {
-		// @Override
-		// public Void call() throws Exception {
-		// int i = 0;
-		// while (true) {
-		// Platform.runLater(new Runnable() {
-		// @Override
-		// public void run() {
-
-		// }
-		// });
-		// i++;
-		// Thread.sleep(1000);
-		//
-		// }
-		// }
-		// };
-		// Thread th = new Thread(task);
-		// th.setDaemon(true);
-		// th.start();
-
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				selectFileButton.requestFocus();
-			}
-		});
-
 		getProperties(metaTagsList);
-		FileChooser filechooser = new FileChooser();
-		DirectoryChooser directoryChooser = new DirectoryChooser();
 		getSaveProperties(startSearchButton);
 		getMaxGoogleSearches();
 		getCheckStatus(startSearchButton, infoLabel);
 		pathTextField.setText(path);
 		fileTextField.setText(chosenPath);
 
-		GUIMain.externalNetCheck();
+		// GUIMain.externalNetCheck();
 
-		if (GUIMain.internetCheck == true) {
-			internetLabel.setText("Internet Connection Established");
-			internetLabel.setTextFill(Color.GREEN);
-			internetLabel.setVisible(false);
-
-		} else {
-			internetLabel.setText("No Internet Connection");
-			internetLabel.setTextFill(Color.RED);
-			startSearchButton.setDisable(true);
-
-		}
-
-		if (GUIMain.bingCheck == true) {
-			bingLabel.setText("Bing is reachable");
-			bingLabel.setTextFill(Color.GREEN);
-			bingLabel.setVisible(false);
-
-		} else {
-			bingLabel.setText("Bing is unreachable");
-			bingLabel.setTextFill(Color.RED);
-			startSearchButton.setDisable(true);
-		}
-
+		/**
+		 * AcionListener for Select File Button
+		 */
 		selectFileButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -361,33 +311,40 @@ public class GUIController implements Initializable {
 									"Excel-File (*.xls)", "*.xls"),
 							new FileChooser.ExtensionFilter("CSV-File (*.csv)",
 									"*.csv"));
+
+					// set Initital Directory according to config
 					if (!chosenPath.isEmpty()) {
 						File initial = new File(chosenPath);
 						filechooser.setInitialDirectory(initial);
 					}
+					// get File
 					MainController.uploadedFileContainingCustomers = filechooser
 							.showOpenDialog(stage);
 					if (MainController.uploadedFileContainingCustomers != null) {
 						fileTextField
-						.setText(MainController.uploadedFileContainingCustomers
-								.getAbsolutePath());
+								.setText(MainController.uploadedFileContainingCustomers
+										.getAbsolutePath());
+
+						// Save path to config
 						setSaveProperties(
 								path,
 								MainController.uploadedFileContainingCustomers
-								.getAbsolutePath()
-								.replaceAll(
-										MainController.uploadedFileContainingCustomers
-										.getName(), ""));
+										.getAbsolutePath()
+										.replaceAll(
+												MainController.uploadedFileContainingCustomers
+														.getName(), ""));
 						config.save();
+						// update configs for GUI
 						getSaveProperties(startSearchButton);
 						List<Customer> testList = MainController
 								.retrieveCustomerFromFile(MainController.uploadedFileContainingCustomers);
+						listSize = testList.size();
 						getCheckStatus(startSearchButton, infoLabel);
 					}
 				} catch (NullPointerException | InternalFormatException
 						| MissingCustomerRowsException | ConfigurationException e) {
 					e.printStackTrace();
-
+					logger.error(e);
 					System.out.println("No File selected");
 					fileTextField.setText("Wrong File Format");
 					fileTextField.setStyle("-fx-text-inner-color: red;");
@@ -397,6 +354,9 @@ public class GUIController implements Initializable {
 			}
 		});
 
+		/**
+		 * ActionListener for Change Directory Button
+		 */
 		changeDirectory.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -419,14 +379,26 @@ public class GUIController implements Initializable {
 						pathTextField.setText(path);
 
 					}
+					// if there is no path selected
 				} catch (NullPointerException | ConfigurationException e) {
+					logger.error(e);
 					startSearchButton.setDisable(true);
 					System.out.println("No Path selected");
 					pathTextField.setText("No Directory Selected");
 					pathTextField.setStyle("-fx-text-inner-color: red;");
+					setSaveProperties("", chosenPath);
+					try {
+						config.save();
+					} catch (ConfigurationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						logger.error(e1);
+					}
+					getSaveProperties(startSearchButton);
 
 					// if Directory is invalid
 				} catch (IllegalArgumentException e) {
+					logger.error(e);
 					pathTextField.setText("Illegal Directory");
 					pathTextField.setStyle("-fx-text-inner-color: red;");
 					setSaveProperties("", chosenPath);
@@ -435,6 +407,7 @@ public class GUIController implements Initializable {
 					} catch (ConfigurationException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
+						logger.error(e1);
 					}
 					getSaveProperties(startSearchButton);
 
@@ -443,6 +416,10 @@ public class GUIController implements Initializable {
 
 		});
 
+		/**
+		 * ActionListener for StartSearchButton. If Paths are emppty the Button
+		 * is disabled
+		 */
 		startSearchButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -455,23 +432,7 @@ public class GUIController implements Initializable {
 						"SaveFile.fxml"));
 				Parent root1;
 				try {
-					// Thread t1 = new Thread() {
-					// public void run() {
-					// MainController main = new MainController();
-					//
-					// try {
-					// main.startMainController();
-					// } catch (InternalFormatException e) {
-					// // TODO Auto-generated catch block
-					// e.printStackTrace();
-					//
-					// }
-					// }
-					// };
-
-					// t1.start();
 					root1 = (Parent) fxmlLoader.load();
-
 					Stage stage = new Stage();
 					stage.setTitle("File processed");
 					stage.setScene(new Scene(root1));
@@ -480,19 +441,17 @@ public class GUIController implements Initializable {
 					stage.showAndWait();
 
 				} catch (IOException | NullPointerException e) {
-					// // TODO Auto-generated catch block
-					// e.printStackTrace();
-					// System.out.println("HAAAALLLOOOO");
-					// Node source = (Node) event.getSource();
-					// Stage stage = (Stage) source.getScene().getWindow();
-					// stage.close();
-					//
+					e.printStackTrace();
+					logger.error(e);
 				}
 
 			}
 
 		});
 
+		/**
+		 * ActionListerner for Properties Button
+		 */
 		MetaTags.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -517,19 +476,20 @@ public class GUIController implements Initializable {
 					// Update SearchEngine Image
 					setSearchEngineImage(searchImage);
 					getMaxGoogleSearches();
-					if (retrievedCustomer == true) {
-						startSearchButton.setDisable(true);
-					}
 					getCheckStatus(startSearchButton, infoLabel);
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					logger.error(e);
 				}
 
 			}
 		});
 
+		/**
+		 * ActionListener for Quit Option
+		 */
 		quitMenuItem.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -540,14 +500,15 @@ public class GUIController implements Initializable {
 			}
 		});
 
+		// Add SwitchButton to View
 		switchToggle = new SwitchButton();
-		// switchToggle.setId("switchToggle");
 		anchorLow.getChildren().add(switchToggle);
-		// anchorLow.setRightAnchor(switchToggle, 60.0);
-		// anchorLow.setTopAnchor(switchToggle, 30.0);
 		switchToggle.setLayoutX(250.0);
 		switchToggle.setLayoutY(45.0);
 
+		/**
+		 * ActionListener for Decoration Button Close
+		 */
 		closeWindowButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -558,6 +519,9 @@ public class GUIController implements Initializable {
 			}
 		});
 
+		/**
+		 * ActionListener for Decoration Button Lower
+		 */
 		lowerWindowButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override

@@ -112,7 +112,7 @@ public class MetaController implements Initializable {
 
 	public void setBingParams() {
 		keyLabel.setText("Bing Access Key:");
-		othersLabel.setText("Bing 2nd Parameter");
+		othersLabel.setText("Bing 2nd Parameter:");
 		keyTextField.setText(GUIController.config
 				.getString("searchEngine.bing.accountKey"));
 		othersTextField.setText(GUIController.config
@@ -121,8 +121,8 @@ public class MetaController implements Initializable {
 	}
 
 	public void setGoogleParams() {
-		keyLabel.setText("Google Access Key:");
-		othersLabel.setText("Google 2nd Parameter");
+		keyLabel.setText("Google API Key:");
+		othersLabel.setText("Google 2nd Parameter:");
 		keyTextField.setText(GUIController.config
 				.getString("searchEngine.google.accountKey"));
 		othersTextField.setText(GUIController.config
@@ -399,12 +399,24 @@ public class MetaController implements Initializable {
 			blackListView.setCellFactory(TextFieldListCell.forListView());
 
 			blackListView
+					.setOnEditStart(new EventHandler<ListView.EditEvent<String>>() {
+						@Override
+						public void handle(ListView.EditEvent<String> t) {
+							editMenu.hide();
+
+						}
+
+					});
+
+			blackListView
 					.setOnEditCommit(new EventHandler<ListView.EditEvent<String>>() {
 						@Override
 						public void handle(ListView.EditEvent<String> t) {
 							blackListView.getItems().set(t.getIndex(),
 									t.getNewValue());
 							System.out.println("setOnEditCommit");
+							editMenu.hide();
+
 						}
 
 					});
@@ -414,6 +426,7 @@ public class MetaController implements Initializable {
 						@Override
 						public void handle(ListView.EditEvent<String> t) {
 							System.out.println("setOnEditCancel");
+							editMenu.hide();
 						}
 					});
 
@@ -425,6 +438,9 @@ public class MetaController implements Initializable {
 							if (event.getButton().equals(MouseButton.SECONDARY)) {
 								editMenu.show(blackListView,
 										event.getScreenX(), event.getScreenY());
+							} else if (event.getButton().equals(
+									MouseButton.PRIMARY)) {
+								editMenu.hide();
 							}
 
 						}
