@@ -90,10 +90,8 @@ public class GoogleSearchEngine implements SearchEngine {
 			try {
 				in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			} catch (IOException httpResponseError) {
-				throw new SearchEngineRequestLimitReachedException("The Google searchengine has reached its limit. Please only search for 100 customers per day.");
+				throw new SearchEngineRequestLimitReachedException("There has been a problem. Either the Google searchengine has reached its request limit or you dont have a connection to the internet.");
 			}
-
-
 
 			String inputLine;
 			final StringBuilder response = new StringBuilder();
