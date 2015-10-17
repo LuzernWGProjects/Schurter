@@ -4,6 +4,44 @@
 	-fx-background-color: white;
 }
 
+#closeWindowButton {
+	-fx-background-color: #A0A0A0 80%;
+    -fx-text-fill: white;
+    -fx-opacity:0.8;
+
+}
+
+#lowerWindowButton {
+	-fx-background-color: #A0A0A0;
+	-fx-opacity:0.8;
+    -fx-text-fill: white;
+    
+}
+
+#closeWindowButton:pressed {
+	-fx-background-color: #BB4E2A;
+            -fx-border-radius: 4px;
+          
+}
+
+#lowerWindowButton:pressed {
+	-fx-background-color: #B3970B;
+            -fx-border-radius: 4px;
+          
+}
+
+#closeWindowButton:hover {
+	-fx-background-color: #FA521A;
+            -fx-border-radius: 4px;
+            -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,1) , 5, 0.0 , 0 , 1 );
+	}
+	
+#lowerWindowButton:hover {
+	-fx-background-color: #FFD917;
+            -fx-border-radius: 4px;
+            -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,1) , 5, 0.0 , 0 , 1 );
+	}
+
 #flowPaneBlackList {
 	-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,1) , 5, 0.0 , 0 , 1 );
 	-fx-background-color:aliceblue;
@@ -88,6 +126,7 @@
     -fx-color: white;
 }
 
+
 .menu-item:focused {
     -fx-background-color: #336699;
 }
@@ -98,7 +137,7 @@
 
 .context-menu {
     -fx-skin: "com.sun.javafx.scene.control.skin.ContextMenuSkin";
-    -fx-background-color: black;
+    -fx-background-color: #A0A0A0;
     -fx-background-insets: 0, 1, 2;
     -fx-background-radius: 0 6 6 6, 0 5 5 5, 0 4 4 4;
 /*    -fx-padding: 0.666667em 0.083333em 0.666667em 0.083333em;  8 1 8 1 */
@@ -108,4 +147,27 @@
 #switchToggle {
 	-fx-background-color: green;-fx-text-fill:white;
 	
+}
+
+
+
+
+
+#blackListView .list-cell { /* <=== changed to even */
+    -fx-background-color: transparent;
+}
+
+
+#blackListView .list-cell:filled:selected:focused, #blackListView .list-cell:filled:selected {
+    -fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #336699 100%);
+    -fx-text-fill: white;
+}
+
+#blackListView .list-cell:even { /* <=== changed to even */
+    -fx-background-color: white;
+}
+
+#blackListView .list-cell:filled:hover {
+    -fx-background-color: #0093ff;
+    -fx-text-fill: white;
 }

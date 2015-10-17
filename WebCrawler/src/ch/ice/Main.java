@@ -7,15 +7,9 @@ import ch.ice.controller.MainController;
 import ch.ice.exceptions.InternalFormatException;
 import ch.ice.exceptions.MissingCustomerRowsException;
 
-/**
- * @author Oliver
- *
- */
 public class Main {
 	private static final Logger logger = LogManager.getLogger(Main.class.getName());
-	/**
-	 * @param args
-	 */
+	
 	public static void main(String[] args) {
 		logger.trace("Start Program");
 		

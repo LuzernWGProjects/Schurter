@@ -25,6 +25,7 @@ public class SwitchButton extends Label {
 		switchBtn
 				.setStyle("-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,1) , 5, 0.0 , 0 , 1 );-fx-background-insets: 0,1,2;"
 						+ "-fx-background-color: linear-gradient(#f2f2f2, #d6d6d6), linear-gradient(#fcfcfc 0%, #d9d9d9 20%, #d6d6d6 100%),linear-gradient(#dddddd 0%, #f6f6f6 50%);");
+
 		switchBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent t) {
@@ -39,8 +40,8 @@ public class SwitchButton extends Label {
 			public void changed(ObservableValue<? extends Boolean> ov,
 					Boolean t, Boolean t1) {
 				if (t1) {
-					MainController.fileWriterFactory = "FileWriterFactory.EXCEL";
-					saveFactoryGlobal("FileWriterFactory.EXCEL");
+					MainController.fileWriterFactory = true;
+					saveFactoryGlobal("EXCEL");
 					setPadding(new javafx.geometry.Insets(0, 0, 0, 5));
 					setText("Excel");
 					setTextAlignment(TextAlignment.LEFT);
@@ -49,8 +50,8 @@ public class SwitchButton extends Label {
 					setMinWidth(77.0);
 				} else {
 					// setMinWidth(77.0);
-					MainController.fileWriterFactory = "FileWriterFactory.CSV";
-					saveFactoryGlobal("FileWriterFactory.CSV");
+					MainController.fileWriterFactory = false;
+					saveFactoryGlobal("CSV");
 					setPadding(new javafx.geometry.Insets(0, 5, 0, 0));
 					setText("CSV");
 					setTextAlignment(TextAlignment.RIGHT);
@@ -62,12 +63,15 @@ public class SwitchButton extends Label {
 		});
 
 		// switchedOn.set(false);
-		if (MainController.fileWriterFactory.equals("FileWriterFactory.EXCEL")) {
+		if (MainController.fileWriterFactory == false) {
 			switchedOn.set(false);
 		}
-		if (MainController.fileWriterFactory.equals("FileWriterFactory.CSV")) {
+		if (MainController.fileWriterFactory == true) {
+			System.out.println("EXCEL");
+			switchedOn.set(false);
 			switchedOn.set(true);
 		}
+
 	}
 
 	public SimpleBooleanProperty switchOnProperty() {

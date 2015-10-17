@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@WebCrawler.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ice.view.SaveWindowController">
+
+<VBox alignment="CENTER" spacing="10.0" stylesheets="@WebCrawler.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ice.view.SaveWindowController">
    <children>
-      <Label fx:id="endMessageLabel" layoutX="96.0" layoutY="188.0">
+      <Label fx:id="endMessageLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="150.0" prefWidth="600.0" wrapText="true" VBox.vgrow="ALWAYS">
          <font>
-            <Font size="20.0" />
+            <Font size="14.0" />
          </font>
       </Label>
-      <ProgressBar fx:id="progressBar" layoutX="96.0" layoutY="251.0" prefHeight="20.0" prefWidth="399.0" progress="0.0" />
-      <Label fx:id="progressLabel" layoutX="96.0" layoutY="288.0" />
-      <Button id="closeButton" fx:id="closeButton" layoutX="204.0" layoutY="323.0" mnemonicParsing="false" stylesheets="@WebCrawler.css" text="Close" textFill="WHITE" />
-      <Button fx:id="openFileButton" layoutX="296.0" layoutY="323.0" mnemonicParsing="false" stylesheets="@WebCrawler.css" text="Open File" textFill="WHITE" />
-      <Button fx:id="cancelButton" layoutX="429.0" layoutY="323.0" mnemonicParsing="false" stylesheets="@WebCrawler.css" text="Cancel" textFill="WHITE" />
+      <ProgressBar fx:id="progressBar" prefWidth="600.0" progress="0.0" VBox.vgrow="ALWAYS" />
+      <Label fx:id="progressLabel" alignment="CENTER" contentDisplay="CENTER" wrapText="true" VBox.vgrow="ALWAYS" />
+      <HBox alignment="CENTER" spacing="50.0">
+         <children>
+            <Button id="closeButton" fx:id="closeButton" alignment="TOP_RIGHT" mnemonicParsing="false" stylesheets="@WebCrawler.css" text="Close" textFill="WHITE" />
+            <Button fx:id="openFileButton" mnemonicParsing="false" stylesheets="@WebCrawler.css" text="Open File" textFill="WHITE" />
+            <Button fx:id="cancelButton" mnemonicParsing="false" stylesheets="@WebCrawler.css" text="Cancel" textFill="WHITE" />
+         </children>
+      </HBox>
    </children>
-</Pane>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox>

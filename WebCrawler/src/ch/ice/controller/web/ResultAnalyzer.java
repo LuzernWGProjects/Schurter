@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ch.ice.controller.MainController;
+import ch.ice.utils.Config;
 import ch.ice.utils.JSONStandardizedKeys;
 
 /**
@@ -257,17 +258,11 @@ public class ResultAnalyzer {
 	private static boolean isBlacklist(String host) {
 		// Create array with blacklisted hosts
 		List<String> blacklist = new ArrayList<String>();
-		try {
 			// Get Blacklist form propertiesfile
-			PropertiesConfiguration config = new PropertiesConfiguration(
-					"conf/app.properties");
+			PropertiesConfiguration config = Config.PROPERTIES;
 			blacklist = Arrays.asList(config
 					.getStringArray("searchEngine.bing.blacklist"));
 
-		} catch (ConfigurationException e) {
-			System.out.println(e.getLocalizedMessage());
-			e.printStackTrace();
-		}
 
 		// Check if one element form the blacklist equals the regarding host..
 		for (String blacklistElement : blacklist) {

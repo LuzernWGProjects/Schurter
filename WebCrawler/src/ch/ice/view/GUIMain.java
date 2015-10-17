@@ -107,7 +107,7 @@ public class GUIMain extends Application {
 		primaryStage.show();
 		Timeline timeline = new Timeline();
 		timeline.getKeyFrames().add(
-				new KeyFrame(Duration.seconds(1),
+				new KeyFrame(Duration.seconds(0.5),
 						new EventHandler<ActionEvent>() {
 
 							@Override
@@ -134,9 +134,10 @@ public class GUIMain extends Application {
 			Scene scene = new Scene(root1);
 			scene.setFill(Color.TRANSPARENT);
 			Stage stage = new Stage();
+			stage.setResizable(false);
 			stage.setTitle("Schurter POS-Data-Enhancement System (SPOSDES) ");
 			stage.setScene(scene);
-			stage.initStyle(StageStyle.DECORATED);
+			stage.initStyle(StageStyle.UNDECORATED);
 
 			stage.show();
 

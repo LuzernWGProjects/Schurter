@@ -8,13 +8,12 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -28,6 +27,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -38,6 +38,10 @@ import org.apache.logging.log4j.Logger;
 
 import ch.ice.controller.MainController;
 import ch.ice.controller.web.SearchEngineFactory;
+import ch.ice.exceptions.InternalFormatException;
+import ch.ice.exceptions.MissingCustomerRowsException;
+import ch.ice.model.Customer;
+import ch.ice.utils.Config;
 
 public class GUIController implements Initializable {
 
@@ -68,204 +72,261 @@ public class GUIController implements Initializable {
 	@FXML
 	private Label bingLabel;
 	@FXML
+	private Label infoLabel;
+	@FXML
 	private AnchorPane anchorLow;
 	@FXML
 	private ImageView searchImage;
+	@FXML
+	private Button closeWindowButton;
+	@FXML
+	private Button lowerWindowButton;
 
-	SwitchButton switchToggle;
+	/**
+	 * SwitchButton for CSV or EXCEL selection
+	 */
+	private SwitchButton switchToggle;
 
-	public static ObservableValue<? extends String> test;
+	/**
+	 * Check variables for maximum search requests according to the selected
+	 * Search Engine
+	 */
+	private int maxGoogle;
+	private int maxBing;
+	private int listSize = 0;
 
-	public static PropertiesConfiguration config;
+	/**
+	 * Text for InfoLabel including search exceeds errors and status report
+	 */
+	private String statusOk = "Status OK";
+	private String googleExceeds = "The file exceeds the allowed Google searches of ";
+	private String bingExceeds = "The file exceeds the allowed Bing searches of ";
 
+	/**
+	 * List for loaded Metatags out of XML. Is referenced by other Classes
+	 */
 	public static List<String> metaTagElements;
 
+	/**
+	 * path for storage of file
+	 */
 	public static String path;
+	/**
+	 * path for selected file
+	 */
+	public static String chosenPath;
 
-	public static String searchGlobal;
+	private File pathFile;
 
-	public static Image googleImage = new Image(
-			MetaController.class.getResourceAsStream("/Google.png"));
-	public static Image bingImage = new Image(
-			MetaController.class.getResourceAsStream("/Bing.png"));
+	/**
+	 * Check variable for selected Search Engine
+	 */
+	private String searchGlobal;
+
+	/**
+	 * Images for Search Engine
+	 */
+	private Image googleImage = new Image(
+			GUIController.class.getResourceAsStream("/Google.png"));
+	private Image bingImage = new Image(
+			GUIController.class.getResourceAsStream("/Bing.png"));
+
+	public static PropertiesConfiguration config = Config.PROPERTIES;
 
 	public static final Logger logger = LogManager
 			.getLogger(GUIController.class.getName());
 
+	/**
+	 * Gets the Metatags out of the Properties and Updates the Label in the
+	 * Parameter. Is referenced by other Classes
+	 * 
+	 * @param label
+	 */
 	public static void getProperties(Label label) {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-			metaTagElements = new CopyOnWriteArrayList<String>(
-					Arrays.asList(config
-							.getStringArray("crawler.searchForMetaTags")));
-			label.setText(metaTagElements.toString().replace("[", "")
-					.replace("]", ""));
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			logger.error(e1);
+		metaTagElements = new CopyOnWriteArrayList<String>(Arrays.asList(config
+				.getStringArray("crawler.searchForMetaTags")));
+		label.setText(metaTagElements.toString().replace("[", "")
+				.replace("]", ""));
+
+	}
+
+	/**
+	 * Gets the paths for the selected file and the saveFile directory
+	 * 
+	 * @param startButton
+	 */
+	private boolean getSaveProperties(Button startButton) {
+		path = config.getString(("writer.file.path"));
+		chosenPath = config.getString(("writer.file.chosenPath"));
+		if (MainController.uploadedFileContainingCustomers == null) {
+			return false;
+
+		} else
+
+			return true;
+
+	}
+
+	/**
+	 * sets the Properties of the file path and the saveFile path
+	 * 
+	 * @param path
+	 *            for the saveFile action
+	 * @param chosenPath
+	 *            for initial directory for the file selection
+	 */
+	private void setSaveProperties(String path, String chosenPath) {
+		config.setProperty("writer.file.path", path);
+		config.setProperty("writer.file.chosenPath", chosenPath);
+
+	}
+
+	/**
+	 * Sets searchEngineIdentifier for MainController to use the selected search
+	 * engine
+	 */
+	private void getSearchEngine() {
+		searchGlobal = config.getString(("searchEngine.global"));
+		if (searchGlobal.equals("GOOGLE")) {
+			MainController.searchEngineIdentifier = SearchEngineFactory.GOOGLE;
+		}
+		if (searchGlobal.equals("BING")) {
+			MainController.searchEngineIdentifier = SearchEngineFactory.BING;
 		}
 
 	}
 
-	public static String getSaveProperties() {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-			path = config.getString(("writer.file.path"));
+	/**
+	 * Sets the Image of the selected search engine
+	 * 
+	 * @param imageView
+	 */
+	private void setSearchEngineImage(ImageView imageView) {
+		searchGlobal = config.getString(("searchEngine.global"));
+		if (searchGlobal.equals("GOOGLE")) {
+			imageView.setImage(googleImage);
 
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			logger.error(e1);
 		}
-		return path;
-
-	}
-
-	public static void setSaveProperties(String chosenPath) {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-			config.setProperty("writer.file.path", chosenPath);
-
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			logger.error(e1);
+		if (searchGlobal.equals("BING")) {
+			imageView.setImage(bingImage);
 		}
 
 	}
 
-	public static void getSearchEngine() {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-			searchGlobal = config.getString(("searchEngine.global"));
-			if (searchGlobal.equals("GOOGLE")) {
-				MainController.searchEngineIdentifier = SearchEngineFactory.GOOGLE;
-			}
-			if (searchGlobal.equals("BING")) {
-				MainController.searchEngineIdentifier = SearchEngineFactory.BING;
-			}
-
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			logger.error(e1);
+	/**
+	 * sets the selected Output File extension CSV or EXCEL
+	 */
+	private void getWriterFactoryProperties() {
+		String tester = config.getString(("writer.factory"));
+		if (tester.equals("EXCEL")) {
+			MainController.fileWriterFactory = true;
+		} else if (tester.equals("CSV")) {
+			MainController.fileWriterFactory = false;
 		}
 
 	}
 
-	public static void setSearchEngineImage(ImageView imageView) {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-			searchGlobal = config.getString(("searchEngine.global"));
-			if (searchGlobal.equals("GOOGLE")) {
-				imageView.setImage(googleImage);
-			}
-			if (searchGlobal.equals("BING")) {
-				imageView.setImage(bingImage);
-			}
-
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+	/**
+	 * sets the maximum amount of search requests according to the config file
+	 */
+	private void getMaxGoogleSearches() {
+		maxGoogle = Integer.parseInt(config
+				.getString(("searchEngine.maxGoogleSearches")));
+		maxBing = Integer.parseInt(config
+				.getString(("searchEngine.maxBingSearches")));
 
 	}
 
-	public static void getWriterFactoryProperties() {
-		try {
-			config = new PropertiesConfiguration("conf/app.properties");
-			String tester = config.getString(("writer.factory"));
-			if (tester.equals("FileWriterFactory.EXCEL")) {
-				MainController.fileWriterFactory = "FileWriterFactory.EXCEL";
-			}
-			if (tester.equals("FileWriterFactory.CSV")) {
-				MainController.fileWriterFactory = "FileWriterFactory.CSV";
+	/**
+	 * Checks the size of the file and disables the search Button. Further it
+	 * shows an accurate message
+	 * 
+	 * @param startSearchButton
+	 * @param infoLabel
+	 */
+	private boolean getCheckStatus(Button startSearchButton, Label infoLabel) {
+
+		while (listSize > 0) {
+			if (listSize > maxGoogle && searchGlobal.equals("GOOGLE")) {
+				System.out.println(maxGoogle);
+				infoLabel.setText(googleExceeds + maxGoogle);
+				infoLabel.setTextFill(Color.RED);
+				return false;
+			} else if (listSize > maxBing && searchGlobal.equals("BING")) {
+				System.out.println("Second");
+				System.out.println(listSize);
+				infoLabel.setText(bingExceeds + maxBing);
+				infoLabel.setTextFill(Color.RED);
+				return false;
+			} else {
+				infoLabel.setText(statusOk);
+				infoLabel.setTextFill(Color.GREEN);
+				return true;
 			}
 
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		}
+		return false;
+
+	}
+
+	private boolean checkAll() {
+		try {
+			if (getSaveProperties(startSearchButton) == true
+					&& getCheckStatus(startSearchButton, infoLabel) == true
+					&& pathFile.exists() == true && pathFile.canWrite() == true) {
+
+				startSearchButton.setDisable(false);
+				return true;
+			} else {
+				startSearchButton.setDisable(true);
+				return false;
+			}
+		} catch (NullPointerException e) {
+			System.out.println("Save Path not set yet or wrong Directory");
+			logger.info("Save Path not set yet or wrong Directory");
+		}
+		startSearchButton.setDisable(true);
+		return false;
 
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
+		// Set Initials
+		infoLabel.setText("No file selected");
+		infoLabel.setTextFill(Color.ORANGE);
 		metaTagsList.setWrapText(true);
 		metaTagsList.setMaxWidth(550);
 		metaTagsList.setMaxHeight(80);
+		FileChooser filechooser = new FileChooser();
+		DirectoryChooser directoryChooser = new DirectoryChooser();
 
+		// Get and set Properties
 		getSearchEngine();
 		setSearchEngineImage(searchImage);
 		getWriterFactoryProperties();
-
-		// Task task = new Task<Void>() {
-		// @Override
-		// public Void call() throws Exception {
-		// int i = 0;
-		// while (true) {
-		// Platform.runLater(new Runnable() {
-		// @Override
-		// public void run() {
-
-		// }
-		// });
-		// i++;
-		// Thread.sleep(1000);
-		//
-		// }
-		// }
-		// };
-		// Thread th = new Thread(task);
-		// th.setDaemon(true);
-		// th.start();
-
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				selectFileButton.requestFocus();
-			}
-		});
-
 		getProperties(metaTagsList);
-		FileChooser filechooser = new FileChooser();
-		DirectoryChooser directoryChooser = new DirectoryChooser();
-		getSaveProperties();
+		getSaveProperties(startSearchButton);
+		getMaxGoogleSearches();
+		getCheckStatus(startSearchButton, infoLabel);
+		checkAll();
 		pathTextField.setText(path);
+		fileTextField.setText(chosenPath);
 
-		GUIMain.externalNetCheck();
+		// GUIMain.externalNetCheck();
 
-		if (GUIMain.internetCheck == true) {
-			internetLabel.setText("Internet Connection Established");
-			internetLabel.setTextFill(Color.GREEN);
-			internetLabel.setVisible(false);
-
-		} else {
-			internetLabel.setText("No Internet Connection");
-			internetLabel.setTextFill(Color.RED);
-			startSearchButton.setDisable(true);
-
-		}
-
-		if (GUIMain.bingCheck == true) {
-			bingLabel.setText("Bing is reachable");
-			bingLabel.setTextFill(Color.GREEN);
-			bingLabel.setVisible(false);
-
-		} else {
-			bingLabel.setText("Bing is unreachable");
-			bingLabel.setTextFill(Color.RED);
-			startSearchButton.setDisable(true);
-		}
-
+		/**
+		 * AcionListener for Select File Button
+		 */
 		selectFileButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
 
-				Stage stage = new Stage();
+				// Stage stage = new Stage();
+				Node source = (Node) event.getSource();
+				Stage stage = (Stage) source.getScene().getWindow();
 				try {
 					filechooser.getExtensionFilters().addAll(
 							new FileChooser.ExtensionFilter(
@@ -274,93 +335,155 @@ public class GUIController implements Initializable {
 									"Excel-File (*.xls)", "*.xls"),
 							new FileChooser.ExtensionFilter("CSV-File (*.csv)",
 									"*.csv"));
+
+					// set Initital Directory according to config
+					if (!chosenPath.isEmpty()) {
+						File initial = new File(chosenPath);
+						filechooser.setInitialDirectory(initial);
+					}
+					// get File
 					MainController.uploadedFileContainingCustomers = filechooser
 							.showOpenDialog(stage);
 					if (MainController.uploadedFileContainingCustomers != null) {
 						fileTextField
 								.setText(MainController.uploadedFileContainingCustomers
 										.getAbsolutePath());
-					}
-				} catch (NullPointerException e) {
 
+						// Save path to config
+						setSaveProperties(
+								path,
+								MainController.uploadedFileContainingCustomers
+										.getAbsolutePath()
+										.replaceAll(
+												MainController.uploadedFileContainingCustomers
+														.getName(), ""));
+						config.save();
+						// update configs for GUI
+						getSaveProperties(startSearchButton);
+						List<Customer> testList = MainController
+								.retrieveCustomerFromFile(MainController.uploadedFileContainingCustomers);
+						listSize = testList.size();
+						getCheckStatus(startSearchButton, infoLabel);
+						checkAll();
+					}
+				} catch (NullPointerException | InternalFormatException
+						| MissingCustomerRowsException | ConfigurationException e) {
+					e.printStackTrace();
+					logger.error(e);
 					System.out.println("No File selected");
-					fileTextField.setText("");
+					fileTextField.setText("Wrong File Format");
+					fileTextField.setStyle("-fx-text-inner-color: red;");
+					checkAll();
 				}
 
 			}
 		});
 
+		/**
+		 * ActionListener for Change Directory Button
+		 */
 		changeDirectory.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
-				Stage stage = new Stage();
+				// Stage stage = new Stage();
+				Node source = (Node) event.getSource();
+				Stage stage = (Stage) source.getScene().getWindow();
 				try {
-
-					File pathFile = directoryChooser.showDialog(stage);
-					if (pathFile != null) {
-						setSaveProperties(pathFile.getAbsolutePath());
+					if (!path.isEmpty()) {
+						File initial = new File(path);
+						directoryChooser.setInitialDirectory(initial);
+					}
+					pathFile = directoryChooser.showDialog(stage);
+					if (pathFile != null && pathFile.exists() == true) {
+						setSaveProperties(pathFile.getAbsolutePath(),
+								chosenPath);
 						config.save();
-						getSaveProperties();
+						getSaveProperties(startSearchButton);
 						pathTextField.setText(path);
 
+					} else {
+						checkAll();
+						pathTextField.setText("Illegal Directory");
+						pathTextField.setStyle("-fx-text-inner-color: red;");
 					}
+					// if there is no path selected
 				} catch (NullPointerException | ConfigurationException e) {
-
+					logger.error(e);
 					System.out.println("No Path selected");
-					pathTextField.setText("");
+					pathTextField.setText("No Directory Selected");
+					pathTextField.setStyle("-fx-text-inner-color: red;");
+					setSaveProperties("", chosenPath);
+					checkAll();
+					try {
+						config.save();
+					} catch (ConfigurationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						logger.error(e1);
+					}
+					getSaveProperties(startSearchButton);
+					checkAll();
+
+					// if Directory is invalid
+				} catch (IllegalArgumentException e) {
+					logger.error(e);
+					pathTextField.setText("Illegal Directory");
+					pathTextField.setStyle("-fx-text-inner-color: red;");
+					setSaveProperties("", chosenPath);
+					checkAll();
+					try {
+						config.save();
+					} catch (ConfigurationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						logger.error(e1);
+					}
+					getSaveProperties(startSearchButton);
+					checkAll();
+
 				}
 			}
 
 		});
 
+		/**
+		 * ActionListener for StartSearchButton. If Paths are emppty the Button
+		 * is disabled
+		 */
 		startSearchButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
+				if (path.equals("") || chosenPath.equals("")) {
+					return;
+				}
 
 				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
 						"SaveFile.fxml"));
 				Parent root1;
 				try {
-					// Thread t1 = new Thread() {
-					// public void run() {
-					// MainController main = new MainController();
-					//
-					// try {
-					// main.startMainController();
-					// } catch (InternalFormatException e) {
-					// // TODO Auto-generated catch block
-					// e.printStackTrace();
-					//
-					// }
-					// }
-					// };
-
-					// t1.start();
 					root1 = (Parent) fxmlLoader.load();
-
 					Stage stage = new Stage();
 					stage.setTitle("File processed");
 					stage.setScene(new Scene(root1));
 					stage.initStyle(StageStyle.UNDECORATED);
+					stage.initModality(Modality.APPLICATION_MODAL);
 					stage.showAndWait();
 
 				} catch (IOException | NullPointerException e) {
-					// // TODO Auto-generated catch block
-					// e.printStackTrace();
-					// System.out.println("HAAAALLLOOOO");
-					// Node source = (Node) event.getSource();
-					// Stage stage = (Stage) source.getScene().getWindow();
-					// stage.close();
-					//
+					e.printStackTrace();
+					logger.error(e);
 				}
 
 			}
 
 		});
 
+		/**
+		 * ActionListerner for Properties Button
+		 */
 		MetaTags.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -368,6 +491,7 @@ public class GUIController implements Initializable {
 
 				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
 						"metaChoice.fxml"));
+
 				Parent root1;
 				try {
 					root1 = (Parent) fxmlLoader.load();
@@ -376,21 +500,29 @@ public class GUIController implements Initializable {
 					stage.setTitle("Choose your Meta Tags");
 					stage.setScene(new Scene(root1));
 					stage.initStyle(StageStyle.UNDECORATED);
+					stage.initModality(Modality.APPLICATION_MODAL);
 					stage.showAndWait();
 
 					// Update Selected Meta Tags
 					getProperties(metaTagsList);
 					// Update SearchEngine Image
 					setSearchEngineImage(searchImage);
+					getMaxGoogleSearches();
+					getCheckStatus(startSearchButton, infoLabel);
+					checkAll();
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					logger.error(e);
 				}
 
 			}
 		});
 
+		/**
+		 * ActionListener for Quit Option
+		 */
 		quitMenuItem.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -401,13 +533,39 @@ public class GUIController implements Initializable {
 			}
 		});
 
+		// Add SwitchButton to View
 		switchToggle = new SwitchButton();
-		// switchToggle.setId("switchToggle");
 		anchorLow.getChildren().add(switchToggle);
-		// anchorLow.setRightAnchor(switchToggle, 60.0);
-		// anchorLow.setTopAnchor(switchToggle, 30.0);
 		switchToggle.setLayoutX(250.0);
 		switchToggle.setLayoutY(45.0);
+
+		/**
+		 * ActionListener for Decoration Button Close
+		 */
+		closeWindowButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+
+				System.exit(0);
+
+			}
+		});
+
+		/**
+		 * ActionListener for Decoration Button Lower
+		 */
+		lowerWindowButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+
+				Node source = (Node) event.getSource();
+				Stage stage = (Stage) source.getScene().getWindow();
+				stage.setIconified(true);
+
+			}
+		});
 
 	}
 }
