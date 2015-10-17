@@ -84,6 +84,8 @@ public class GUIController implements Initializable {
 	@FXML
 	private Button lowerWindowButton;
 	@FXML
+	private Button resetKeysButton;
+	@FXML
 	private VBox vBox;
 
 	private double xOffset = 0;
@@ -358,6 +360,7 @@ public class GUIController implements Initializable {
 						fileTextField
 								.setText(MainController.uploadedFileContainingCustomers
 										.getAbsolutePath());
+						fileTextField.setStyle("-fx-text-inner-color: black;");
 
 						// Save path to config
 						setSaveProperties(
@@ -377,11 +380,19 @@ public class GUIController implements Initializable {
 						checkAll();
 					}
 				} catch (NullPointerException | InternalFormatException
-						| MissingCustomerRowsException | ConfigurationException e) {
+						| ConfigurationException e) {
 					e.printStackTrace();
 					logger.error(e);
 					System.out.println("No File selected");
 					fileTextField.setText("Wrong File Format");
+					fileTextField.setStyle("-fx-text-inner-color: red;");
+					checkAll();
+				} catch (MissingCustomerRowsException e) {
+					e.printStackTrace();
+					logger.error(e);
+					System.out.println("No Customers in File");
+					fileTextField
+							.setText("There seem to be no Customers in the file");
 					fileTextField.setStyle("-fx-text-inner-color: red;");
 					checkAll();
 				}
@@ -401,28 +412,38 @@ public class GUIController implements Initializable {
 				Node source = (Node) event.getSource();
 				Stage stage = (Stage) source.getScene().getWindow();
 				try {
-					if (!path.isEmpty()) {
+					if (!path.isEmpty() && pathFile.exists() == true) {
 						File initial = new File(path);
 						directoryChooser.setInitialDirectory(initial);
+
 					}
 					pathFile = directoryChooser.showDialog(stage);
+
 					if (pathFile != null && pathFile.exists() == true) {
 						setSaveProperties(pathFile.getAbsolutePath(),
 								chosenPath);
 						config.save();
 						getSaveProperties(startSearchButton);
 						pathTextField.setText(path);
+						pathTextField.setStyle("-fx-text-inner-color: black;");
+
+					} else if (pathFile == null) {
+						pathTextField.setText(path);
+						pathTextField.setStyle("-fx-text-inner-color: black;");
+						pathFile = new File(path);
+						checkAll();
 
 					} else {
 						checkAll();
-						pathTextField.setText("Illegal Directory");
+						pathTextField.setText("No legal Directory selected");
 						pathTextField.setStyle("-fx-text-inner-color: red;");
 					}
 					// if there is no path selected
 				} catch (NullPointerException | ConfigurationException e) {
 					logger.error(e);
+					e.printStackTrace();
 					System.out.println("No Path selected");
-					pathTextField.setText("No Directory Selected");
+					pathTextField.setText("No Directory selected");
 					pathTextField.setStyle("-fx-text-inner-color: red;");
 					setSaveProperties("", chosenPath);
 					checkAll();
@@ -439,6 +460,7 @@ public class GUIController implements Initializable {
 					// if Directory is invalid
 				} catch (IllegalArgumentException e) {
 					logger.error(e);
+					e.printStackTrace();
 					pathTextField.setText("Illegal Directory");
 					pathTextField.setStyle("-fx-text-inner-color: red;");
 					setSaveProperties("", chosenPath);
@@ -574,6 +596,28 @@ public class GUIController implements Initializable {
 				Stage stage = (Stage) source.getScene().getWindow();
 				stage.setIconified(true);
 
+			}
+		});
+
+		resetKeysButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				String bingKeyReset = config
+						.getString("searchEngine.bing.accountKeyReset");
+				String bingPatternReset = config
+						.getString("searchEngine.bing.patternReset");
+				String googleKeyReset = config
+						.getString("searchEngine.google.accountKeyReset");
+				String googlePatternReset = config
+						.getString("searchEngine.google.cxReset");
+
+				config.setProperty(bingKeyReset, "searchEngine.bing.accountKey");
+				config.setProperty(bingPatternReset,
+						"searchEngine.bing.pattern");
+				config.setProperty(googleKeyReset,
+						"searchEngine.google.accountKey");
+				config.setProperty(googlePatternReset, "searchEngine.google.cx");
 			}
 		});
 
