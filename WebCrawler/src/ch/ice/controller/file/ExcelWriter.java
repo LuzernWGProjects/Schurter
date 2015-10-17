@@ -106,6 +106,13 @@ public class ExcelWriter implements Writer {
 					cell.setCellStyle(style);
 
 					cell.setCellValue((String) obj.toString());
+					
+					Cell UnsureFirstCell = sheet.getRow(2).createCell(cellnum+1);
+					UnsureFirstCell.setCellValue("unsure");
+					cell = sheet.getRow(row.getRowNum()).createCell(cellnum+1);
+					cell.setCellStyle(style);
+					cell.setCellValue(c.getWebsite().getUnsure());
+					
 				} else if (obj instanceof Map) {
 					// Start the writeMap lamda Method to write down the whole
 					// Metatags-Map
@@ -168,10 +175,10 @@ public class ExcelWriter implements Writer {
 	private void writeMap(Object k, Object v) {
 
 		// write header informations (key)
-		Cell firstCell = sheet.getRow(2).createCell(cellnum + mapCellNum);
+		Cell firstCell = sheet.getRow(2).createCell(cellnum +1 + mapCellNum);
 		firstCell.setCellValue((String) k);
 		// write cell values (Value)
-		cell = row.createCell(cellnum + mapCellNum);
+		cell = row.createCell(cellnum+1 + mapCellNum);
 		cell.setCellValue((String) v);
 		cell.setCellStyle(style);
 		mapCellNum++;
