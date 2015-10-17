@@ -134,9 +134,10 @@ public class GUIMain extends Application {
 			Scene scene = new Scene(root1);
 			scene.setFill(Color.TRANSPARENT);
 			Stage stage = new Stage();
+			stage.setResizable(false);
 			stage.setTitle("Schurter POS-Data-Enhancement System (SPOSDES) ");
 			stage.setScene(scene);
-			stage.initStyle(StageStyle.DECORATED);
+			stage.initStyle(StageStyle.UNDECORATED);
 
 			stage.show();
 

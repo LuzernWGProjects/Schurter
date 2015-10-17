@@ -78,6 +78,10 @@ public class GUIController implements Initializable {
 	private AnchorPane anchorLow;
 	@FXML
 	private ImageView searchImage;
+	@FXML
+	private Button closeWindowButton;
+	@FXML
+	private Button lowerWindowButton;
 
 	SwitchButton switchToggle;
 
@@ -207,8 +211,7 @@ public class GUIController implements Initializable {
 			String tester = config.getString(("writer.factory"));
 			if (tester.equals("EXCEL")) {
 				MainController.fileWriterFactory = true;
-			}
-			if (tester.equals("CSV")) {
+			} else if (tester.equals("CSV")) {
 				MainController.fileWriterFactory = false;
 			}
 
@@ -230,6 +233,45 @@ public class GUIController implements Initializable {
 		} catch (ConfigurationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		}
+
+	}
+
+	public void getCheckStatus(Button startSearchButton, Label infoLabel) {
+		try {
+			List<Customer> testList = MainController
+					.retrieveCustomerFromFile(MainController.uploadedFileContainingCustomers);
+
+			if (testList.size() > maxGoogle && searchGlobal.equals("GOOGLE")) {
+				System.out.println("First");
+				retrievedCustomer = true;
+				startSearchButton.setDisable(true);
+				infoLabel.setText(googleExceeds);
+				infoLabel.setTextFill(Color.RED);
+			} else if (testList.size() > maxBing && searchGlobal.equals("BING")) {
+				System.out.println("Second");
+				System.out.println(testList.size());
+				retrievedCustomer = true;
+				startSearchButton.setDisable(true);
+				infoLabel.setText(bingExceeds);
+				infoLabel.setTextFill(Color.RED);
+			} else {
+				startSearchButton.setDisable(false);
+				infoLabel.setText(statusOk);
+				infoLabel.setTextFill(Color.GREEN);
+			}
+			return;
+
+		} catch (InternalFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MissingCustomerRowsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		} catch (NullPointerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 	}
@@ -280,6 +322,7 @@ public class GUIController implements Initializable {
 		DirectoryChooser directoryChooser = new DirectoryChooser();
 		getSaveProperties(startSearchButton);
 		getMaxGoogleSearches();
+		getCheckStatus(startSearchButton, infoLabel);
 		pathTextField.setText(path);
 		fileTextField.setText(chosenPath);
 
@@ -345,31 +388,14 @@ public class GUIController implements Initializable {
 						getSaveProperties(startSearchButton);
 						List<Customer> testList = MainController
 								.retrieveCustomerFromFile(MainController.uploadedFileContainingCustomers);
-						if (testList.size() > maxGoogle
-								&& searchGlobal.equals("GOOGLE")) {
-							retrievedCustomer = true;
-							startSearchButton.setDisable(true);
-							infoLabel.setText(googleExceeds);
-							infoLabel.setTextFill(Color.RED);
-						} else if (testList.size() > maxBing
-								&& searchGlobal.equals("BING")) {
-							System.out.println(testList.size());
-							retrievedCustomer = true;
-							startSearchButton.setDisable(true);
-							infoLabel.setText(bingExceeds);
-							infoLabel.setTextFill(Color.RED);
-						} else {
-							startSearchButton.setDisable(false);
-							infoLabel.setText(statusOk);
-							infoLabel.setTextFill(Color.GREEN);
-						}
+						getCheckStatus(startSearchButton, infoLabel);
 					}
 				} catch (NullPointerException | InternalFormatException
 						| MissingCustomerRowsException | ConfigurationException e) {
 					e.printStackTrace();
 
 					System.out.println("No File selected");
-					fileTextField.setText("No File selected");
+					fileTextField.setText("Wrong File Format");
 					fileTextField.setStyle("-fx-text-inner-color: red;");
 					startSearchButton.setDisable(true);
 				}
@@ -400,10 +426,23 @@ public class GUIController implements Initializable {
 
 					}
 				} catch (NullPointerException | ConfigurationException e) {
-					startSearchButton.setDisable(false);
+					startSearchButton.setDisable(true);
 					System.out.println("No Path selected");
 					pathTextField.setText("No Directory Selected");
 					pathTextField.setStyle("-fx-text-inner-color: red;");
+
+					// if Directory is invalid
+				} catch (IllegalArgumentException e) {
+					pathTextField.setText("Illegal Directory");
+					pathTextField.setStyle("-fx-text-inner-color: red;");
+					setSaveProperties("", chosenPath);
+					try {
+						config.save();
+					} catch (ConfigurationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					getSaveProperties(startSearchButton);
 
 				}
 			}
@@ -467,6 +506,7 @@ public class GUIController implements Initializable {
 
 				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
 						"metaChoice.fxml"));
+
 				Parent root1;
 				try {
 					root1 = (Parent) fxmlLoader.load();
@@ -486,6 +526,7 @@ public class GUIController implements Initializable {
 					if (retrievedCustomer == true) {
 						startSearchButton.setDisable(true);
 					}
+					getCheckStatus(startSearchButton, infoLabel);
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -512,6 +553,28 @@ public class GUIController implements Initializable {
 		// anchorLow.setTopAnchor(switchToggle, 30.0);
 		switchToggle.setLayoutX(250.0);
 		switchToggle.setLayoutY(45.0);
+
+		closeWindowButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+
+				System.exit(0);
+
+			}
+		});
+
+		lowerWindowButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+
+				Node source = (Node) event.getSource();
+				Stage stage = (Stage) source.getScene().getWindow();
+				stage.setIconified(true);
+
+			}
+		});
 
 	}
 }

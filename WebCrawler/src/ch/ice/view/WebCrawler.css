@@ -4,6 +4,44 @@
 	-fx-background-color: white;
 }
 
+#closeWindowButton {
+	-fx-background-color: #A0A0A0 80%;
+    -fx-text-fill: white;
+    -fx-opacity:0.8;
+
+}
+
+#lowerWindowButton {
+	-fx-background-color: #A0A0A0;
+	-fx-opacity:0.8;
+    -fx-text-fill: white;
+    
+}
+
+#closeWindowButton:pressed {
+	-fx-background-color: #BB4E2A;
+            -fx-border-radius: 4px;
+          
+}
+
+#lowerWindowButton:pressed {
+	-fx-background-color: #B3970B;
+            -fx-border-radius: 4px;
+          
+}
+
+#closeWindowButton:hover {
+	-fx-background-color: #FA521A;
+            -fx-border-radius: 4px;
+            -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,1) , 5, 0.0 , 0 , 1 );
+	}
+	
+#lowerWindowButton:hover {
+	-fx-background-color: #FFD917;
+            -fx-border-radius: 4px;
+            -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,1) , 5, 0.0 , 0 , 1 );
+	}
+
 #flowPaneBlackList {
 	-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,1) , 5, 0.0 , 0 , 1 );
 	-fx-background-color:aliceblue;
@@ -87,6 +125,7 @@
  -fx-text-fill: white;
     -fx-color: white;
 }
+
 
 .menu-item:focused {
     -fx-background-color: #336699;

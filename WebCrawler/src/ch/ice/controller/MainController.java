@@ -386,8 +386,7 @@ public class MainController {
 			if (fileWriterFactory == true) {
 				fileWriter = FileWriterFactory
 						.requestFileWriter(FileWriterFactory.EXCEL);
-			}
-			if (fileWriterFactory == false) {
+			} else if (fileWriterFactory == false) {
 				fileWriter = FileWriterFactory
 						.requestFileWriter(FileWriterFactory.CSV);
 			}
