@@ -402,6 +402,7 @@ public class GUIController implements Initializable {
 					pathTextField.setText("Illegal Directory");
 					pathTextField.setStyle("-fx-text-inner-color: red;");
 					setSaveProperties("", chosenPath);
+					startSearchButton.setDisable(true);
 					try {
 						config.save();
 					} catch (ConfigurationException e1) {
