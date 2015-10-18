@@ -123,10 +123,7 @@ public class BingSearchEngine implements SearchEngine {
 			JSONUtil.urlLabel = "Url";
 
 			bingResults = JSONUtil.cleanUp(bingResults);
-
-			System.out.println("Cleaned up results from Bing: "+bingResults);
-			System.out.println("Cleaned up resulsts length: "+bingResults.length());
-
+			
 			// standardize lables
 			Map<String, String> keyNodeMap = new HashMap<String,String>();
 			keyNodeMap.put("Url", JSONStandardizedKeys.URL);
@@ -134,11 +131,9 @@ public class BingSearchEngine implements SearchEngine {
 			keyNodeMap.put("Title", JSONStandardizedKeys.TITLE);
 
 			bingResults = this.standardizer(bingResults, keyNodeMap);
-
-			System.out.println("STD results from Bing: "+bingResults);
-			System.out.println("STD resulsts length: "+bingResults.length());
-
+			
 			return bingResults;
+			
 		} catch(IOException e){
 			throw new SearchEngineRequestLimitReachedException("There has been a problem. Either the Bing searchengine has reached its request limit or you dont have a connection to the internet.");
 		}
