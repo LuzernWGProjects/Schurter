@@ -1,6 +1,3 @@
-/**
- * 
- */
 package ch.ice.controller.file;
 
 import java.io.File;
@@ -11,9 +8,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
@@ -26,14 +20,10 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import ch.ice.controller.interf.Parser;
 import ch.ice.controller.interf.Writer;
 import ch.ice.model.Customer;
-import ch.ice.utils.Config;
 import ch.ice.utils.FileOutputNameGenerator;
 import ch.ice.view.SaveWindowController;
 
@@ -53,7 +43,6 @@ public class ExcelWriter implements Writer {
 	private int cellnum;
 	private int rownum;
 	private int mapCellNum;
-	private Configuration config = Config.PROPERTIES;
 	public static String fileName;
 	CellStyle style = null;
 	

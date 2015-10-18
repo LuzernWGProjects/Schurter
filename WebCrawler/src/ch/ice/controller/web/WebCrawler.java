@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,6 +14,7 @@ import org.jsoup.nodes.Document;
 import ch.ice.exceptions.HttpStatusException;
 
 public class WebCrawler {
+	private static final Logger logger = LogManager.getLogger(WebCrawler.class.getName());
 
 	Document document;
 	Connection connection;
@@ -46,16 +49,15 @@ public class WebCrawler {
 					map.put(metaWord, metaTags);
 				} catch (Exception e) {
 					// MetaTags not available
-					//TODO Throw custom Exception -> gui handle
 					map.put(metaWord, "n/a");
+					logger.warn("MetaTags not available for this URL");
 				}
 			}
 		}
 
 		else {
-			System.out.println("Received HTTP error code : " + statusCode +" "+ connection.response().statusMessage());
+			logger.error("Received HTTP error code : " + statusCode +" "+ connection.response().statusMessage());
 			throw new HttpStatusException("Received HTTP error code : " +statusCode +" "+ connection.response().statusMessage());
-
 		}
 
 		return map;

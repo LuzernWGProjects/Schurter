@@ -4,10 +4,13 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,11 +21,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import ch.ice.controller.MainController;
 import ch.ice.exceptions.InternalFormatException;
 import ch.ice.exceptions.MissingCustomerRowsException;
@@ -61,15 +67,56 @@ public class SaveWindowController extends Thread implements Initializable {
 	private static Boolean pauseFlag = false;
 	MainController main = new MainController();
 
-	public void killAll() {
-		cancelButton.fire();
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle("Search Engine Limit Reached");
-		alert.setContentText("Your Search Request Limit is reached. Plase check your Account.");
+	public static Bool bool = new Bool();
+
+	public void getMain() {
+		task.cancel();
+		task1.cancel();
+		try {
+			main.stopThread("FIRST THREAD");
+			main.stopThread("FIRST THREAD");
+			main.stopThread("SECOND THREAD");
+			main.stopThread("THIRD THREAD");
+			main.stopThread("FOURTH THREAD");
+
+			th.join();
+			t1.join();
+			main = null;
+
+			MainController.processEnded = false;
+			// // Node source = (Node) event.getSource();
+			// // Stage stage = (Stage) source.getScene().getWindow();
+			// // stage.close();
+
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		bool.getBoolProp().addListener(new ChangeListener() {
+
+			@Override
+			public void changed(ObservableValue observable, Object oldValue,
+					Object newValue) {
+				System.out.println("Hahaha");
+
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+
+						endMessageLabel
+								.setText("Your Search Limit was reached. Please cancel the process");
+						endMessageLabel.setTextFill(Color.RED);
+
+					}
+				});
+				bool.setBool(false);
+				cancelButton.fire();
+
+			}
+		});
 
 		closeButton.setDisable(true);
 		openFileButton.setDisable(true);
@@ -81,7 +128,6 @@ public class SaveWindowController extends Thread implements Initializable {
 			public void handle(ActionEvent event) {
 				// myBooChecking = true;
 				if (MainController.processEnded == false) {
-
 					task.cancel();
 					task1.cancel();
 					try {
@@ -94,31 +140,83 @@ public class SaveWindowController extends Thread implements Initializable {
 						t1.join();
 						main = null;
 
-					} catch (InterruptedException e) {
+					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						Alert alert = new Alert(AlertType.WARNING);
+						alert.initStyle(StageStyle.UNDECORATED);
+						alert.initOwner(cancelButton.getScene().getWindow());
+						alert.setTitle("Information Dialog");
+						alert.setHeaderText("Your Canceling the Process");
+						alert.setContentText("No file will be saved");
+						alert.setOnCloseRequest(new EventHandler<DialogEvent>() {
+
+							@Override
+							public void handle(DialogEvent event) {
+								// TODO Auto-generated method stub
+								Node source = (Node) event.getSource();
+								Stage stage = (Stage) source.getScene()
+										.getWindow();
+								stage.close();
+							}
+
+						});
+
+						try {
+							Optional<ButtonType> result = alert.showAndWait();
+							if (result.get() == ButtonType.OK
+									|| result.get() == ButtonType.CLOSE) {
+								// ... user chose OK
+								// System.exit(0);
+
+								Stage stage = (Stage) cancelButton.getScene()
+										.getWindow();
+								stage.close();
+							}
+
+						} catch (NoSuchElementException e1) {
+
+						}
 					}
 
 					Alert alert = new Alert(AlertType.WARNING);
+					alert.initOwner(cancelButton.getScene().getWindow());
+					alert.initStyle(StageStyle.UNDECORATED);
 					alert.setTitle("Information Dialog");
 					alert.setHeaderText("Your Canceling the Process");
 					alert.setContentText("No file will be saved");
+					alert.setOnCloseRequest(new EventHandler<DialogEvent>() {
 
-					Optional<ButtonType> result = alert.showAndWait();
-					if (result.get() == ButtonType.OK) {
-						// ... user chose OK
-						// System.exit(0);
+						@Override
+						public void handle(DialogEvent event) {
+							// TODO Auto-generated method stub
+							Stage stage = (Stage) cancelButton.getScene()
+									.getWindow();
+							stage.close();
+						}
 
-						Node source = (Node) event.getSource();
-						Stage stage = (Stage) source.getScene().getWindow();
-						stage.close();
-						// ... user chose CANCEL or closed the dialog
-						// resumeThread();
-						// Node source = (Node) event.getSource();
-						// Stage stage = (Stage) source.getScene().getWindow();
-						// stage.show();
+					});
+					try {
+						Optional<ButtonType> result = alert.showAndWait();
+						if (result.get() == ButtonType.OK) {
+							// ... user chose OK
+							// System.exit(0);
+
+							Node source = (Node) event.getSource();
+							Stage stage = (Stage) source.getScene().getWindow();
+							stage.close();
+							// ... user chose CANCEL or closed the dialog
+							// resumeThread();
+							// Node source = (Node) event.getSource();
+							// Stage stage = (Stage)
+							// source.getScene().getWindow();
+							// stage.show();
+
+						}
+					} catch (NoSuchElementException e) {
 
 					}
+
 				} else {
 
 					Node source = (Node) event.getSource();
@@ -217,6 +315,7 @@ public class SaveWindowController extends Thread implements Initializable {
 							endMessageLabel.setMaxWidth(400);
 							endMessageLabel.setMaxHeight(80);
 							endMessageLabel.setText("Please wait " + points);
+							endMessageLabel.setTextFill(Color.BLACK);
 
 							if (MainController.customerList != null) {
 								System.out.println(MainController.customerList
@@ -241,6 +340,8 @@ public class SaveWindowController extends Thread implements Initializable {
 
 								if (myBooWriting == true) {
 									progressLabel.setText("Writing File");
+									d = 1;
+									progressBar.setProgress(d);
 									progressBar.setStyle("-fx-accent: orange");
 								}
 
@@ -300,6 +401,20 @@ public class SaveWindowController extends Thread implements Initializable {
 				System.out.println("in cancel mode");
 
 				cancel(true);
+				System.out.println("HaseHase");
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Search Engine Limit Reached");
+				alert.setContentText("Your Search Request Limit is reached. Plase check your Account.");
+
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.get() == ButtonType.OK) {
+					// ... user chose OK
+					// System.exit(0);
+
+					Stage stage = (Stage) progressBar.getScene().getWindow();
+					stage.close();
+				}
+
 				return null;
 
 			}

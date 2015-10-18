@@ -39,10 +39,11 @@ import ch.ice.utils.JSONStandardizedKeys;
 import ch.ice.view.SaveWindowController;
 
 public class MainController {
-	public static final Logger logger = LogManager.getLogger(MainController.class.getName());
+	public static final Logger logger = LogManager
+			.getLogger(MainController.class.getName());
 
 	public static File uploadedFileContainingCustomers;
-	
+
 	/**
 	 * List containing all rendered Customers
 	 */
@@ -98,7 +99,7 @@ public class MainController {
 	 * @throws InterruptedException
 	 */
 	public void startMainController() throws InternalFormatException,
-			MissingCustomerRowsException, InterruptedException {
+	MissingCustomerRowsException, InterruptedException {
 		// Core settings
 		isSearchAvail = false;
 		defaultUrl = null;
@@ -110,7 +111,7 @@ public class MainController {
 		 * Load Configuration File
 		 */
 		try {
-			
+
 			isSearchAvail = config.getBoolean("core.search.isEnabled");
 			defaultUrl = new URL(config.getString("core.search.defaultUrl"));
 			MainController.limitSearchResults = config.getInteger(
@@ -119,13 +120,14 @@ public class MainController {
 			metaTagElements = Arrays.asList(config
 					.getStringArray("crawler.searchForMetaTags"));
 		} catch (MalformedURLException e) {
-			logger.error("Faild to load config file");
+			logger.error(e.getMessage());
 		}
 
 		// for test without gui
 		if (searchEngineIdentifier == null) {
 			searchEngineIdentifier = "BING";
 		}
+
 		// request new SearchEngine
 		MainController.searchEngine = SearchEngineFactory
 				.requestSearchEngine(MainController.searchEngineIdentifier);
@@ -160,12 +162,11 @@ public class MainController {
 		int fourthStart = quarterSize * 3;
 		int fourthEnd = listSize;
 
-		System.out.println(0 + ", " + firstEnd + ", " + secondStart + ", "
+		logger.info(0 + ", " + firstEnd + ", " + secondStart + ", "
 				+ secondEnd + ", " + thirdStart + ", " + thirdEnd + ", "
 				+ fourthStart + ", " + fourthEnd);
 
 		if (listSize < 16) {
-			System.out.println("Below 16");
 			firstArray = new ArrayList<Customer>(customerList);
 			SearchThread s1 = new SearchThread();
 			s1.setCheckNumber(1);
@@ -191,7 +192,7 @@ public class MainController {
 			s1.setSearchList(firstArray);
 			Thread t1 = new Thread(s1);
 			t1.setName("FIRST THREAD");
-			System.out.println("First Thread Size: "
+			logger.info("First Thread Size: "
 					+ s1.getSearchList().size());
 
 			SearchThread s2 = new SearchThread();
@@ -199,7 +200,7 @@ public class MainController {
 			s2.setSearchList(secondArray);
 			Thread t2 = new Thread(s2);
 			t2.setName("SECOND THREAD");
-			System.out.println("Second Thread Size: "
+			logger.info("Second Thread Size: "
 					+ s2.getSearchList().size());
 
 			SearchThread s3 = new SearchThread();
@@ -207,7 +208,7 @@ public class MainController {
 			s3.setSearchList(thirdArray);
 			Thread t3 = new Thread(s3);
 			t3.setName("THIRD THREAD");
-			System.out.println("Third Thread Size: "
+			logger.info("Third Thread Size: "
 					+ s3.getSearchList().size());
 
 			SearchThread s4 = new SearchThread();
@@ -215,7 +216,7 @@ public class MainController {
 			s4.setSearchList(fourthArray);
 			Thread t4 = new Thread(s4);
 			t4.setName("FOURTH THREAD");
-			System.out.println("Fourth Thread Size: "
+			logger.info("Fourth Thread Size: "
 					+ s4.getSearchList().size());
 
 			t1.start();
@@ -227,13 +228,13 @@ public class MainController {
 			t3.join();
 			t4.join();
 
-			System.out.println("First Thread Size: "
+			logger.info("First Thread Size: "
 					+ s1.getSearchList().size());
-			System.out.println("Second Thread Size: "
+			logger.info("Second Thread Size: "
 					+ s2.getSearchList().size());
-			System.out.println("Third Thread Size: "
+			logger.info("Third Thread Size: "
 					+ s3.getSearchList().size());
-			System.out.println("Fourth Thread Size: "
+			logger.info("Fourth Thread Size: "
 					+ s4.getSearchList().size());
 
 			customerList.clear();
@@ -258,7 +259,7 @@ public class MainController {
 		logger.info("Spilt: " + stopwatch.toSplitString() + " total: "
 				+ stopwatch.toString());
 
-		logger.info("end");
+		logger.info("Program has ended");
 		SaveWindowController.myBoo = true;
 		processEnded = true;
 	}
@@ -301,7 +302,6 @@ public class MainController {
 		}
 
 		return new LinkedList<Customer>();
-
 	}
 
 	/**
@@ -309,6 +309,7 @@ public class MainController {
 	 * 
 	 * @param Customer
 	 * @return URL of Customer - Depends on the quality of the search engine
+	 * @throws SearchEngineRequestLimitReachedException
 	 */
 	public URL searchForUrl(Customer c) {
 
@@ -327,7 +328,8 @@ public class MainController {
 		try {
 			// Start Search
 			JSONArray results = MainController.searchEngine.search(lookupQuery,
-					MainController.limitSearchResults, c.getCountryCode().toLowerCase());
+					MainController.limitSearchResults, c.getCountryCode()
+							.toLowerCase());
 
 			// logic to pick the first record ; here should be the search logic!
 			JSONObject aResult = ResultAnalyzer.analyse(results, params);
@@ -336,8 +338,15 @@ public class MainController {
 			// return only the URL form first object
 			return new URL((String) aResult.get(JSONStandardizedKeys.URL));
 
-		} catch (IOException | NoUrlFoundException | SearchEngineRequestLimitReachedException e) {
+		} catch (IOException | NoUrlFoundException e) {
 			logger.error(e.getMessage());
+
+		} catch (SearchEngineRequestLimitReachedException e) {
+			// TODO Auto-generated catch block
+			// SaveWindowController.getMain();
+			e.printStackTrace();
+			logger.info("Search Engine Limit reached");
+			SaveWindowController.bool.setBool(true);
 		}
 
 		return defaultUrl;
@@ -362,7 +371,7 @@ public class MainController {
 			}
 
 		} catch (FileParserNotAvailableException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 
 		try {
@@ -370,8 +379,7 @@ public class MainController {
 			fileWriter.writeFile(enhancedCustomerList,
 					MainController.fileParser);
 		} catch (IOException e) {
-			// TODO Throw this to gui!!!!!!!!!!!!!!!!!!!!!!!!!
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 

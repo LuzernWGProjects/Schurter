@@ -1,5 +1,6 @@
 package ch.ice.view;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -59,6 +60,8 @@ public class GUIController implements Initializable {
 	private MenuItem MetaTags;
 	@FXML
 	private MenuItem quitMenuItem;
+	@FXML
+	private MenuItem manualMenuItem;
 	@FXML
 	private Button cancelMetaButton;
 	@FXML
@@ -384,9 +387,9 @@ public class GUIController implements Initializable {
 						checkAll();
 
 					} else {
-						checkAll();
 						pathTextField.setText("No legal Directory selected");
 						pathTextField.setStyle("-fx-text-inner-color: red;");
+						checkAll();
 					}
 				} catch (NullPointerException | InternalFormatException
 						| ConfigurationException e) {
@@ -436,6 +439,7 @@ public class GUIController implements Initializable {
 						getSaveProperties(startSearchButton);
 						pathTextField.setText(path);
 						pathTextField.setStyle("-fx-text-inner-color: black;");
+						checkAll();
 
 					} else if (pathFile == null) {
 						pathTextField.setText(path);
@@ -444,9 +448,10 @@ public class GUIController implements Initializable {
 						checkAll();
 
 					} else {
-						checkAll();
+
 						pathTextField.setText("No legal Directory selected");
 						pathTextField.setStyle("-fx-text-inner-color: red;");
+						checkAll();
 					}
 					// if there is no path selected
 				} catch (NullPointerException | ConfigurationException e) {
@@ -605,6 +610,25 @@ public class GUIController implements Initializable {
 				Node source = (Node) event.getSource();
 				Stage stage = (Stage) source.getScene().getWindow();
 				stage.setIconified(true);
+
+			}
+		});
+
+		manualMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+
+				Desktop dt = Desktop.getDesktop();
+				try {
+
+					dt.open(new File("conf/SPOSDES_manual.pdf"));
+				} catch (IOException e) {
+					// TODO
+					// Auto-generated
+					// catch block
+					e.printStackTrace();
+				}
 
 			}
 		});

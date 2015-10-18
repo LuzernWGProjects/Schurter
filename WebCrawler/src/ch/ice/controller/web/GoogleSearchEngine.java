@@ -91,7 +91,7 @@ public class GoogleSearchEngine implements SearchEngine {
 			try {
 				in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			} catch (IOException httpResponseError) {
-				System.out.println(httpResponseError.getMessage());
+				logger.error(httpResponseError.getMessage());
 				throw new SearchEngineRequestLimitReachedException("There has been a problem. Either the Google searchengine has reached its request limit or you dont have a connection to the internet.");
 			}
 
@@ -130,22 +130,22 @@ public class GoogleSearchEngine implements SearchEngine {
 			keyNodeMap.put("title", JSONStandardizedKeys.TITLE);
 
 			googleSarchResults = this.standardizer(googleSarchResults, keyNodeMap);
-
-
-
+			
 			return googleSarchResults;
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 
 		return null;
 	}
-
+	
+	@Override
 	public JSONArray search(String requestedQuery, int limitSearchResult) throws NoUrlFoundException, SearchEngineRequestLimitReachedException {
 		return search(requestedQuery, limitSearchResult, "us");
 	}
 
+	@Override
 	public String buildQuery(List<String> params){
 		String query = "";
 
