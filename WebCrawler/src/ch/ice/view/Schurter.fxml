@@ -23,6 +23,11 @@
                         <MenuItem fx:id="quitMenuItem" mnemonicParsing="false" text="Quit" />
                 </items>
               </Menu>
+                  <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                      <MenuItem fx:id="manualMenuItem" mnemonicParsing="false" text="Manual" />
+                    </items>
+                  </Menu>
             </menus>
           </MenuBar>
             <HBox alignment="TOP_RIGHT" fillHeight="false" maxHeight="29.0" maxWidth="60.0" spacing="8.0" StackPane.alignment="TOP_RIGHT">

@@ -40,9 +40,9 @@ public class SearchThread extends Thread {
 
 	@Override
 	public void run() {
+		MainController.customersEnhanced = 0;
+		SaveWindowController.d = 0.0;
 		while (!Thread.currentThread().isInterrupted()) {
-			MainController.customersEnhanced = 0;
-			SaveWindowController.d = 0.0;
 
 			System.out.println("Were in!");
 

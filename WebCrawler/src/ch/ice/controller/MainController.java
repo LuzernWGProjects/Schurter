@@ -39,10 +39,11 @@ import ch.ice.utils.JSONStandardizedKeys;
 import ch.ice.view.SaveWindowController;
 
 public class MainController {
-	public static final Logger logger = LogManager.getLogger(MainController.class.getName());
+	public static final Logger logger = LogManager
+			.getLogger(MainController.class.getName());
 
 	public static File uploadedFileContainingCustomers;
-	
+
 	/**
 	 * List containing all rendered Customers
 	 */
@@ -110,7 +111,7 @@ public class MainController {
 		 * Load Configuration File
 		 */
 		try {
-			
+
 			isSearchAvail = config.getBoolean("core.search.isEnabled");
 			defaultUrl = new URL(config.getString("core.search.defaultUrl"));
 			MainController.limitSearchResults = config.getInteger(
@@ -309,6 +310,7 @@ public class MainController {
 	 * 
 	 * @param Customer
 	 * @return URL of Customer - Depends on the quality of the search engine
+	 * @throws SearchEngineRequestLimitReachedException
 	 */
 	public URL searchForUrl(Customer c) {
 
@@ -327,7 +329,8 @@ public class MainController {
 		try {
 			// Start Search
 			JSONArray results = MainController.searchEngine.search(lookupQuery,
-					MainController.limitSearchResults, c.getCountryCode().toLowerCase());
+					MainController.limitSearchResults, c.getCountryCode()
+							.toLowerCase());
 
 			// logic to pick the first record ; here should be the search logic!
 			JSONObject aResult = ResultAnalyzer.analyse(results, params);
@@ -336,8 +339,15 @@ public class MainController {
 			// return only the URL form first object
 			return new URL((String) aResult.get(JSONStandardizedKeys.URL));
 
-		} catch (IOException | NoUrlFoundException | SearchEngineRequestLimitReachedException e) {
+		} catch (IOException | NoUrlFoundException e) {
 			logger.error(e.getMessage());
+
+		} catch (SearchEngineRequestLimitReachedException e) {
+			// TODO Auto-generated catch block
+			// SaveWindowController.getMain();
+			e.printStackTrace();
+			logger.info("Search Engine Limit reached");
+			SaveWindowController.bool.setBool(true);
 		}
 
 		return defaultUrl;
