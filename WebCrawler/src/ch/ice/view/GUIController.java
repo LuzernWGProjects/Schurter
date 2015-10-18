@@ -309,8 +309,6 @@ public class GUIController implements Initializable {
 		metaTagsList.setWrapText(true);
 		metaTagsList.setMaxWidth(550);
 		metaTagsList.setMaxHeight(80);
-		FileChooser filechooser = new FileChooser();
-		DirectoryChooser directoryChooser = new DirectoryChooser();
 
 		// Get and set Properties
 		getSearchEngine();
@@ -338,6 +336,7 @@ public class GUIController implements Initializable {
 				// Stage stage = new Stage();
 				Node source = (Node) event.getSource();
 				Stage stage = (Stage) source.getScene().getWindow();
+				FileChooser filechooser = new FileChooser();
 				try {
 					filechooser.getExtensionFilters().addAll(
 							new FileChooser.ExtensionFilter(
@@ -377,6 +376,17 @@ public class GUIController implements Initializable {
 						listSize = testList.size();
 						getCheckStatus(startSearchButton, infoLabel);
 						checkAll();
+
+					} else if (MainController.uploadedFileContainingCustomers == null) {
+						MainController.uploadedFileContainingCustomers = new File(
+								fileTextField.getText());
+						fileTextField.setStyle("-fx-text-inner-color: black;");
+						checkAll();
+
+					} else {
+						checkAll();
+						pathTextField.setText("No legal Directory selected");
+						pathTextField.setStyle("-fx-text-inner-color: red;");
 					}
 				} catch (NullPointerException | InternalFormatException
 						| ConfigurationException e) {
@@ -403,6 +413,7 @@ public class GUIController implements Initializable {
 		 * ActionListener for Change Directory Button
 		 */
 		changeDirectory.setOnAction(new EventHandler<ActionEvent>() {
+			DirectoryChooser directoryChooser = new DirectoryChooser();
 
 			@Override
 			public void handle(ActionEvent event) {
