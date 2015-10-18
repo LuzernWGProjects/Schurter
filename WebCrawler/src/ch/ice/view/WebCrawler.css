@@ -2,6 +2,8 @@
 
 .root {
 	-fx-background-color: white;
+	-fx-border-color: #336699;
+	-fx-effect: dropshadow( three-pass-box , #336699 , 10, 1.0 , 0.0 , 1.0 );
 }
 
 #resetKeyButton:hover:pressed {
