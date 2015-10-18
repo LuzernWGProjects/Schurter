@@ -20,7 +20,7 @@
             <TextField fx:id="keyTextField" layoutX="216.0" layoutY="56.0" />
             <TextField fx:id="othersTextField" editable="false" layoutX="216.0" layoutY="120.0" />
             <Label fx:id="checkAccountLabel" layoutX="2.0" layoutY="166.0" text="CheckLabel: " />
-            <Button layoutX="2.0" layoutY="120.0" mnemonicParsing="false" text="Reset" />
+            <Button id="resetKeyButton" fx:id="resetKeysButton" layoutX="2.0" layoutY="120.0" mnemonicParsing="false" text="Reset Keys" />
          </children>
          <opaqueInsets>
             <Insets />
@@ -81,7 +81,7 @@
       <HBox alignment="BOTTOM_RIGHT" prefHeight="40.0" prefWidth="200.0" spacing="15.0">
          <children>
             <Button id="cancelMetaButton" fx:id="cancelMetaButton" mnemonicParsing="false" text="Cancel" textFill="WHITE" />
-            <Button id="okMetaButton" fx:id="okMetaButton" mnemonicParsing="false" text="OK" textFill="WHITE" />
+            <Button id="okMetaButton" fx:id="okMetaButton" mnemonicParsing="false" text="Save" textFill="WHITE" />
          </children>
          <VBox.margin>
             <Insets />

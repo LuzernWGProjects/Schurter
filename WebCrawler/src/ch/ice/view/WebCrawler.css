@@ -4,6 +4,21 @@
 	-fx-background-color: white;
 }
 
+#resetKeyButton:hover:pressed {
+	-fx-background-color: #555555;
+            -fx-border-radius: 4px;
+          
+}
+
+#resetKeyButton:hover {
+	-fx-background-color: #A0A0A0;
+            -fx-border-radius: 4px;
+}
+
+#resetKeyButton {
+	-fx-background-color: orange;-fx-text-fill:white;
+}
+
 #closeWindowButton {
 	-fx-background-color: #A0A0A0 80%;
     -fx-text-fill: white;
@@ -144,13 +159,13 @@
     -fx-padding: 0.333333em 0.083333em 0.666667em 0.083333em; /* 4 1 8 1 */
 }
 
+
+
+
 #switchToggle {
 	-fx-background-color: green;-fx-text-fill:white;
 	
 }
-
-
-
 
 
 #blackListView .list-cell { /* <=== changed to even */

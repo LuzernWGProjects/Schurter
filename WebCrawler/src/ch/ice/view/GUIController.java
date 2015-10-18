@@ -83,8 +83,7 @@ public class GUIController implements Initializable {
 	private Button closeWindowButton;
 	@FXML
 	private Button lowerWindowButton;
-	@FXML
-	private Button resetKeysButton;
+
 	@FXML
 	private VBox vBox;
 
@@ -596,28 +595,6 @@ public class GUIController implements Initializable {
 				Stage stage = (Stage) source.getScene().getWindow();
 				stage.setIconified(true);
 
-			}
-		});
-
-		resetKeysButton.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent event) {
-				String bingKeyReset = config
-						.getString("searchEngine.bing.accountKeyReset");
-				String bingPatternReset = config
-						.getString("searchEngine.bing.patternReset");
-				String googleKeyReset = config
-						.getString("searchEngine.google.accountKeyReset");
-				String googlePatternReset = config
-						.getString("searchEngine.google.cxReset");
-
-				config.setProperty(bingKeyReset, "searchEngine.bing.accountKey");
-				config.setProperty(bingPatternReset,
-						"searchEngine.bing.pattern");
-				config.setProperty(googleKeyReset,
-						"searchEngine.google.accountKey");
-				config.setProperty(googlePatternReset, "searchEngine.google.cx");
 			}
 		});
 

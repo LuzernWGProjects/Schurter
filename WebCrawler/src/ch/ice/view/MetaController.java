@@ -89,6 +89,8 @@ public class MetaController implements Initializable {
 	private Label blackListLabel;
 	@FXML
 	private Label checkAccountLabel;
+	@FXML
+	private Button resetKeysButton;
 
 	/**
 	 * Menu for editing Blacklist
@@ -153,10 +155,9 @@ public class MetaController implements Initializable {
 	public void setGoogleParams() {
 		keyLabel.setText("Google API Key:");
 		othersLabel.setText("Google 2nd Parameter:");
-		keyTextField.setText(GUIController.config
-				.getString("searchEngine.google.accountKey"));
-		othersTextField.setText(GUIController.config
-				.getString("searchEngine.google.cx"));
+		keyTextField
+				.setText(config.getString("searchEngine.google.accountKey"));
+		othersTextField.setText(config.getString("searchEngine.google.cx"));
 	}
 
 	@Override
@@ -576,6 +577,51 @@ public class MetaController implements Initializable {
 
 				newWindow.show();
 
+			}
+		});
+
+		resetKeysButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				String bingKeyReset = config
+						.getString("searchEngine.bing.accountKeyReset");
+				String bingPatternReset = config
+						.getString("searchEngine.bing.patternReset");
+				String googleKeyReset = config
+						.getString("searchEngine.google.accountKeyReset");
+				String googlePatternReset = config
+						.getString("searchEngine.google.cxReset");
+
+				config.setProperty("searchEngine.bing.accountKey", bingKeyReset);
+				config.setProperty("searchEngine.bing.pattern",
+						bingPatternReset);
+				config.setProperty("searchEngine.google.accountKey",
+						googleKeyReset);
+				config.setProperty("searchEngine.google.cx", googlePatternReset);
+
+				if (MainController.searchEngineIdentifier == SearchEngineFactory.GOOGLE) {
+					System.out.println("Hase");
+					setGoogleParams();
+					try {
+						config.save();
+					} catch (ConfigurationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						logger.error(e);
+					}
+				}
+				if (MainController.searchEngineIdentifier == SearchEngineFactory.BING) {
+					System.out.println("Bär");
+					setBingParams();
+					try {
+						config.save();
+					} catch (ConfigurationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						logger.error(e);
+					}
+				}
 			}
 		});
 
