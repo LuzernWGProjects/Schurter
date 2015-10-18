@@ -61,6 +61,13 @@ public class SaveWindowController extends Thread implements Initializable {
 	private static Boolean pauseFlag = false;
 	MainController main = new MainController();
 
+	public void killAll() {
+		cancelButton.fire();
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Search Engine Limit Reached");
+		alert.setContentText("Your Search Request Limit is reached. Plase check your Account.");
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
