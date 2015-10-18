@@ -15,8 +15,14 @@
                   <Font name="System Bold" size="16.0" />
                </font></Label>
             <ComboBox id="searchEngineBox" fx:id="selectEngine" layoutX="2.0" layoutY="33.0" prefWidth="150.0" />
-            <Label fx:id="keyLabel" layoutX="216.0" layoutY="30.0" text="AccessKey:" />
-            <Label fx:id="othersLabel" layoutX="216.0" layoutY="98.0" text="Others:" />
+            <Label fx:id="keyLabel" layoutX="216.0" layoutY="30.0" text="AccessKey:">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font></Label>
+            <Label fx:id="othersLabel" layoutX="216.0" layoutY="98.0" text="Others:">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font></Label>
             <TextField fx:id="keyTextField" layoutX="216.0" layoutY="56.0" />
             <TextField fx:id="othersTextField" editable="false" layoutX="216.0" layoutY="120.0" />
             <Label fx:id="checkAccountLabel" layoutX="2.0" layoutY="166.0" text="CheckLabel: " />

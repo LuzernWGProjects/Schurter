@@ -142,8 +142,8 @@ public class MetaController implements Initializable {
 	 * Get Bing Parameters for GUI
 	 */
 	public void setBingParams() {
-		keyLabel.setText("Bing Access Key:");
-		othersLabel.setText("Bing 2nd Parameter:");
+		keyLabel.setText("Bing Primary Account Key:");
+		othersLabel.setText("Bing Azure URL:");
 		keyTextField.setText(config.getString("searchEngine.bing.accountKey"));
 		othersTextField.setText(config.getString("searchEngine.bing.pattern"));
 
@@ -153,8 +153,8 @@ public class MetaController implements Initializable {
 	 * Get Google Parameters for GUI
 	 */
 	public void setGoogleParams() {
-		keyLabel.setText("Google API Key:");
-		othersLabel.setText("Google 2nd Parameter:");
+		keyLabel.setText("Google Search Engine ID:");
+		othersLabel.setText("API Key:");
 		keyTextField
 				.setText(config.getString("searchEngine.google.accountKey"));
 		othersTextField.setText(config.getString("searchEngine.google.cx"));

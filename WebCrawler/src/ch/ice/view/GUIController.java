@@ -399,6 +399,7 @@ public class GUIController implements Initializable {
 					fileTextField.setText("Wrong File Format");
 					fileTextField.setStyle("-fx-text-inner-color: red;");
 					checkAll();
+					startSearchButton.setDisable(true);
 				} catch (MissingCustomerRowsException e) {
 					e.printStackTrace();
 					logger.error(e);
@@ -407,6 +408,7 @@ public class GUIController implements Initializable {
 							.setText("There seem to be no Customers in the file");
 					fileTextField.setStyle("-fx-text-inner-color: red;");
 					checkAll();
+					startSearchButton.setDisable(true);
 				}
 
 			}

@@ -100,14 +100,13 @@ public class SaveWindowController extends Thread implements Initializable {
 			@Override
 			public void changed(ObservableValue observable, Object oldValue,
 					Object newValue) {
-				System.out.println("Hahaha");
 
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
 
 						endMessageLabel
-								.setText("Your Search Limit was reached. Please cancel the process");
+								.setText("Your Search Limit was reached or Access Key is invalid. Please cancel the process");
 						endMessageLabel.setTextFill(Color.RED);
 
 					}
