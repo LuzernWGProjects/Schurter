@@ -71,6 +71,7 @@ public class GUIMain extends Application {
 		if (netIsAvailable("http://www.google.com") == false) {
 			internetCheck = false;
 			Alert alert = new Alert(AlertType.ERROR);
+			alert.initStyle(StageStyle.UNDECORATED);
 			alert.setTitle("Internet Connection");
 			alert.setHeaderText("No Internet Connection");
 			alert.setContentText("Please establish Internet Connection");
