@@ -18,6 +18,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Hyperlink;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -68,7 +72,8 @@ public class ExcelWriter implements Writer {
 		for (Customer c : customerList) {
 			// initialize cell style (needed for foreground color if unsure)
 			style = this.workbook.createCellStyle();
-
+			
+			
 			// get the 3rd row
 			row = sheet.getRow(rownum++);
 
@@ -104,14 +109,29 @@ public class ExcelWriter implements Writer {
 					cell = sheet.getRow(row.getRowNum()).createCell(cellnum);
 					// TODO add cellstyle setting logic here
 					cell.setCellStyle(style);
-
-					cell.setCellValue((String) obj.toString());
 					
-					Cell UnsureFirstCell = sheet.getRow(2).createCell(cellnum+1);
-					UnsureFirstCell.setCellValue("unsure");
-					cell = sheet.getRow(row.getRowNum()).createCell(cellnum+1);
-					cell.setCellStyle(style);
-					cell.setCellValue(c.getWebsite().getUnsure());
+					//set style as hyperlink
+					 CellStyle hlink_style = workbook.createCellStyle();
+				        Font hlink_font = workbook.createFont();
+				        hlink_font.setUnderline(Font.U_SINGLE);
+				        hlink_font.setColor(IndexedColors.BLUE.getIndex());
+				        hlink_style.setFont(hlink_font);
+				        hlink_style.setFillForegroundColor(style.getFillForegroundColor());
+				        hlink_style.setFillPattern(style.getFillPattern());
+				        
+					CreationHelper createHelper = this.workbook.getCreationHelper();
+
+				    Hyperlink link = createHelper.createHyperlink(Hyperlink.LINK_URL);
+			        link.setAddress(obj.toString());
+					cell.setHyperlink(link);
+					cell.setCellValue((String) obj.toString());
+					cell.setCellStyle(hlink_style);
+					
+//					Cell UnsureFirstCell = sheet.getRow(2).createCell(cellnum+1);
+//					UnsureFirstCell.setCellValue("unsure");
+//					cell = sheet.getRow(row.getRowNum()).createCell(cellnum+1);
+//					cell.setCellStyle(style);
+//					cell.setCellValue(c.getWebsite().getUnsure());
 					
 				} else if (obj instanceof Map) {
 					// Start the writeMap lamda Method to write down the whole
@@ -175,10 +195,10 @@ public class ExcelWriter implements Writer {
 	private void writeMap(Object k, Object v) {
 
 		// write header informations (key)
-		Cell firstCell = sheet.getRow(2).createCell(cellnum +1 + mapCellNum);
+		Cell firstCell = sheet.getRow(2).createCell(cellnum + mapCellNum);
 		firstCell.setCellValue((String) k);
 		// write cell values (Value)
-		cell = row.createCell(cellnum+1 + mapCellNum);
+		cell = row.createCell(cellnum + mapCellNum);
 		cell.setCellValue((String) v);
 		cell.setCellStyle(style);
 		mapCellNum++;
