@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -72,6 +73,8 @@ public class GUIMain extends Application {
 			internetCheck = false;
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.initStyle(StageStyle.UNDECORATED);
+			DialogPane pane = alert.getDialogPane();
+			pane.getStylesheets().add("ch/ice/view/WebCrawler.css");
 			alert.setTitle("Internet Connection");
 			alert.setHeaderText("No Internet Connection");
 			alert.setContentText("Please establish Internet Connection");

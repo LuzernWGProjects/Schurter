@@ -22,6 +22,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogEvent;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.input.MouseEvent;
@@ -144,6 +145,8 @@ public class SaveWindowController extends Thread implements Initializable {
 						e.printStackTrace();
 						Alert alert = new Alert(AlertType.WARNING);
 						alert.initStyle(StageStyle.UNDECORATED);
+						DialogPane pane = alert.getDialogPane();
+						pane.getStylesheets().add("ch/ice/view/WebCrawler.css");
 						alert.initOwner(cancelButton.getScene().getWindow());
 						alert.setTitle("Information Dialog");
 						alert.setHeaderText("Your Canceling the Process");
@@ -181,6 +184,8 @@ public class SaveWindowController extends Thread implements Initializable {
 					Alert alert = new Alert(AlertType.WARNING);
 					alert.initOwner(cancelButton.getScene().getWindow());
 					alert.initStyle(StageStyle.UNDECORATED);
+					DialogPane pane = alert.getDialogPane();
+					pane.getStylesheets().add("ch/ice/view/WebCrawler.css");
 					alert.setTitle("Information Dialog");
 					alert.setHeaderText("Your Canceling the Process");
 					alert.setContentText("No file will be saved");
@@ -400,19 +405,6 @@ public class SaveWindowController extends Thread implements Initializable {
 				System.out.println("in cancel mode");
 
 				cancel(true);
-				System.out.println("HaseHase");
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Search Engine Limit Reached");
-				alert.setContentText("Your Search Request Limit is reached. Plase check your Account.");
-
-				Optional<ButtonType> result = alert.showAndWait();
-				if (result.get() == ButtonType.OK) {
-					// ... user chose OK
-					// System.exit(0);
-
-					Stage stage = (Stage) progressBar.getScene().getWindow();
-					stage.close();
-				}
 
 				return null;
 

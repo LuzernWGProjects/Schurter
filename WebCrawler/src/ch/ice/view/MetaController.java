@@ -24,6 +24,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -293,6 +294,8 @@ public class MetaController implements Initializable {
 				if (GUIController.metaTagElements.size() < 1) {
 					Alert alert = new Alert(AlertType.INFORMATION);
 					alert.initStyle(StageStyle.UNDECORATED);
+					DialogPane pane = alert.getDialogPane();
+					pane.getStylesheets().add("ch/ice/view/WebCrawler.css");
 					alert.setTitle("Information Dialog");
 					alert.setHeaderText("No Meta Tags selected");
 					alert.setContentText("Please select at least one Meta Tag");
@@ -561,6 +564,9 @@ public class MetaController implements Initializable {
 						if (editNew.getText().equals("")) {
 							Alert alert = new Alert(AlertType.ERROR);
 							alert.initStyle(StageStyle.UNDECORATED);
+							DialogPane pane = alert.getDialogPane();
+							pane.getStylesheets().add(
+									"ch/ice/view/WebCrawler.css");
 							alert.setTitle("Empty Field");
 							alert.setHeaderText("Empty Field");
 							alert.setContentText("Please enter Blacklist name");

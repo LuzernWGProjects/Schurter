@@ -6,6 +6,21 @@
 	-fx-effect: dropshadow( three-pass-box , #336699 , 10, 1.0 , 0.0 , 1.0 );
 }
 
+.dialog-pane {
+	-fx-border-color: #336699;
+	-fx-effect: dropshadow( three-pass-box , #336699 , 10, 1.0 , 0.0 , 1.0 );
+}
+
+.dialog-pane .button {
+	 -fx-text-fill: white;
+}
+
+.dialog-pane .button:pressed {
+	 -fx-text-fill: white;
+	 -fx-background-color: #555555;
+            -fx-border-radius: 4px;
+}
+
 #resetKeyButton:hover:pressed {
 	-fx-background-color: #555555;
             -fx-border-radius: 4px;
@@ -35,13 +50,13 @@
     
 }
 
-#closeWindowButton:pressed {
+#closeWindowButton:hover:pressed {
 	-fx-background-color: #BB4E2A;
             -fx-border-radius: 4px;
           
 }
 
-#lowerWindowButton:pressed {
+#lowerWindowButton:hover:pressed {
 	-fx-background-color: #B3970B;
             -fx-border-radius: 4px;
           
