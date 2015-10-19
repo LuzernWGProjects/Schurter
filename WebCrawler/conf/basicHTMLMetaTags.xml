@@ -7,7 +7,7 @@
 	</metaTag>
 	<metaTag>
 		<name>description</name>
-		<description>A description of your website in 3 of 4 sentences</description>
+		<description>A description of your website in 3 or 4 sentences</description>
 		<example>SCHURTER is a leading innovator, manufacturer and distributor of fuses, connectors, circuit breakers, input systems and EMC products.</example>
 	</metaTag>
 	<metaTag>
@@ -22,7 +22,7 @@
 	</metaTag>
 	<metaTag>
 		<name>language</name>
-		<description>Explains in which language your website is in</description>
+		<description>The language of the website</description>
 		<example>eng-GB</example>
 	</metaTag>
 	<metaTag>
@@ -77,7 +77,7 @@
 	</metaTag>
 	<metaTag>
 		<name>expires</name>
-		<description>he expires meta tag defines the expiration date and time of the document being indexed</description>
+		<description>The expires meta tag defines the expiration date and time of the document being indexed</description>
 		<example>19-10-2027</example>
 	</metaTag>
 </basicMetaTag>
