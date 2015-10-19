@@ -15,7 +15,7 @@
   <children>
       <StackPane VBox.vgrow="ALWAYS">
          <children>
-          <MenuBar StackPane.alignment="TOP_LEFT">
+          <MenuBar minHeight="29.0" prefHeight="29.0" StackPane.alignment="TOP_LEFT">
             <menus>
               <Menu mnemonicParsing="false" text="File">
                 <items>
