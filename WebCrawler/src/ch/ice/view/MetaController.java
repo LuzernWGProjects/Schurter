@@ -154,8 +154,8 @@ public class MetaController implements Initializable {
 	 * Get Google Parameters for GUI
 	 */
 	public void setGoogleParams() {
-		keyLabel.setText("Google Search Engine ID:");
-		othersLabel.setText("API Key:");
+		keyLabel.setText("API Key:");
+		othersLabel.setText("Google Search Engine ID:");
 		keyTextField
 				.setText(config.getString("searchEngine.google.accountKey"));
 		othersTextField.setText(config.getString("searchEngine.google.cx"));
