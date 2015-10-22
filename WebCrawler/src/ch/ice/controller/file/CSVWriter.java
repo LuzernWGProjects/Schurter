@@ -47,6 +47,7 @@ public class CSVWriter implements Writer {
 		//	cellHeaders.add(5,"");
 		cellHeaders.add(7, "Customer Ident. Lvl");
 		cellHeaders.add(8, "URL");
+		cellHeaders.add(9, "Industry");
 
 		createHeader();
 
@@ -74,6 +75,7 @@ public class CSVWriter implements Writer {
 			customerObjectArray.add(c.getFullName());
 			customerObjectArray.add("Country+PC+Name");
 			customerObjectArray.add(c.getWebsite().getUrl());
+			customerObjectArray.add(c.getIndustry());
 
 			try {
 				Set<Entry<String, String>> entries =  c.getWebsite().getMetaTags().entrySet();
