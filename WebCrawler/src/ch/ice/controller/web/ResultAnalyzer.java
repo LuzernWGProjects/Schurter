@@ -70,6 +70,7 @@ public class ResultAnalyzer {
 			}
 
 			String host = uri.getHost().replaceFirst("^(http://|http://www\\.|www\\.)", "");
+			
 
 			// store name of company in a variable to work with later on
 			String companyName = (String) parameters.get(0);
@@ -86,7 +87,7 @@ public class ResultAnalyzer {
 			String strippedURL = host.replace("-", " ").replaceAll("[^\\w]"," ");
 			String strippedURLNoWhitespace = host.replace("-", "").replaceAll("[^\\w]",	"");
 			String[] singleURLWords = strippedURL.split("\\s+");
-
+		
 			// create acronym of company name
 			String acroOfCompanyName = createAcronym(companyName);
 
@@ -145,7 +146,7 @@ public class ResultAnalyzer {
 				}
 
 				// does the url contains the acronym of the company?
-				if (host.equals((CharSequence) acroOfCompanyName)) {
+				if (singleURLWords[0].equals((CharSequence) acroOfCompanyName)) {
 					candidatesArray[i] = candidatesArray[i] + (5);
 					logger.info("Acronym \""+acroOfCompanyName+"\" is equal as URL["+url+"]; Add 5 units to total score");
 				}

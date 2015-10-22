@@ -109,7 +109,7 @@ public class GUIController implements Initializable {
 	/**
 	 * Text for InfoLabel including search exceeds errors and status report
 	 */
-	private String statusOk = "Status OK";
+	private String statusOk = "File Status OK";
 	private String googleExceeds = "The file exceeds the allowed Google searches of ";
 	private String bingExceeds = "The file exceeds the allowed Bing searches of ";
 
@@ -387,8 +387,8 @@ public class GUIController implements Initializable {
 						checkAll();
 
 					} else {
-						pathTextField.setText("No legal Directory selected");
-						pathTextField.setStyle("-fx-text-inner-color: red;");
+						fileTextField.setText("Illegal Directory for File");
+						fileTextField.setStyle("-fx-text-inner-color: red;");
 						checkAll();
 					}
 				} catch (NullPointerException | InternalFormatException
@@ -409,6 +409,25 @@ public class GUIController implements Initializable {
 					fileTextField.setStyle("-fx-text-inner-color: red;");
 					checkAll();
 					startSearchButton.setDisable(true);
+
+				} catch (IllegalArgumentException e) {
+					logger.error(e);
+					e.printStackTrace();
+					fileTextField.setText("Illegal Directory for File");
+					fileTextField.setStyle("-fx-text-inner-color: red;");
+					checkAll();
+					setSaveProperties(path, "");
+					checkAll();
+					try {
+						config.save();
+					} catch (ConfigurationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						logger.error(e1);
+					}
+					getSaveProperties(startSearchButton);
+					checkAll();
+
 				}
 
 			}
@@ -451,7 +470,7 @@ public class GUIController implements Initializable {
 
 					} else {
 
-						pathTextField.setText("No legal Directory selected");
+						pathTextField.setText("Illegal Directory for Saving");
 						pathTextField.setStyle("-fx-text-inner-color: red;");
 						checkAll();
 					}
@@ -478,7 +497,7 @@ public class GUIController implements Initializable {
 				} catch (IllegalArgumentException e) {
 					logger.error(e);
 					e.printStackTrace();
-					pathTextField.setText("Illegal Directory");
+					pathTextField.setText("Illegal Directory for Saving");
 					pathTextField.setStyle("-fx-text-inner-color: red;");
 					setSaveProperties("", chosenPath);
 					checkAll();
