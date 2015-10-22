@@ -107,7 +107,7 @@ public class SaveWindowController extends Thread implements Initializable {
 					public void run() {
 
 						endMessageLabel
-								.setText("Your Search Limit was reached or Access Key is invalid. Please cancel the process");
+								.setText("Your Search Limit was reached or Access Key is invalid. Please cancel the process to save the progress.");
 						endMessageLabel.setTextFill(Color.RED);
 
 					}
@@ -130,6 +130,7 @@ public class SaveWindowController extends Thread implements Initializable {
 				if (MainController.processEnded == false) {
 					task.cancel();
 					task1.cancel();
+
 					try {
 						main.stopThread("FIRST THREAD");
 						main.stopThread("SECOND THREAD");
@@ -138,7 +139,7 @@ public class SaveWindowController extends Thread implements Initializable {
 
 						th.join();
 						t1.join();
-						main = null;
+						// main = null;
 
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
@@ -149,8 +150,11 @@ public class SaveWindowController extends Thread implements Initializable {
 						pane.getStylesheets().add("ch/ice/view/WebCrawler.css");
 						alert.initOwner(cancelButton.getScene().getWindow());
 						alert.setTitle("Information Dialog");
-						alert.setHeaderText("Your Canceling the Process");
-						alert.setContentText("No file will be saved");
+						alert.setHeaderText("You canceled the Process");
+						alert.setContentText("Press OK to save the progressed file to: "
+								+ GUIController.path
+								+ "\n"
+								+ " (This could take a few seconds)");
 						alert.setOnCloseRequest(new EventHandler<DialogEvent>() {
 
 							@Override
@@ -170,7 +174,9 @@ public class SaveWindowController extends Thread implements Initializable {
 									|| result.get() == ButtonType.CLOSE) {
 								// ... user chose OK
 								// System.exit(0);
-
+								main.startWriter(MainController.customerList);
+								myBoo = false;
+								main = null;
 								Stage stage = (Stage) cancelButton.getScene()
 										.getWindow();
 								stage.close();
@@ -187,8 +193,11 @@ public class SaveWindowController extends Thread implements Initializable {
 					DialogPane pane = alert.getDialogPane();
 					pane.getStylesheets().add("ch/ice/view/WebCrawler.css");
 					alert.setTitle("Information Dialog");
-					alert.setHeaderText("Your Canceling the Process");
-					alert.setContentText("No file will be saved");
+					alert.setHeaderText("You canceled the process");
+					alert.setContentText("Press OK to save the progressed file to: "
+							+ GUIController.path
+							+ "\n"
+							+ " (This could take a few seconds)");
 					alert.setOnCloseRequest(new EventHandler<DialogEvent>() {
 
 						@Override
@@ -205,7 +214,9 @@ public class SaveWindowController extends Thread implements Initializable {
 						if (result.get() == ButtonType.OK) {
 							// ... user chose OK
 							// System.exit(0);
-
+							main.startWriter(MainController.customerList);
+							myBoo = false;
+							main = null;
 							Node source = (Node) event.getSource();
 							Stage stage = (Stage) source.getScene().getWindow();
 							stage.close();
@@ -217,6 +228,7 @@ public class SaveWindowController extends Thread implements Initializable {
 							// stage.show();
 
 						}
+
 					} catch (NoSuchElementException e) {
 
 					}

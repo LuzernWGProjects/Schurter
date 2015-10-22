@@ -84,6 +84,16 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </VBox>
+      <VBox spacing="10.0">
+         <children>
+            <Label fx:id="checkCatLabel" text="Categorization: ">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <CheckBox fx:id="checkCategorization" alignment="TOP_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" />
+         </children>
+      </VBox>
       <HBox alignment="BOTTOM_RIGHT" prefHeight="40.0" prefWidth="200.0" spacing="15.0">
          <children>
             <Button id="cancelMetaButton" fx:id="cancelMetaButton" mnemonicParsing="false" text="Cancel" textFill="WHITE" />
