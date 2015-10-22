@@ -37,6 +37,7 @@ import ch.ice.model.Customer;
 import ch.ice.utils.Clusterer;
 import ch.ice.utils.Config;
 import ch.ice.utils.JSONStandardizedKeys;
+import ch.ice.view.MetaController;
 import ch.ice.view.SaveWindowController;
 
 public class MainController {
@@ -250,8 +251,10 @@ public class MainController {
 				+ stopwatch.toString());
 		
 		// start clusterer
-		customerList = Clusterer.cluster(MainController.customerList);
-				
+		if(MetaController.checkCatBool){
+			customerList = Clusterer.cluster(MainController.customerList);
+		}
+		
 		/*
 		 * Write every enhanced customer object into a new file
 		 */
