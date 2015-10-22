@@ -34,6 +34,7 @@ import ch.ice.exceptions.MissingCustomerRowsException;
 import ch.ice.exceptions.NoUrlFoundException;
 import ch.ice.exceptions.SearchEngineRequestLimitReachedException;
 import ch.ice.model.Customer;
+import ch.ice.utils.Clusterer;
 import ch.ice.utils.Config;
 import ch.ice.utils.JSONStandardizedKeys;
 import ch.ice.view.SaveWindowController;
@@ -247,12 +248,17 @@ public class MainController {
 		stopwatch.split();
 		logger.info("Spilt: " + stopwatch.toSplitString() + " total: "
 				+ stopwatch.toString());
-
+		
+		// start clusterer
+		customerList = Clusterer.cluster(MainController.customerList);
+		
+		logger.debug("Customer MetaTags = "+customerList.get(0).getWebsite().getMetaTags().toString());
+		
 		/*
 		 * Write every enhanced customer object into a new file
 		 */
 		SaveWindowController.myBooWriting = true;
-
+		
 		this.startWriter(MainController.customerList);
 
 		stopwatch.stop();

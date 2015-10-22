@@ -116,11 +116,11 @@ public class ExcelWriter implements Writer {
 					cell.setCellValue((String) obj.toString());
 					cell.setCellStyle(hlink_style);
 					
-//					Cell UnsureFirstCell = sheet.getRow(2).createCell(cellnum+1);
-//					UnsureFirstCell.setCellValue("unsure");
-//					cell = sheet.getRow(row.getRowNum()).createCell(cellnum+1);
-//					cell.setCellStyle(style);
-//					cell.setCellValue(c.getWebsite().getUnsure());
+					Cell UnsureFirstCell = sheet.getRow(2).createCell(cellnum+1);
+					UnsureFirstCell.setCellValue("Industry");
+					cell = sheet.getRow(row.getRowNum()).createCell(cellnum+1);
+					cell.setCellStyle(style);
+					cell.setCellValue(c.getIndustry());
 					
 				} else if (obj instanceof Map) {
 					// Start the writeMap lamda Method to write down the whole
@@ -184,10 +184,10 @@ public class ExcelWriter implements Writer {
 	private void writeMap(Object k, Object v) {
 
 		// write header informations (key)
-		Cell firstCell = sheet.getRow(2).createCell(cellnum + mapCellNum);
+		Cell firstCell = sheet.getRow(2).createCell(cellnum + mapCellNum + 1);
 		firstCell.setCellValue((String) k);
 		// write cell values (Value)
-		cell = row.createCell(cellnum + mapCellNum);
+		cell = row.createCell(cellnum + mapCellNum + 1);
 		cell.setCellValue((String) v);
 		cell.setCellStyle(style);
 		mapCellNum++;

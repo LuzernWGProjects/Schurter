@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<keywordlist>
+	<industry name="Audio">
+		<keyword>audio</keyword>
+		<keyword>midi</keyword>
+		<keyword>music</keyword>
+		<keyword>ensemble</keyword>
+		<keyword>amplifiers</keyword>
+		<keyword>AMP</keyword>
+		<keyword>sound</keyword>
+		<keyword>signal processing equipment</keyword>
+		<keyword>in-ears</keyword>
+		<keyword>Analog</keyword>
+		<keyword>Digital</keyword>
+		<keyword>recording</keyword>
+		<keyword>Hi-Fi</keyword>
+		<keyword>amplification</keyword>
+		<keyword>CD Player</keyword>
+		<keyword>mp3</keyword>
+		<keyword>wma</keyword>
+		<keyword>SST</keyword>
+		<keyword>Surround Sound</keyword>
+		<keyword>stereo</keyword>
+		<keyword>microphone</keyword>
+		<keyword>Speakers</keyword>
+		<keyword>Subwoofers</keyword>
+		<keyword>recording</keyword>
+		<keyword>concert</keyword>
+		<keyword>Loudspeakers</keyword>
+		<keyword>recording</keyword>
+		<keyword>equalizer</keyword>
+		<keyword>headphones</keyword>
+		<keyword>earphones</keyword>
+		<keyword>hifi</keyword>
+	</industry>
+	
+	<industry name="Information Technology">
+		<keyword>Artificial intelligence</keyword>
+		<keyword>AI</keyword>
+		<keyword>Business analytics</keyword>
+		<keyword>Business continuity</keyword>
+		<keyword>Business support systems</keyword>
+		<keyword>BSS</keyword>
+		<keyword>Business to business</keyword>
+		<keyword>B2B</keyword>
+		<keyword>Business to consumer</keyword>
+		<keyword>B2C</keyword>
+		<keyword>Business transformation</keyword>
+		<keyword>Change management</keyword>
+		<keyword>Computer science</keyword>
+		<keyword>Data controller</keyword>
+		<keyword>Data</keyword>
+		<keyword>Data gathering</keyword>
+		<keyword>Big Data</keyword>
+		<keyword>Data mining</keyword>
+		<keyword>Data Warehouse</keyword>
+		<keyword>Database</keyword>
+		<keyword>e-commerce</keyword>
+		<keyword>e-portal</keyword>
+		<keyword>Framework</keyword>
+		<keyword>Enterprise</keyword>
+		<keyword>Management information system</keyword>
+		<keyword>Oracle</keyword>
+		<keyword>Saas</keyword>
+		<keyword>SPSS</keyword>
+		<keyword>Sas</keyword>
+		<keyword>Web technology</keyword>
+		<keyword>Technology</keyword>
+	</industry>
+	
+</keywordlist>
