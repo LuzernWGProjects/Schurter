@@ -92,6 +92,15 @@ public class MetaController implements Initializable {
 	private Label checkAccountLabel;
 	@FXML
 	private Button resetKeysButton;
+	@FXML
+	private CheckBox checkCategorization;
+	@FXML
+	private Label checkCatLabel;
+
+	/**
+	 * Check boolean for Categorization
+	 */
+	public static boolean checkCatBool = false;
 
 	/**
 	 * Menu for editing Blacklist
@@ -193,6 +202,23 @@ public class MetaController implements Initializable {
 		editMenu.getItems().add(addNew);
 
 		GUIController.getProperties(metaTagsLabel);
+
+		/**
+		 * check Cat CheckBox
+		 */
+		checkCatLabel.setTooltip(new Tooltip(
+				"Check if you want to activate the Categorization for Industries"
+						+ "\n"
+						+ "(Info: Only Proof of Concept version implemented)"));
+		if (checkCatBool == false) {
+			checkCategorization.setSelected(false);
+			checkCategorization.setText("Categorization Inactive");
+			checkCategorization.setTextFill(Color.RED);
+		} else {
+			checkCategorization.setSelected(true);
+			checkCategorization.setText("Categorization Active");
+			checkCategorization.setTextFill(Color.GREEN);
+		}
 
 		/**
 		 * Search Engine Drop Down
@@ -630,6 +656,24 @@ public class MetaController implements Initializable {
 						logger.error(e);
 					}
 				}
+			}
+		});
+
+		checkCategorization.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+
+				if (checkCategorization.isSelected() == false) {
+					checkCatBool = false;
+					checkCategorization.setText("Categorization Inactive");
+					checkCategorization.setTextFill(Color.RED);
+				} else {
+					checkCatBool = true;
+					checkCategorization.setText("Categorization Active");
+					checkCategorization.setTextFill(Color.GREEN);
+				}
+
 			}
 		});
 
