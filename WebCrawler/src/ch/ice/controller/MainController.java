@@ -251,8 +251,6 @@ public class MainController {
 		 */
 		SaveWindowController.myBooWriting = true;
 		
-		this.startWriter(MainController.customerList);
-
 		stopwatch.stop();
 		logger.info("Spilt: " + stopwatch.toSplitString() + " total: "
 				+ stopwatch.toString());

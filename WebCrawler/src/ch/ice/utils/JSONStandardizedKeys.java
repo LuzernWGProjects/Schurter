@@ -1,7 +1,7 @@
 package ch.ice.utils;
 
 /**
- * This class hold alls available JSON Standard Labels for a JSON array
+ * This class hold all available JSON Standard Labels for a JSON array
  * 
  * @author mneuhaus
  *

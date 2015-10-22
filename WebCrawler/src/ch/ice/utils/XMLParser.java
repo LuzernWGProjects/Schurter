@@ -2,10 +2,8 @@ package ch.ice.utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,6 +17,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+/**
+ * Rendes an xml file and returns the correct Map
+ * 
+ * @author mneuhaus
+ *
+ */
 public class XMLParser {
 
 	private static final String country2xmlFile = "conf/country2market.xml";
@@ -27,6 +31,13 @@ public class XMLParser {
 		XMLParser.getTLDOfCountry();
 	}
 	
+	/**
+	 * Return the TopLevelDomain of each country.<br />
+	 * This is only for the google domain<br />
+	 * tld. Not in every country google is available
+	 * 
+	 * @return Map
+	 */
 	public static Map<String, String> getTLDOfCountry(){
 
 		Map<String, String> country2tld = new HashMap<String, String>();
@@ -43,6 +54,7 @@ public class XMLParser {
 
 			NodeList nList = doc.getElementsByTagName("country");
 
+			// go through every node and child node
 			for (int temp = 0; temp < nList.getLength(); temp++) {
 
 				Node nNode = nList.item(temp);
@@ -71,6 +83,12 @@ public class XMLParser {
 		return country2tld;
 	}
 	
+	/**
+	 * Return each Market associated with a Country. <br />
+	 * This will be used to improve Bings searchlogic<br />
+	 * and deliver better (localized) results.
+	 * @return
+	 */
 	public static Map<String, String> getMarket(){
 
 		Map<String, String> country2Market = new HashMap<String, String>();
@@ -115,8 +133,14 @@ public class XMLParser {
 		return country2Market;
 	}
 	
-	public static Map<String, Set<String>> getWordsPerIndustry(){
-		String keywordfile = "conf/industryLists.xml";
+	/**
+	 * Return all associated keywords with an industry <br />
+	 * This will be used for the clustering class.
+	 * 
+	 * @param keywordfile
+	 * @return
+	 */
+	public static Map<String, Set<String>> getWordsPerIndustry(String keywordfile){
 		File xmlFile = new File(keywordfile);
 		
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
