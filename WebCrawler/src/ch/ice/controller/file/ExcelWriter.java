@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.ss.SpreadsheetVersion;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -188,7 +189,23 @@ public class ExcelWriter implements Writer {
 		firstCell.setCellValue((String) k);
 		// write cell values (Value)
 		cell = row.createCell(cellnum + mapCellNum);
-		cell.setCellValue((String) v);
+		
+		//check if string is to long for excel cell
+		String value = (String)v;
+		String text;
+		int maxLength = SpreadsheetVersion.EXCEL2007.getMaxTextLength();
+		if(value.length()> maxLength )
+		{
+			System.out.println("trim########### ");
+			
+			text = value.substring(0, maxLength-1);
+		}
+		else
+		{
+			
+			text = value;
+		}
+		cell.setCellValue((String) text);
 		cell.setCellStyle(style);
 		mapCellNum++;
 

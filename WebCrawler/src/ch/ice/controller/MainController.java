@@ -372,6 +372,9 @@ public class MainController {
 					MainController.fileParser);
 		} catch (IOException e) {
 			logger.error(e.getMessage());
+		} catch (Exception ex)
+		{
+			logger.error(ex.getMessage());
 		}
 	}
 
