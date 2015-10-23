@@ -34,8 +34,10 @@ import ch.ice.exceptions.MissingCustomerRowsException;
 import ch.ice.exceptions.NoUrlFoundException;
 import ch.ice.exceptions.SearchEngineRequestLimitReachedException;
 import ch.ice.model.Customer;
+import ch.ice.utils.Clusterer;
 import ch.ice.utils.Config;
 import ch.ice.utils.JSONStandardizedKeys;
+import ch.ice.view.MetaController;
 import ch.ice.view.SaveWindowController;
 
 public class MainController {
@@ -99,7 +101,7 @@ public class MainController {
 	 * @throws InterruptedException
 	 */
 	public void startMainController() throws InternalFormatException,
-			MissingCustomerRowsException, InterruptedException {
+	MissingCustomerRowsException, InterruptedException {
 		// Core settings
 		isSearchAvail = false;
 		defaultUrl = null;
@@ -162,9 +164,9 @@ public class MainController {
 		int fourthStart = quarterSize * 3;
 		int fourthEnd = listSize;
 
-		logger.info(0 + ", " + firstEnd + ", " + secondStart + ", " + secondEnd
-				+ ", " + thirdStart + ", " + thirdEnd + ", " + fourthStart
-				+ ", " + fourthEnd);
+		logger.info(0 + ", " + firstEnd + ", " + secondStart + ", "
+				+ secondEnd + ", " + thirdStart + ", " + thirdEnd + ", "
+				+ fourthStart + ", " + fourthEnd);
 
 		if (listSize < 16) {
 			firstArray = new ArrayList<Customer>(customerList);
@@ -192,28 +194,32 @@ public class MainController {
 			s1.setSearchList(firstArray);
 			Thread t1 = new Thread(s1);
 			t1.setName("FIRST THREAD");
-			logger.info("First Thread Size: " + s1.getSearchList().size());
+			logger.info("First Thread Size: "
+					+ s1.getSearchList().size());
 
 			SearchThread s2 = new SearchThread();
 			s2.setCheckNumber(2);
 			s2.setSearchList(secondArray);
 			Thread t2 = new Thread(s2);
 			t2.setName("SECOND THREAD");
-			logger.info("Second Thread Size: " + s2.getSearchList().size());
+			logger.info("Second Thread Size: "
+					+ s2.getSearchList().size());
 
 			SearchThread s3 = new SearchThread();
 			s3.setCheckNumber(4);
 			s3.setSearchList(thirdArray);
 			Thread t3 = new Thread(s3);
 			t3.setName("THIRD THREAD");
-			logger.info("Third Thread Size: " + s3.getSearchList().size());
+			logger.info("Third Thread Size: "
+					+ s3.getSearchList().size());
 
 			SearchThread s4 = new SearchThread();
 			s4.setCheckNumber(4);
 			s4.setSearchList(fourthArray);
 			Thread t4 = new Thread(s4);
 			t4.setName("FOURTH THREAD");
-			logger.info("Fourth Thread Size: " + s4.getSearchList().size());
+			logger.info("Fourth Thread Size: "
+					+ s4.getSearchList().size());
 
 			t1.start();
 			t2.start();
@@ -224,10 +230,14 @@ public class MainController {
 			t3.join();
 			t4.join();
 
-			logger.info("First Thread Size: " + s1.getSearchList().size());
-			logger.info("Second Thread Size: " + s2.getSearchList().size());
-			logger.info("Third Thread Size: " + s3.getSearchList().size());
-			logger.info("Fourth Thread Size: " + s4.getSearchList().size());
+			logger.info("First Thread Size: "
+					+ s1.getSearchList().size());
+			logger.info("Second Thread Size: "
+					+ s2.getSearchList().size());
+			logger.info("Third Thread Size: "
+					+ s3.getSearchList().size());
+			logger.info("Fourth Thread Size: "
+					+ s4.getSearchList().size());
 
 			customerList.clear();
 			customerList.addAll(s1.getSearchList());
@@ -239,12 +249,17 @@ public class MainController {
 		stopwatch.split();
 		logger.info("Spilt: " + stopwatch.toSplitString() + " total: "
 				+ stopwatch.toString());
-
+		
+		// start clusterer
+		if(MetaController.checkCatBool){
+			customerList = Clusterer.cluster(MainController.customerList);
+		}
+		
 		/*
 		 * Write every enhanced customer object into a new file
 		 */
 		SaveWindowController.myBooWriting = true;
-
+		
 		this.startWriter(MainController.customerList);
 
 		stopwatch.stop();

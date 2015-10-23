@@ -46,7 +46,13 @@ public class WebCrawler {
 			for (String metaWord : metaDef) {
 				try {
 					String metaTags = document.select("meta[name=" + metaWord + "]").first().attr("content");
-					map.put(metaWord, metaTags);
+					
+					if(metaTags.isEmpty()){
+						map.put(metaWord, "n/a");
+					} else {
+						map.put(metaWord, metaTags);
+					}
+					
 				} catch (Exception e) {
 					// MetaTags not available
 					map.put(metaWord, "n/a");

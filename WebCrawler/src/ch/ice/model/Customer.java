@@ -13,6 +13,7 @@ public class Customer {
 	private String countryName;
 	private String zipCode;
 	private Website website;
+	private String industryCode;
 	
 	public String getId() {
 		return id;
@@ -70,8 +71,11 @@ public class Customer {
 		this.website = website;
 	}
 	
-//	@Override
-//	public String toString() {
-//		return "Customer Object = ID: "+this.getId()+"; Full Name: "+this.getFullName()+"; Short Name: "+this.getShortName()+"; Country Code: "+this.getCountryCode()+"; Country Name: "+this.getCountryName()+"; ZIP Code: "+this.getZipCode()+"; Website: [ URL: "+this.getWebsite().getUrl().toString()+"; Meta Tags: "+this.getWebsite().getMetaTags().toString()+" ];";
-//	}
+	public String getIndustry(){
+		return industryCode;
+	}
+	
+	public void setIndustry(String industryCode){
+		this.industryCode = industryCode;
+	}
 }
